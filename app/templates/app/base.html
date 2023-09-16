@@ -24,7 +24,7 @@
 
 
 <!--		&lt;!&ndash; Bootstrap &ndash;&gt;-->
-<!--		<link type="text/css" rel="stylesheet" href="{% static 'app/css/bootstrap.min.css' %}"/>-->
+		<link type="text/css" rel="stylesheet" href="{% static 'app/css/bootstrap.min.css' %}"/>
 
 <!--		&lt;!&ndash; Slick &ndash;&gt;-->
 		<link type="text/css" rel="stylesheet" href="{% static 'app/css/slick.css' %}"/>
@@ -39,12 +39,12 @@
 <!--		&lt;!&ndash; Custom stlylesheet &ndash;&gt;-->
 		<link type="text/css" rel="stylesheet" href="{% static 'app/css/style2.css' %}"/>
 
-<!--		&lt;!&ndash; HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries &ndash;&gt;-->
-<!--		&lt;!&ndash; WARNING: Respond.js doesn't work if you view the page via file:// &ndash;&gt;-->
-<!--		&lt;!&ndash;[if lt IE 9]>-->
-<!--		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>-->
-<!--		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
-<!--		<![endif]&ndash;&gt;-->
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
 
 
 
@@ -66,79 +66,83 @@
         footer{
             margin-top:300px;
             }
+        .cart-link {
+            color: white;
+            }
+
 
     </style>
 
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-     <div class="container">
-       <a class="navbar-brand text-success fw-bold" href="/">PayForTech</a>
-       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-         <span class="navbar-toggler-icon"></span>
-       </button>
-       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-           <li class="nav-item">
-             <a class="nav-link active" aria-current="page" href="/">Home</a>
-           </li>
-           <li class="nav-item dropdown">
-             <a class="nav-link dropdown-toggle text-white" href="#" id="electronicsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-               Electronics
-             </a>
-             <ul class="dropdown-menu" aria-labelledby="electronicsDropdown">
-               <li><a class="dropdown-item" href="{% url 'mobile' %}">Mobile</a></li>
-               <li><a class="dropdown-item" href="#">Laptop</a></li>
-             </ul>
-           </li>
-           <li class="nav-item dropdown">
-             <a class="nav-link dropdown-toggle text-white" href="#" id="fashionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-               Fashion
-             </a>
-             <ul class="dropdown-menu" aria-labelledby="fashionDropdown">
-               <li><a class="dropdown-item" href="#">Top Wear</a></li>
-               <li><a class="dropdown-item" href="#">Bottom Wear</a></li>
-             </ul>
-           </li>
-         </ul>
-         <form class="d-flex">
-           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-           <button class="btn btn-warning" type="submit">Search</button>
-         </form>
-         <div>
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              {% if request.user.is_authenticated %}
-           <li class="nav-item dropdown mx-2">
-              <a class="nav-link dropdown-toggle text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  {{request.user.username|capfirst}}
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                <li><a class="dropdown-item" href="{% url 'orders' %}">Orders</a></li>
-                <li><a class="dropdown-item" href="{% url 'passwordchange' %}">Change Password</a></li>
-                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
-              </ul>
-            </li>
-            <li class="nav-item mx-2">
-             <a href="{% url 'add-to-cart' %}" class="nav-link text-white"><span class="badge bg-danger"><div class="qty">3 </div></span><i class="fa fa-shopping-cart"></i> Cart </a>
-            </li>
-              <li class="nav-item mx-2">
-									<a href="#" class="nav-link text-white"><span class="badge bg-danger"><div class="qty">2 </div></span><i class="fa fa-heart"></i>Wishlist</a>
-              </li>
 
-              {% else %}
-            <li class="nav-item mx-2">
-             <a href="{% url 'login' %}" class="nav-link text-white">Login</a>
-            </li>
-            <li class="nav-item mx-2">
-             <a href="{% url 'customerregistration' %}" class="nav-link text-white">Registration</a>
-            </li>
-            {% endif %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand text-success fw-bold" href="/">PayForTech</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse me-4" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- "Home" and "Electronics" items -->
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="electronicsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Electronics
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="electronicsDropdown">
+            <li><a class="dropdown-item" href="{% url 'mobile' %}">Mobile</a></li>
+            <li><a class="dropdown-item" href="#">Laptop</a></li>
           </ul>
-         </div>
-       </div>
-     </div>
-    </nav>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-warning text-dark me-4" type="submit">Search</button>
+      </form>
+      <div class="header-ctn">
+        {% if request.user.is_authenticated %}
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown mx-2">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{request.user.username|capfirst}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+              <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'orders' %}">Orders</a></li>
+              <li><a class="dropdown-item" href="{% url 'passwordchange' %}">Change Password</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </li>
+          <!-- Cart and Wishlist icons for authenticated users -->
+          <li class="nav-item mx-2">
+            <a href="#" class="cart-link"><i class="fa fa-shopping-cart"></i><br><span class="cart-link"> Cart</span><div class="qty">2</div></a>
+          </li>
+          <li class="nav-item mx-2">
+            <a href="#" class="cart-link"><i class="fa fa-heart"></i><br><span class="cart-link"> Wishlist</span><div class="qty">2</div></a>
+          </li>
+        </ul>
+        {% else %}
+        <!-- Login and Registration links for unauthenticated users -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item mx-2">
+            <a href="{% url 'login' %}" class="nav-link text-white">Login</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a href="{% url 'customerregistration' %}" class="nav-link text-white">Registration</a>
+          </li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+
     {% block banner_slider %} {% endblock banner_slider %}
     {% block livesale %} {% endblock livesale %}
     {% block main-content %} {% endblock main-content %}

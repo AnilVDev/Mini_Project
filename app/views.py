@@ -51,6 +51,7 @@ class CustomerRegistrationView(View):
       if form.is_valid():
          messages.success(request, 'Registered Successfully')
          form.save()
+      form = CustomerRegistrationForm()
       return render(request, 'app/customerregistration.html', {'form': form})
 
 @method_decorator(login_required, name='dispatch')

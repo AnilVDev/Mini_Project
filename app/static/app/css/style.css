@@ -25,9 +25,10 @@
 }
 
 /* Change the background color and text color when a nav-link is hovered over */
-.nav-item a.nav-link:hover {
-  background-color: #0b94d4; /* Change to your desired background color */
-  color: #6929ff; /* Change to your desired text color */
-  transform: scale(1);
+.navbar-nav .nav-item a.nav-link:hover {
+  color: #eb1515; /* Change to your desired text color */
 }
 
+#slider{
+    height:600px;
+}
