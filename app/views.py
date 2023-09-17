@@ -1,16 +1,24 @@
 from django.shortcuts import render
 from django.views import View
-from .models import Customer,Cart,Product,OrderPlaced
-from .forms import CustomerRegistrationForm,CustomerProfileForm
+from .models import Customer,Cart,Product,OrderPlaced,ProductImage
+from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, ProductImageForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.forms import modelformset_factory
 
-def home(request):
- return render(request, 'app/home.html')
 
-def product_detail(request):
- return render(request, 'app/productdetail.html')
+class ProductView(View):
+    def get(self, request):
+        # camera = Product.objects.filter(category='')
+        # watch = Product.objects.filter(category='')
+        return render(request, 'app/home.html')
+
+
+class ProductDetailView(View):
+    def get(self, request,pk):
+        product = Product.objects.get(pk=pk)
+        return render(request, 'app/productdetails.html', {'product':product})
 
 def add_to_cart(request):
  return render(request, 'app/addtocart.html')
@@ -74,3 +82,26 @@ class ProfileView(View):
             reg.save()
             messages.success(request, 'Congratulations!! Profile Updated Successfully')
         return render(request, 'app/profile.html',{'form':form,'active':'btn-primary'})
+
+def add_product_with_images(request):
+    if request.method == 'POST':
+        product_form = ProductForm(request.POST)
+        image_formset = ProductImageFormSet(request.POST, request.FILES, prefix='images')
+
+        if product_form.is_valid() and image_formset.is_valid():
+            # Save the product
+            product = product_form.save()
+
+            # Associate each image with the product
+            for image_form in image_formset:
+                if image_form.cleaned_data:
+                    image = image_form.save(commit=False)
+                    image.product = product
+                    image.save()
+
+            return redirect('product_list')  # Redirect to a success page or product list
+    else:
+        product_form = ProductForm()
+        image_formset = ProductImageFormSet(prefix='images')
+
+    return render(request, 'add_product_with_images.html', {'product_form': product_form, 'image_formset': image_formset})

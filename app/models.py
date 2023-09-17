@@ -64,24 +64,42 @@ class Customer(models.Model):
 
 
 
-CATEGORY_CHOICES = (
-    ('M', 'Mobile'),
-    ('L', 'Laptop'),
-    ('SW', 'Smartwatch'),
-    ('DC', 'Digitalcamera'),
-)
+
+
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='product_images/')
+
+    def __str__(self):
+        return str(self.product) + " - " + str(self.id)
+
+
+
+class Brand(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
-    selling_price = models.FloatField()
-    discount_price = models.FloatField()
+    selling_price = models.DecimalField(max_digits=10, decimal_places=2)
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    brand = models.CharField(max_length=100)
-    category = models.CharField(choices= CATEGORY_CHOICES, max_length=2)
-    product_image = models.ImageField(upload_to='productimg')
+    details = models.TextField(max_length=255, default='No details available')
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.id)
+        return self.title
 
 class Cart(models.Model):
 

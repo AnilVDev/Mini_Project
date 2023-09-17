@@ -3,8 +3,9 @@ from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,Userna
 from django.contrib.auth.models import User
 from django.utils.translation import gettext,gettext_lazy as _
 from django.contrib.auth import password_validation
-from .models import Customer
+from .models import Customer,Product, ProductImage
 from django.core.validators import RegexValidator
+from django.forms import modelformset_factory
 
 
 class CustomerRegistrationForm(UserCreationForm):
@@ -59,3 +60,24 @@ class CustomerProfileForm(forms.ModelForm):
                    'state':forms.Select(attrs={'class':'form-control'}),
                    'pincode':forms.NumberInput(attrs={'class':'form-control'}),
                    }
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'selling_price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'discount_price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control'}),
+            'details': forms.TextInput(attrs={'class': 'form-control'}),
+            'brand': forms.Select(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+class ProductImageForm(forms.ModelForm):
+    class Meta:
+        model = ProductImage
+        fields = '__all__'
+
+ProductImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=1)

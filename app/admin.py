@@ -2,22 +2,45 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomerRegistrationForm
 from django.contrib.auth.models import User
+from django.utils.html import format_html
 
 from .models import (
     Customer,
     Product,
     Cart,
-    OrderPlaced
+    OrderPlaced,
+    ProductImage,
+    Brand,
+    Category
 )
 # Register your models here.
 @admin.register(Customer)
 class CustomerModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'name','phone_number', 'locality', 'city', 'pincode', 'state']
-
 @admin.register(Product)
 class ProductModelAdmin(admin.ModelAdmin):
-    list_display = ['id','title', 'selling_price','discount_price', 'description', 'brand', 'category', 'product_image']
+    list_display = ['id', 'title', 'selling_price', 'discount_price', 'description', 'brand', 'category', 'display_product_images']
 
+    def display_product_images(self, obj):
+        if obj.images.all():  # Check if there are associated images
+            first_image = obj.images.first()
+            return format_html('<img src="{}" width="50" height="50" />', first_image.image.url)
+        else:
+            return 'No Image'
+
+    display_product_images.short_description = 'Product Image'
+
+@admin.register(ProductImage)
+class PoductImageModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'product', 'image']
+
+@admin.register(Category)
+class CategoryModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+
+@admin.register(Brand)
+class BrandModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
 
 # class CustomUserAdmin(UserAdmin):
 #     add_form = CustomerRegistrationForm
