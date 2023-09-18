@@ -1,35 +1,135 @@
-{% extends 'app/base.html' %}
+{% extends 'app/baseindex.html' %}
 {% load static %}
 {% block title %}Profile{% endblock title %}
 {% block main-content %}
-<div class="container my-5">
- <div class="row">
-     <h5>Welcome  <span class="text-capitalize h2 text-primary">{{request.user}}</span></h5>
-  <div class="col-sm-2 border-end">
-   <ul class="list-unstyled">
-    <li class="d-grid"><a href="{% url 'profile' %}" class="btn {{active}}">Profile</a></li>
-    <li class="d-grid"><a href="{% url 'address' %}" class="btn">Address</a></li>
-   </ul>
-  </div>
-  <div class="col-sm-8 offset-sm-1">
-      <h4 class="mb-5 text-danger">Add New Address</h4>
-   <form action="" method="post" novalidate>
-    {% csrf_token %}
-         {% for fm in form %}
-        <div class="form-group col-lg-6 mb-3">
-         {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
+
+<!--<div id="custom-navigation"> &lt;!&ndash; Use a <div> instead of <nav> &ndash;&gt;-->
+<!--    &lt;!&ndash; container &ndash;&gt;-->
+<!--    <div class="containe">-->
+<!--        &lt;!&ndash; responsive-nav &ndash;&gt;-->
+<!--        <div id="responsive-nav">-->
+<!--            &lt;!&ndash; NAV &ndash;&gt;-->
+<!--            <ul class="main-nav custom-nav"> &lt;!&ndash; Add your custom class name here &ndash;&gt;-->
+<!--                <li class="active"><a href="#">Profile</a></li>-->
+<!--                <li><a href="#">Address</a></li>-->
+<!--                <li><a href="#">Change Password</a></li>-->
+<!--                <li><a href="#">Orders</a></li>-->
+<!--                <li><a href="#">Wishlist</a></li>-->
+<!--                <li class="nav-divider"></li> &lt;!&ndash; Add a divider &ndash;&gt;-->
+<!--                <li class="category-title">Categories:</li> &lt;!&ndash; Add a category title &ndash;&gt;-->
+<!--                <li><a href="#">Cameras</a></li>-->
+<!--                <li><a href="#">Accessories</a></li>-->
+<!--            </ul>-->
+<!--            &lt;!&ndash; /NAV &ndash;&gt;-->
+<!--        </div>-->
+<!--        &lt;!&ndash; /responsive-nav &ndash;&gt;-->
+<!--    </div>-->
+<!--    &lt;!&ndash; /container &ndash;&gt;-->
+<!--</div>-->
+
+
+<!--<div class="container my-5">-->
+<!-- <div class="row">-->
+<!--     <h5>Welcome  <span class="text-capitalize h2 text-primary">{{request.user}}</span></h5>-->
+<!--  <div class="col-sm-2 border-end">-->
+<!--   <ul class="list-unstyled">-->
+<!--    <li class="d-grid"><a href="{% url 'profile' %}" class="btn {{active}}">Profile</a></li>-->
+<!--    <li class="d-grid"><a href="{% url 'address' %}" class="btn">Address</a></li>-->
+<!--   </ul>-->
+<!--  </div>-->
+<!--  <div class="col-sm-8 offset-sm-1">-->
+<!--      <h4 class="mb-5 text-danger">Add New Address</h4>-->
+<!--   <form action="" method="post" novalidate>-->
+<!--    {% csrf_token %}-->
+<!--         {% for fm in form %}-->
+<!--        <div class="form-group col-lg-6 mb-3">-->
+<!--         {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>-->
+<!--        </div>-->
+<!--      {% endfor %}-->
+<!--    <div class="col-12 mt-3">-->
+<!--      <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--    </div>-->
+<!--   </form>-->
+<!--      {% if messages %}-->
+<!--       {% for message in messages %}-->
+<!--            <p {% if message.tags %} class="alert alert-{{message.tags}} mb-5" {% endif %}>{{message}}</p>-->
+<!--       {% endfor %}-->
+<!--        {% endif %}-->
+<!--  </div>-->
+<!-- </div>-->
+<!--</div>-->
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Your Page Title</title>-->
+<!--    <link rel="stylesheet" href="your-styles.css">-->
+<!--</head>-->
+<!--<body>-->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Sidebar Navigation -->
+            <div class="col-md-3 bg-dark text-light">
+                <div id="custom-navigation">
+                    <div class="container">
+                        <div id="responsive-nav">
+                            <ul class=" custom-nav">
+                                <h5>Welcome <span class=" active text-capitalize h2 text-primary">{{request.user}}</span></h5>
+<!--                                <li class="active"><a href="#">{{request.user}}</a></li>-->
+                                <li><a href="{% url 'profile' %}" class="{{active}}">Profile</a></li>
+                                <li><a href="{% url 'address' %}">Address</a></li>
+                                <li><a href="{% url 'passwordchange' %}">Change Password</a></li>
+                                <li><a href="#">Orders</a></li>
+                                <li><a href="#">Wishlist</a></li>
+                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Left Sidebar Navigation -->
+
+            <!-- Right Content -->
+            <div class="col-md-9">
+                <div class="container my-5">
+                    <div class="row">
+<!--                        <h5>Welcome <span class="text-capitalize h2 text-primary">{{request.user}}</span></h5>-->
+<!--                        <div class="col-sm-2 border-end">-->
+<!--                            <ul class="list-unstyled">-->
+<!--                                <li class="d-grid"><a href="{% url 'profile' %}" class="btn {{active}}">Profile</a></li>-->
+<!--                                <li class="d-grid"><a href="{% url 'address' %}" class="btn">Address</a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+                        <div class="col-sm-8 offset-sm-1">
+                            <h4 class="mb-5 text-danger">Add New Address</h4>
+                            <form action="" method="post" novalidate>
+                                {% csrf_token %}
+                                {% for fm in form %}
+                                <div class="form-group col-lg-6 mb-3">
+                                    {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
+                                </div>
+                                {% endfor %}
+                                <div class="col-12 mt-3">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                            {% if messages %}
+                            {% for message in messages %}
+                            <p {% if message.tags %} class="alert alert-{{message.tags}} mb-5" {% endif %}>{{message}}</p>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Right Content -->
         </div>
-      {% endfor %}
-    <div class="col-12 mt-3">
-      <button type="submit" class="btn btn-primary">Submit</button>
     </div>
-   </form>
-      {% if messages %}
-       {% for message in messages %}
-            <p {% if message.tags %} class="alert alert-{{message.tags}} mb-5" {% endif %}>{{message}}</p>
-       {% endfor %}
-        {% endif %}
-  </div>
- </div>
-</div>
+<!--</body>-->
+<!--</html>-->
+
 {% endblock main-content %}

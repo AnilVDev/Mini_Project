@@ -1,18 +1,21 @@
 from django.shortcuts import render
 from django.views import View
-from .models import Customer,Cart,Product,OrderPlaced,ProductImage
+from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category
 from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, ProductImageForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.forms import modelformset_factory
-
+from .forms import MyPasswordChangeForm
+from django.db.models import Q
+from django.contrib.auth import views as auth_views
+from django.urls import reverse
 
 class ProductView(View):
     def get(self, request):
-        # camera = Product.objects.filter(category='')
-        # watch = Product.objects.filter(category='')
-        return render(request, 'app/home.html')
+        camera = Product.objects.filter(Q(category__name__icontains='camera'))
+        watch = Product.objects.filter(Q(category__name__icontains='watch'))
+        return render(request, 'app/index.html', {'camera':camera,'watch':watch})
 
 
 class ProductDetailView(View):
@@ -29,7 +32,7 @@ def buy_now(request):
 @login_required
 def address(request):
  add = Customer.objects.filter(user=request.user)
- return render(request, 'app/address.html', {'add':add,'active':'btn-primary'})
+ return render(request, 'app/address.html', {'add':add,'active':'bg-danger'})
 
 def orders(request):
  return render(request, 'app/orders.html')
@@ -66,7 +69,7 @@ class CustomerRegistrationView(View):
 class ProfileView(View):
     def get(self, request):
         form = CustomerProfileForm()
-        return render(request, 'app/profile.html', {'form':form, 'active':'btn-primary'})
+        return render(request, 'app/profile.html', {'form':form, 'active':'bg-danger'})
 
     def post(self, request):
         form = CustomerProfileForm(request.POST)
@@ -81,7 +84,7 @@ class ProfileView(View):
             reg = Customer(user=usr, name=name, phone_number=phone_number, locality=locality, city=city, state=state, pincode=pincode)
             reg.save()
             messages.success(request, 'Congratulations!! Profile Updated Successfully')
-        return render(request, 'app/profile.html',{'form':form,'active':'btn-primary'})
+        return render(request, 'app/profile.html',{'form':form,'active':'bg-danger'})
 
 def add_product_with_images(request):
     if request.method == 'POST':
@@ -105,3 +108,15 @@ def add_product_with_images(request):
         image_formset = ProductImageFormSet(prefix='images')
 
     return render(request, 'add_product_with_images.html', {'product_form': product_form, 'image_formset': image_formset})
+
+
+def password_change_view(request):
+    context = {
+        'form_class': MyPasswordChangeForm,
+        'success_url': reverse('password_change_done'),
+        'active': 'bg-danger',  # Add the 'active' context variable here
+    }
+    return auth_views.PasswordChangeView.as_view(
+        template_name='app/passwordchange.html',
+        extra_context=context  # Pass the context here
+    )(request)

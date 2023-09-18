@@ -123,5 +123,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-LOGIN_REDIRECT_URL = '/profile/'
+LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

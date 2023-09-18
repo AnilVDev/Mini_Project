@@ -128,7 +128,9 @@
 										{% for c in camera %}
 										<div class="product"  >
 											<div class="product-img">
-												<img src="{{c.product_image.url}}" style="width: 250px; height: 200px;" alt="">
+												{% if c.images.all %}
+												<img src="{{c.images.first.image.url}}" style="width: 250px; height: 200px;" alt="">
+												{% endif %}
 												<div class="product-label">
 													<span class="sale">-30%</span>
 													<span class="new">NEW</span>
@@ -136,7 +138,7 @@
 											</div>
 											<div class="product-body">
 												<p class="product-category">Category</p>
-												<h3 class="product-name"><a href="{% url 'product-detail' c.id %}">{{c.title}}/a></h3>
+												<h3 class="product-name"><a href="{% url 'product-detail' c.id %}">{{c.title}}</a></h3>
 												<h4 class="product-price">Rs.{{c.discount_price}} <del class="product-old-price">Rs.{{c.selling_price}}</del></h4>
 												<div class="product-rating">
 													<i class="fa fa-star"></i>
@@ -146,8 +148,8 @@
 													<i class="fa fa-star"></i>
 												</div>
 												<div class="product-btns">
-													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+													<button class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+													<button class="add-to-compare"><i class="fab fa-exchange"></i><span class="tooltipp">add to compare</span></button>
 													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>
@@ -157,119 +159,6 @@
 										</div>
 										{% endfor %}
 										<!-- /product -->
-
-										<!-- product -->
-<!--										<div class="product">-->
-<!--											<div class="product-img">-->
-<!--												<img src="{% static 'app/images/product/2.jpg' %}" alt="">-->
-<!--												<div class="product-label">-->
-<!--													<span class="new">NEW</span>-->
-<!--												</div>-->
-<!--											</div>-->
-<!--											<div class="product-body">-->
-<!--												<p class="product-category">Category</p>-->
-<!--												<h3 class="product-name"><a href="#">product name goes here</a></h3>-->
-<!--												<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>-->
-<!--												<div class="product-rating">-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star-o"></i>-->
-<!--												</div>-->
-<!--												<div class="product-btns">-->
-<!--													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>-->
-<!--													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>-->
-<!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
-<!--												</div>-->
-<!--											</div>-->
-<!--											<div class="add-to-cart">-->
-<!--												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>-->
-<!--											</div>-->
-<!--										</div>-->
-<!--										&lt;!&ndash; /product &ndash;&gt;-->
-
-<!--										&lt;!&ndash; product &ndash;&gt;-->
-<!--										<div class="product">-->
-<!--											<div class="product-img">-->
-<!--												<img src="./img/product03.png" alt="">-->
-<!--												<div class="product-label">-->
-<!--													<span class="sale">-30%</span>-->
-<!--												</div>-->
-<!--											</div>-->
-<!--											<div class="product-body">-->
-<!--												<p class="product-category">Category</p>-->
-<!--												<h3 class="product-name"><a href="#">product name goes here</a></h3>-->
-<!--												<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>-->
-<!--												<div class="product-rating">-->
-<!--												</div>-->
-<!--												<div class="product-btns">-->
-<!--													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>-->
-<!--													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>-->
-<!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
-<!--												</div>-->
-<!--											</div>-->
-<!--											<div class="add-to-cart">-->
-<!--												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>-->
-<!--											</div>-->
-<!--										</div>-->
-<!--										&lt;!&ndash; /product &ndash;&gt;-->
-
-<!--										&lt;!&ndash; product &ndash;&gt;-->
-<!--										<div class="product">-->
-<!--											<div class="product-img">-->
-<!--												<img src="{% static 'app/images/product/2.jpg' %}" alt="">-->
-<!--											</div>-->
-<!--											<div class="product-body">-->
-<!--												<p class="product-category">Category</p>-->
-<!--												<h3 class="product-name"><a href="#">product name goes here</a></h3>-->
-<!--												<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>-->
-<!--												<div class="product-rating">-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--												</div>-->
-<!--												<div class="product-btns">-->
-<!--													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>-->
-<!--													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>-->
-<!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
-<!--												</div>-->
-<!--											</div>-->
-<!--											<div class="add-to-cart">-->
-<!--												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>-->
-<!--											</div>-->
-<!--										</div>-->
-<!--										&lt;!&ndash; /product &ndash;&gt;-->
-
-<!--										&lt;!&ndash; product &ndash;&gt;-->
-<!--										<div class="product">-->
-<!--											<div class="product-img">-->
-<!--												<img src="./img/product05.png" alt="">-->
-<!--											</div>-->
-<!--											<div class="product-body">-->
-<!--												<p class="product-category">Category</p>-->
-<!--												<h3 class="product-name"><a href="#">product name goes here</a></h3>-->
-<!--												<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>-->
-<!--												<div class="product-rating">-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--													<i class="fa fa-star"></i>-->
-<!--												</div>-->
-<!--												<div class="product-btns">-->
-<!--													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>-->
-<!--													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>-->
-<!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
-<!--												</div>-->
-<!--											</div>-->
-<!--											<div class="add-to-cart">-->
-<!--												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>-->
-<!--											</div>-->
-<!--										</div>-->
-<!--										&lt;!&ndash; /product &ndash;&gt;-->
 									</div>
 									<div id="slick-nav-1" class="products-slick-nav"></div>
 								</div>

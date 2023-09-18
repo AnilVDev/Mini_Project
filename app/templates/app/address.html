@@ -1,16 +1,33 @@
-{% extends 'app/base.html' %}
+{% extends 'app/baseindex.html' %}
 {% load static %}
-{% block title %}Buy Now{% endblock title %}
+{% block title %}Address{% endblock title %}
 {% block main-content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Sidebar Navigation -->
+            <div class="col-md-3 bg-dark text-light">
+                <div id="custom-navigation">
+                    <div class="container">
+                        <div id="responsive-nav">
+                            <ul class=" custom-nav">
+                                <h5>Welcome <span class=" active text-capitalize h2 text-primary">{{request.user}}</span></h5>
+<!--                                <li class="active"><a href="#">{{request.user}}</a></li>-->
+                                <li><a href="{% url 'profile' %}" >Profile</a></li>
+                                <li><a href="{% url 'address' %}" class="{{active}}">Address</a></li>
+                                <li><a href="{% url 'passwordchange' %}">Change Password</a></li>
+                                <li><a href="#">Orders</a></li>
+                                <li><a href="#">Wishlist</a></li>
+                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Left Sidebar Navigation -->
+
 <div class="container my-5">
  <div class="row">
- <h5>Welcome <span class="text-capitalize h2 text-primary">{{request.user}}</span></h5>
-  <div class="col-sm-2 border-end">
-   <ul class="list-unstyled">
-    <li class="d-grid"><a href="{% url 'profile' %}" class="btn">Profile</a></li>
-    <li class="d-grid"><a href="{% url 'address' %}" class="btn {{active}}">Address</a></li>
-   </ul>
-  </div>
   <div class="col-sm-9 offset-sm-1">
    <div class="row">
     {% for ad in add %}
