@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views import View
 from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category
-from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, ProductImageForm
+from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, ProductImageForm, CustomAdminLoginForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -10,12 +10,24 @@ from .forms import MyPasswordChangeForm
 from django.db.models import Q
 from django.contrib.auth import views as auth_views
 from django.urls import reverse
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
+from django.views.decorators.cache import never_cache
+from django.contrib.auth import logout
 
 class ProductView(View):
     def get(self, request):
         camera = Product.objects.filter(Q(category__name__icontains='camera'))
         watch = Product.objects.filter(Q(category__name__icontains='watch'))
-        return render(request, 'app/index.html', {'camera':camera,'watch':watch})
+        categories = Product.objects.values_list('category__name', flat=True).distinct()
+
+        context = {
+            'camera': camera,
+            'watch': watch,
+            'categories': categories,
+        }
+        return render(request, 'app/index.html', context)
 
 
 class ProductDetailView(View):
@@ -114,9 +126,59 @@ def password_change_view(request):
     context = {
         'form_class': MyPasswordChangeForm,
         'success_url': reverse('password_change_done'),
-        'active': 'bg-danger',  # Add the 'active' context variable here
+        'active': 'bg-danger',
     }
     return auth_views.PasswordChangeView.as_view(
         template_name='app/passwordchange.html',
         extra_context=context  # Pass the context here
     )(request)
+
+
+
+class CustomAdminLoginView(LoginView):
+    template_name = 'admin_login.html'  # Create this template
+    authentication_form = CustomAdminLoginForm
+
+@never_cache
+def admin_login(request):
+    errors = None
+    if request.method == 'POST':
+        # Use the AuthenticationForm to validate the login data
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            # Get the user from the form
+            user = form.get_user()
+
+            # Check if the user is a superuser (admin)
+            if user.is_superuser:
+                login(request)  # Log in the user
+                return redirect('admin_home')
+            else:
+                errors = 'You are not an admin. Please use User login.'
+
+
+    else:
+        # Display the login form
+        form = AuthenticationForm(request)
+
+    return render(request, 'app/admin_login.html', {'form': form, 'errors': errors})
+
+
+
+@never_cache
+def admin_home(request):
+    # if 'username' in request.session:
+    #     username = request.session['username']
+    #     user = Custom_user.objects.get(username = username)
+    #
+    #     if user.is_superuser:
+    #         search = request.POST.get('search')
+    #
+    #         if search:
+    #             userDatas = Custom_user.objects.filter(username__istartswith = search)
+    #         else:
+    #             userDatas = Custom_user.objects.filter(is_superuser = False)
+    #         return render(request, 'admin_Home.html', {'datas': userDatas})
+    return render(request,'app/admin_home.html')
+
+

@@ -75,16 +75,21 @@ class ProductImage(models.Model):
     def __str__(self):
         return str(self.product) + " - " + str(self.id)
 
+unique_case_insensitive_validator = RegexValidator(
+    r'^[a-zA-Z0-9_]*$',
+    message="Name must be unique and case-sensitive.",
+    flags=models.UniqueConstraint
+)
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
 
 class Category(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
@@ -109,5 +114,6 @@ class Cart(models.Model):
 
 class OrderPlaced(models.Model):
     pass
+
 
 

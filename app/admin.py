@@ -13,13 +13,17 @@ from .models import (
     Brand,
     Category
 )
+
+
+
+
 # Register your models here.
 @admin.register(Customer)
 class CustomerModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'name','phone_number', 'locality', 'city', 'pincode', 'state']
 @admin.register(Product)
 class ProductModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'selling_price', 'discount_price', 'description', 'brand', 'category', 'display_product_images']
+    list_display = ['id', 'title', 'selling_price', 'discount_price', 'description', 'details', 'brand', 'category', 'display_product_images']
 
     def display_product_images(self, obj):
         if obj.images.all():  # Check if there are associated images
@@ -50,6 +54,5 @@ class BrandModelAdmin(admin.ModelAdmin):
 #         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
 #         ('Important dates', {'fields': ('last_login', 'date_joined')}),
 #     )
-#
-# admin.site.unregister(User)
-# admin.site.register(User, CustomUserAdmin)
+
+

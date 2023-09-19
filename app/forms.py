@@ -81,3 +81,8 @@ class ProductImageForm(forms.ModelForm):
         fields = '__all__'
 
 ProductImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=1)
+
+
+class CustomAdminLoginForm(AuthenticationForm):
+    username = UsernameField(widget=forms.TextInput(attrs={'autofocus': True, 'class': 'form-control'}))
+    password = forms.CharField(label=_("Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'class': 'form-control'}))
