@@ -1,12 +1,11 @@
 from django.shortcuts import render,redirect
 from django.views import View
 from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category
-from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, ProductImageForm, CustomAdminLoginForm
+from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, ProductImageForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.forms import modelformset_factory
-from .forms import MyPasswordChangeForm
 from django.db.models import Q
 from django.contrib.auth import views as auth_views
 from django.urls import reverse
@@ -15,6 +14,10 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import logout
+from twilio.rest import Client
+import datetime
+from django.conf import settings
+from django.contrib.auth.models import User
 
 class ProductView(View):
     def get(self, request):
@@ -64,18 +67,134 @@ def login(request):
 def checkout(request):
  return render(request, 'app/checkout.html')
 
-class CustomerRegistrationView(View):
-     def get(self, request):
-          form = CustomerRegistrationForm()
-          return render(request, 'app/customerregistration.html', {'form':form})
+# class CustomerRegistrationView(View):
+#      def get(self, request):
+#           form = CustomerRegistrationForm()
+#           return render(request, 'app/customerregistration.html', {'form':form})
+#
+#      def post(self, request):
+#       form = CustomerRegistrationForm(request.POST)
+#       if form.is_valid():
+#          messages.success(request, 'Registered Successfully')
+#          form.save()
+#       form = CustomerRegistrationForm()
+#       return render(request, 'app/customerregistration.html', {'form': form})
 
-     def post(self, request):
-      form = CustomerRegistrationForm(request.POST)
-      if form.is_valid():
-         messages.success(request, 'Registered Successfully')
-         form.save()
-      form = CustomerRegistrationForm()
-      return render(request, 'app/customerregistration.html', {'form': form})
+class CustomerRegistrationView(View):
+    def get(self, request):
+        form = CustomerRegistrationForm()
+        return render(request, 'app/customerregistration.html', {'form': form})
+
+    def post(self, request):
+        form = CustomerRegistrationForm(request.POST)
+        if form.is_valid():
+            request.session['temp_user_data'] = {
+                'username': form.cleaned_data['username'],
+                'email': form.cleaned_data['email'],
+                'password': form.cleaned_data['password1'],  # Replace with your password hashing logic
+            }
+
+            otp = form.generate_otp()
+
+            # Send the OTP via Twilio
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            message = client.messages.create(
+                body=f'Your OTP for registration: {otp}',
+                from_=settings.TWILIO_PHONE_NUMBER,
+                to = "+917012115234"
+                # to=form.cleaned_data['phone_number']
+            )
+
+            # Store the OTP in the session for later verification
+            request.session['registration_otp'] = otp
+
+            messages.success(request, 'OTP sent successfully. Please verify your phone number.')
+
+            # Redirect to the OTP verification page
+            return redirect('verify_otp')
+
+        return render(request, 'app/customerregistration.html', {'form': form})
+
+class OTPVerificationView(View):
+    MAX_ATTEMPTS = 3
+    OTP_EXPIRY_MINUTES = 1
+
+    def get(self, request):
+        if 'registration_otp' in request.session:
+            return render(request, 'app/verify_otp.html', {'form': OTPVerificationForm()})
+        else:
+            return redirect('customer_registration')
+
+    def post(self, request):
+        form = OTPVerificationForm()
+        if 'registration_otp' in request.session:
+            form = OTPVerificationForm(request.POST)
+            if form.is_valid():
+                entered_otp = form.cleaned_data['otp']
+                stored_otp = request.session['registration_otp']
+                if 'otp_attempts' not in request.session:
+                    request.session['otp_attempts'] = 0
+                otp_attempts = request.session['otp_attempts']
+                now = datetime.datetime.now()
+
+                # Check if the OTP has expired
+                otp_timestamp = request.session.get('otp_timestamp')
+                if otp_timestamp and (now - otp_timestamp).total_seconds() > (self.OTP_EXPIRY_MINUTES * 60):
+                    del request.session['registration_otp']
+                    messages.error(request, 'OTP has expired. Please request a new OTP.')
+                    return redirect('customer_registration')
+
+                if entered_otp == stored_otp:
+                    user_data = request.session.get('temp_user_data')
+                    user = User.objects.create(
+                        username=user_data['username'],
+                        email=user_data['email'],
+                        password=user_data['password'],  # Replace with your password hashing logic
+                    )
+                    del request.session['temp_user_data']
+                    # Valid OTP
+                    del request.session['registration_otp']
+                    del request.session['otp_attempts']
+                    messages.success(request, 'OTP verified successfully. Registration complete!')
+                    # Perform your user registration logic here
+                    return redirect('login')  # Redirect to login page or any other desired page
+                else:
+                    otp_attempts += 1
+                    request.session['otp_attempts'] = otp_attempts
+                    if otp_attempts >= self.MAX_ATTEMPTS:
+                        del request.session['registration_otp']
+                        del request.session['otp_attempts']
+                        messages.error(request, 'You have exceeded the maximum OTP verification attempts.')
+                        return redirect('customerregistration')
+                    messages.error(request, 'Invalid OTP. Please try again.')
+
+        return render(request, 'app/verify_otp.html', {'form': form})
+
+    def resend_otp(self, request):
+        if 'registration_otp' in request.session:
+            now = datetime.datetime.now()
+            otp_timestamp = request.session.get('otp_timestamp')
+            if not otp_timestamp or (now - otp_timestamp).total_seconds() > (self.OTP_EXPIRY_MINUTES * 60):
+                # Generate a new OTP
+                new_otp = generate_random_otp()
+                # Send the new OTP via Twilio or any other method
+                # Update the OTP timestamp
+                request.session['otp_timestamp'] = now
+                request.session['registration_otp'] = new_otp
+                messages.success(request, 'New OTP sent successfully. Please check your phone.')
+            else:
+                messages.error(request, 'You can only request a new OTP after the previous one has expired.')
+
+        return redirect('verify_otp')
+
+
+
+def registration_complete(request):
+    return render(request, 'registration_complete.html')
+
+def max_attempts_exceeded(request):
+    return render(request, 'max_attempts_exceeded.html')
+
 
 @method_decorator(login_required, name='dispatch')
 class ProfileView(View):

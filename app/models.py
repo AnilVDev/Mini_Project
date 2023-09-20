@@ -59,6 +59,7 @@ class Customer(models.Model):
     )
     phone_number = models.CharField(validators=[phone_regex], max_length=10)
 
+
     def __str__(self):
         return str(self.id)
 

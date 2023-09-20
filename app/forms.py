@@ -6,6 +6,7 @@ from django.contrib.auth import password_validation
 from .models import Customer,Product, ProductImage
 from django.core.validators import RegexValidator
 from django.forms import modelformset_factory
+import random
 
 
 class CustomerRegistrationForm(UserCreationForm):
@@ -13,17 +14,19 @@ class CustomerRegistrationForm(UserCreationForm):
     password2 = forms.CharField(label='Confirm Password (again)', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))
     # Add a phone number field with digit-only validation
-    phone_regex = RegexValidator(
-        regex=r'^\d{10}$',  # Matches a 10-digit number
-        message="Phone number must be 10 digits long."
-    )
-    phonenumber = forms.CharField(validators=[phone_regex], max_length=10,
-                                  widget=forms.TextInput(attrs={'class': 'form-control'}))
-
+    # phone_regex = RegexValidator(
+    #     regex=r'^\d{10}$',  # Matches a 10-digit number
+    #     message="Phone number must be 10 digits long."
+    # )
+    # phone_number = forms.CharField(validators=[phone_regex], max_length=10,
+    #                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+    def generate_otp(self):
+        # Generate a random OTP
+        return str(random.randint(100000, 999999))
 
     class Meta:
         model = User
-        fields = ['username', 'email','phonenumber', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2']
         labels = {'email': 'Email'}
         widgets = {'username': forms.TextInput(attrs={'class':'form-control'})}
 
@@ -86,3 +89,7 @@ ProductImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, 
 class CustomAdminLoginForm(AuthenticationForm):
     username = UsernameField(widget=forms.TextInput(attrs={'autofocus': True, 'class': 'form-control'}))
     password = forms.CharField(label=_("Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'class': 'form-control'}))
+
+class OTPVerificationForm(forms.Form):
+    otp = forms.CharField(label=_("OTP"), max_length=6, widget=forms.TextInput(attrs={'autocomplete': 'off', 'class' : 'form-control'}))
+

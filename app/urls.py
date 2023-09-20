@@ -26,8 +26,11 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='app/password_reset_confirm.html', form_class=MySetPasswordForm),name='password_reset_confirm'),
     path('password-reset-complete/',auth_views.PasswordResetCompleteView.as_view(template_name='app/password_reset_complete.html'),name='password_reset_complete'),
     path('registration/', views.CustomerRegistrationView.as_view(), name='customerregistration'),
+    path('verify-otp/', views.OTPVerificationView.as_view(), name='verify_otp'),
     path('checkout/', views.checkout, name='checkout'),
     path('admin-login/', views.admin_login, name='admin_login'),
     path('admin-home', views.admin_home, name='admin_home'),
+    path('registration_complete/', views.registration_complete, name='registration_complete'),
+    path('max_attempts_exceeded/', views.max_attempts_exceeded, name='max_attempts_exceeded'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
