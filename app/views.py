@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category
 from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, ProductImageForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm
@@ -18,6 +18,8 @@ from twilio.rest import Client
 import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.views.generic import ListView
+
 
 class ProductView(View):
     def get(self, request):
@@ -165,7 +167,7 @@ class OTPVerificationView(View):
                         del request.session['registration_otp']
                         del request.session['otp_attempts']
                         messages.error(request, 'You have exceeded the maximum OTP verification attempts.')
-                        return redirect('customerregistration')
+                        return redirect('customer_registration')
                     messages.error(request, 'Invalid OTP. Please try again.')
 
         return render(request, 'app/verify_otp.html', {'form': form})
@@ -301,3 +303,18 @@ def admin_home(request):
     return render(request,'app/admin_home.html')
 
 
+def user_list(request):
+    users = User.objects.all()
+    return render(request, 'app/user_list.html', {'users': users})
+
+
+class DeleteUserView(View):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        user.delete()
+        return redirect('user_list')
+
+class ProductListView(ListView):
+    model = Product
+    template_name = 'app/product_list.html'
+    context_object_name = 'products'

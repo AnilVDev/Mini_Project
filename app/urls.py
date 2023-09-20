@@ -25,12 +25,14 @@ urlpatterns = [
     path('password-reset/done/',auth_views.PasswordResetDoneView.as_view(template_name='app/password_reset_done.html'),name='password_reset_done'),
     path('password-reset-confirm/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='app/password_reset_confirm.html', form_class=MySetPasswordForm),name='password_reset_confirm'),
     path('password-reset-complete/',auth_views.PasswordResetCompleteView.as_view(template_name='app/password_reset_complete.html'),name='password_reset_complete'),
-    path('registration/', views.CustomerRegistrationView.as_view(), name='customerregistration'),
-    path('verify-otp/', views.OTPVerificationView.as_view(), name='verify_otp'),
+    path('registration/', views.CustomerRegistrationView.as_view(), name='customer_registration'),
+    path('registration/verify-otp/', views.OTPVerificationView.as_view(), name='verify_otp'),
     path('checkout/', views.checkout, name='checkout'),
     path('admin-login/', views.admin_login, name='admin_login'),
     path('admin-home', views.admin_home, name='admin_home'),
     path('registration_complete/', views.registration_complete, name='registration_complete'),
     path('max_attempts_exceeded/', views.max_attempts_exceeded, name='max_attempts_exceeded'),
-
+    path('admin-home/user-list/', views.user_list, name='user_list'),
+    path('user/delete/<int:user_id>/', views.DeleteUserView.as_view(), name='delete_user'),
+    path('admin-home/products/', views.ProductListView.as_view(), name='product_list'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
