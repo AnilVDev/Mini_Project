@@ -1,0 +1,13 @@
+{% extends 'app/baseindex.html' %}
+{% load static %}
+{% block title %}Registration Complete{% endblock title %}
+
+
+
+{% block main-content %}
+
+    <h1>Registration Complete</h1>
+    <p>Congratulations! Your registration is complete.</p>
+    <p><a href="{% url 'login' %}">Login</a></p>
+
+{% block admin %} {% endblock admin %}

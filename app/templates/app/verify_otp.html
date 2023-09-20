@@ -1,0 +1,58 @@
+{% extends 'app/baseindex.html' %}
+{% load static %}
+{% block title %}Verfing OTP{% endblock title %}
+
+
+
+{% block main-content %}
+
+<!--<h1>OTP Verification</h1>-->
+<!--<div class="container">-->
+<!-- <div class="row my-3">-->
+<!--  <div class="col-sm-6 offset-sm-3">-->
+
+<!--   <hr>-->
+<!--   <form action="" method="post" novalidate class="shadow p-5">-->
+<!--      <h1>OTP Verification</h1>-->
+
+<!--        {% csrf_token %}-->
+<!--        {{ form.as_p }}-->
+<!--        <button type="submit">Verify OTP</button>-->
+
+<!--      <button type="submit" class="btn btn-primary mt-4">Verify OTP</button>-->
+<!--       {% if form.non_field_errors %}-->
+<!--            {% for error in form.non_field_errors %}-->
+<!--                <p class="alert alert-danger my-3">{{error}}</p>-->
+<!--            {% endfor %}-->
+<!--       {% endif %}-->
+
+<!--   </form>-->
+<!--  </div>-->
+<!-- </div>-->
+<!--</div>-->
+
+<div class="container">
+    <div class="row my-3">
+        <div class="col-sm-6 offset-sm-3">
+            <h1>OTP Verification</h1>
+            <hr>
+            <form action="" method="post" novalidate class="shadow p-5">
+                {% csrf_token %}
+                 {% for fm in form %}
+                    <div class="form-group">
+                     {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small><br>
+                    </div>
+                  {% endfor %}
+                <button type="submit" class="btn btn-primary mt-4">Verify OTP</button>
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <p class="alert alert-danger my-3">{{error}}</p>
+                    {% endfor %}
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock main-content %}

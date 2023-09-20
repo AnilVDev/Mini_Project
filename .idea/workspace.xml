@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="user signup with otp succeed.." />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2VR4cNyY1IbDX2L1M22X2gdcQlv" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/anil/Projects/admin panel&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
+  }
+}</component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="" />
+      <created>1694785638282</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1694785638282</updated>
+    </task>
+    <task id="LOCAL-00001" summary="product and image added successfully. Product side cleared">
+      <option name="closed" value="true" />
+      <created>1694961143318</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1694961143318</updated>
+    </task>
+    <task id="LOCAL-00002" summary="product side cleared with all html pages, corrected with new templates">
+      <option name="closed" value="true" />
+      <created>1695043987064</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1695043987064</updated>
+    </task>
+    <task id="LOCAL-00003" summary="product side cleared with all html pages, corrected with new templates (2)">
+      <option name="closed" value="true" />
+      <created>1695044423472</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1695044423472</updated>
+    </task>
+    <task id="LOCAL-00004" summary="admin login and admin home is cleared">
+      <option name="closed" value="true" />
+      <created>1695131712963</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1695131712963</updated>
+    </task>
+    <task id="LOCAL-00005" summary="user signup with otp succeed..">
+      <option name="closed" value="true" />
+      <created>1695201043461</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1695201043461</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="product and image added successfully. Product side cleared" />
+    <MESSAGE value="product side cleared with all html pages, corrected with new templates" />
+    <MESSAGE value="product side cleared with all html pages, corrected with new templates (2)" />
+    <MESSAGE value="admin login and admin home is cleared" />
+    <MESSAGE value="user signup with otp succeed.." />
+    <option name="LAST_COMMIT_MESSAGE" value="user signup with otp succeed.." />
+  </component>
+</project>
