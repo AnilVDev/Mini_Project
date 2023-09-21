@@ -354,6 +354,19 @@ def add_product_images(request):
 
     return render(request, 'app/add_image_to_product.html', {'formset': formset})
 
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'app/edit_product.html', {'form': form, 'product': product})
+
 def category_list_and_add(request):
     categories = Category.objects.all()
     if request.method == 'POST':
@@ -376,6 +389,19 @@ def delete_category(request, category_id):
 
     # Redirect to the page where you list categories
     return redirect('category_list_and_add')
+
+def edit_category(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('category_list_and_add')
+    else:
+        form = CategoryForm(instance=category)
+
+    return render(request, 'app/edit_category.html', {'form': form, 'category': category})
 
 
 def brand_list_and_add(request):
@@ -402,3 +428,15 @@ def delete_brand(request, brand_id):
     # Redirect to the page where you list categories
     return redirect('brand_list_and_add')
 
+def edit_brand(request, brand_id):
+    brand = get_object_or_404(Brand, pk=brand_id)
+
+    if request.method == 'POST':
+        form = BrandForm(request.POST, instance=brand)
+        if form.is_valid():
+            form.save()
+            return redirect('brand_list_and_add')
+    else:
+        form = BrandForm(instance=brand)
+
+    return render(request, 'app/edit_brand.html', {'form': form, 'brand': brand})
