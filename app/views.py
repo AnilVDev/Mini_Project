@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
-from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category
-from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, ProductImageForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm
+from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand
+from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -318,3 +318,87 @@ class ProductListView(ListView):
     model = Product
     template_name = 'app/product_list.html'
     context_object_name = 'products'
+
+
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')  # Redirect to the product list page after successful submission
+    else:
+        form = ProductForm()
+
+    return render(request, 'app/add_product.html', {'form': form})
+
+
+# def add_product_image(request):
+#     if request.method == 'POST':
+#         form = ProductImageForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('product_list')  # Redirect to the product list page or any other appropriate page
+#     else:
+#         form = ProductImageForm()
+#
+#     return render(request, 'app/add_image_to_product.html', {'form': form})
+
+def add_product_images(request):
+    if request.method == 'POST':
+        formset = ProductImageFormSet(request.POST, request.FILES, queryset=ProductImage.objects.none())
+        if formset.is_valid():
+            formset.save()
+            return redirect('product_list')  # Redirect to the product list page or any other appropriate page
+    else:
+        formset = ProductImageFormSet(queryset=ProductImage.objects.none())
+
+    return render(request, 'app/add_image_to_product.html', {'formset': formset})
+
+def category_list_and_add(request):
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('category_list_and_add')
+    else:
+        form = CategoryForm()
+    return render(request, 'app/category_list_and_add.html', {'categories': categories, 'form': form})
+
+def delete_category(request, category_id):
+    try:
+        category = Category.objects.get(pk=category_id)
+        category.delete()
+        # Optionally, you can add a success message
+        messages.success(request, 'Category deleted successfully.')
+    except Category.DoesNotExist:
+        messages.error(request, 'Category not found.')
+
+    # Redirect to the page where you list categories
+    return redirect('category_list_and_add')
+
+
+def brand_list_and_add(request):
+    brands = Brand.objects.all()
+    if request.method == 'POST':
+        form = BrandForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('brand_list_and_add')
+    else:
+        form = CategoryForm()
+    return render(request, 'app/brand_list_and_add.html', {'brands': brands, 'form': form})
+
+
+def delete_brand(request, brand_id):
+    try:
+        brand = Brand.objects.get(pk=brand_id)
+        brand.delete()
+        # Optionally, you can add a success message
+        messages.success(request, 'Brand deleted successfully.')
+    except Brand.DoesNotExist:
+        messages.error(request, 'Brand not found.')
+
+    # Redirect to the page where you list categories
+    return redirect('brand_list_and_add')
+

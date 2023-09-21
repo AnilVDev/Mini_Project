@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,Userna
 from django.contrib.auth.models import User
 from django.utils.translation import gettext,gettext_lazy as _
 from django.contrib.auth import password_validation
-from .models import Customer,Product, ProductImage
+from .models import Customer,Product, ProductImage,Category,Brand
 from django.core.validators import RegexValidator
 from django.forms import modelformset_factory
 import random
@@ -93,3 +93,13 @@ class CustomAdminLoginForm(AuthenticationForm):
 class OTPVerificationForm(forms.Form):
     otp = forms.CharField(label=_("OTP"), max_length=6, widget=forms.TextInput(attrs={'autocomplete': 'off', 'class' : 'form-control'}))
 
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+
+class BrandForm(forms.ModelForm):
+    class Meta:
+        model = Brand
+        fields = ['name']
