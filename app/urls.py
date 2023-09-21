@@ -17,6 +17,7 @@ urlpatterns = [
     path('mobile/', views.mobile, name='mobile'),
     path('accounts/login/', auth_views.LoginView.as_view(template_name= 'app/login.html',authentication_form=LoginForm), name='login'),
     path('logout/',auth_views.LogoutView.as_view(next_page='login'),name= 'logout'),
+    path('resend-otp/', views.OTPVerificationView.as_view(), name='resend_otp'),
     # path('password-change/',auth_views.PasswordChangeView.as_view(template_name='app/passwordchange.html',form_class=MyPasswordChangeForm, success_url='/password-change-done/'),name='passwordchange'),
     path('password-change/', views.password_change_view, name='passwordchange'),
     # path('password-change-done/',auth_views.PasswordChangeDoneView.as_view(template_name='app/passwordchangedone.html'),name='passwordchangedone'),
@@ -37,8 +38,12 @@ urlpatterns = [
     path('admin-home/products/', views.ProductListView.as_view(), name='product_list'),
     path('admin-home/add_product/', views.add_product, name='add_product'),
     path('admin-home/add_product_image/', views.add_product_images, name='add_product_image'),
+    path('admin-home/edit_product/<int:product_id>/', views.edit_product, name='edit_product'),
     path('admin-home/categories/', views.category_list_and_add, name='category_list_and_add'),
     path('admin-home/categories/delete/<int:category_id>/', views.delete_category, name='delete_category'),
+    path('admin-home/edit_category/<int:category_id>/', views.edit_category, name='edit_category'),
     path('admin-home/brands/', views.brand_list_and_add, name='brand_list_and_add'),
     path('admin-home/brands/delete/<int:brand_id>/', views.delete_brand, name='delete_brand'),
+    path('admin-home/edit_brand/<int:brand_id>/', views.edit_brand, name='edit_brand'),
+    path('admin-home/toggle_user_status/<int:user_id>/', views.toggle_user_status, name='toggle_user_status')
          ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

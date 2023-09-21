@@ -13,13 +13,7 @@ class CustomerRegistrationForm(UserCreationForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class':'form-control'}))
     password2 = forms.CharField(label='Confirm Password (again)', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     email = forms.CharField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    # Add a phone number field with digit-only validation
-    # phone_regex = RegexValidator(
-    #     regex=r'^\d{10}$',  # Matches a 10-digit number
-    #     message="Phone number must be 10 digits long."
-    # )
-    # phone_number = forms.CharField(validators=[phone_regex], max_length=10,
-    #                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     def generate_otp(self):
         # Generate a random OTP
         return str(random.randint(100000, 999999))

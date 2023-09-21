@@ -1,0 +1,114 @@
+{% extends 'app/admin_home.html' %}
+{% load static %}
+{% block title %}User List{% endblock title %}
+
+
+
+{% block admin %}
+
+
+
+<style>
+        .add-user-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+</style>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Left Side - Navigation Bar -->
+        <nav class="sidebar sidebar-offcanvas col-lg-3" id="sidebar">
+            <!-- Navigation content (your existing code) -->
+            <!-- ... -->
+        </nav>
+
+        <!-- Right Side - User List -->
+        <div class="col-lg-9">
+            <a href="" class="btn btn-success add-user-button">Add User</a>
+            <h1>User List</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Is Admin</th>
+                        <th>Is Active</th>
+                        <th>Date Joined</th>
+                        <th>Edit User</th>
+                        <th>Block User</th>
+                        <th>Delete User</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.is_superuser }}</td>
+                        <td>{{ user.is_active }}</td>
+                        <td>{{ user.date_joined }}</td>
+                        <td>
+                            <a href="" class="btn btn-primary">Edit</a>
+                        </td>
+                        <td>
+<!--                            <a href="" class="btn btn-warning">Block</a>-->
+                                <form method="post" action="{% url 'toggle_user_status' user.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn {% if user.is_active %}btn-warning{% else %}btn-success{% endif %}">
+                                    {% if user.is_active %}Block{% else %}Unblock{% endif %}
+                                    </button>
+                                </form>
+                        </td>
+                        <td>
+                            <form method="post" action="">
+                                {% csrf_token %}
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+{% for user in users %}
+<div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete "{{ user.username }}"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_user' user.id %}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Bootstrap JavaScript and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+
+{% endblock admin %}
+

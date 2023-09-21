@@ -130,3 +130,17 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 TWILIO_ACCOUNT_SID = 'AC1c617c8923a97588a3ae841ab5c2f9b3'
 TWILIO_AUTH_TOKEN = '36e14188a606513583acdccd02b11442'
 TWILIO_PHONE_NUMBER = '+15178782279'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'ksheeraq59d@gmail.com'
+EMAIL_HOST_PASSWORD = 'gpnc jijs vxas gajr'
+DEFAULT_FROM_EMAIL = 'ksheeraq59d@gmail.com'
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]

@@ -1,0 +1,33 @@
+{% extends 'app/admin_home.html' %}
+{% load static %}
+{% block title %}User List{% endblock title %}
+
+
+
+{% block admin %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <nav class="sidebar sidebar-offcanvas col-lg-3" id="sidebar">
+      <!-- Your existing sidebar content -->
+    </nav>
+
+    <!-- Product Addition Form -->
+    <div class="col-lg-9">
+      <div class="container">
+        <h1>Edit Product</h1>
+          <form method="post">
+              {% csrf_token %}
+              {{ form.as_p }}
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+              <a href="{% url 'product_list' %}" class="btn btn-secondary">Cancel</a>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+{% endblock admin %}

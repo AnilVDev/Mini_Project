@@ -1,0 +1,84 @@
+{% extends 'app/admin_home.html' %}
+{% load static %}
+{% block title %}Brands{% endblock title %}
+
+
+
+{% block admin %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <nav class="sidebar sidebar-offcanvas col-lg-3" id="sidebar">
+      <!-- Your existing sidebar content -->
+    </nav>
+
+    <!-- Product Addition Form -->
+    <div class="col-lg-9">
+      <div class="container">
+          <!-- templates/app/category_list_and_add.html -->
+            <h2>Add Brand</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Add</button>
+            </form>
+             <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            <h1>Brands</h1>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for brand in brands %}
+                    <tr>
+                        <td>{{ brand.name }}</td>
+                        <td>
+                            <a href="{% url 'edit_brand' brand.id %}" class="btn btn-primary">Edit</a>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUserModal{{ brand.id }}">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% for brand in brands %}
+<div class="modal fade" id="deleteUserModal{{ brand.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete "{{ brand.name }}"?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_brand' brand.id %}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Bootstrap JavaScript and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+{% endblock admin %}

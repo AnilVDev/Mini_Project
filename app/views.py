@@ -24,12 +24,12 @@ from django.views.generic import ListView
 class ProductView(View):
     def get(self, request):
         camera = Product.objects.filter(Q(category__name__icontains='camera'))
-        watch = Product.objects.filter(Q(category__name__icontains='watch'))
+        smartwatch = Product.objects.filter(Q(category__name__icontains='smart watch'))
         categories = Product.objects.values_list('category__name', flat=True).distinct()
 
         context = {
             'camera': camera,
-            'watch': watch,
+            'smartwatch': smartwatch,
             'categories': categories,
         }
         return render(request, 'app/index.html', context)
@@ -68,19 +68,6 @@ def login(request):
 
 def checkout(request):
  return render(request, 'app/checkout.html')
-
-# class CustomerRegistrationView(View):
-#      def get(self, request):
-#           form = CustomerRegistrationForm()
-#           return render(request, 'app/customerregistration.html', {'form':form})
-#
-#      def post(self, request):
-#       form = CustomerRegistrationForm(request.POST)
-#       if form.is_valid():
-#          messages.success(request, 'Registered Successfully')
-#          form.save()
-#       form = CustomerRegistrationForm()
-#       return render(request, 'app/customerregistration.html', {'form': form})
 
 class CustomerRegistrationView(View):
     def get(self, request):
@@ -218,7 +205,7 @@ class ProfileView(View):
             reg.save()
             messages.success(request, 'Congratulations!! Profile Updated Successfully')
         return render(request, 'app/profile.html',{'form':form,'active':'bg-danger'})
-
+@method_decorator(staff_member_required, name='dispatch')
 def add_product_with_images(request):
     if request.method == 'POST':
         product_form = ProductForm(request.POST)
@@ -255,7 +242,7 @@ def password_change_view(request):
     )(request)
 
 
-
+@method_decorator(staff_member_required, name='dispatch')
 class CustomAdminLoginView(LoginView):
     template_name = 'admin_login.html'  # Create this template
     authentication_form = CustomAdminLoginForm
@@ -285,7 +272,7 @@ def admin_login(request):
     return render(request, 'app/admin_login.html', {'form': form, 'errors': errors})
 
 
-
+@method_decorator(staff_member_required, name='dispatch')
 @never_cache
 def admin_home(request):
     # if 'username' in request.session:
@@ -302,24 +289,24 @@ def admin_home(request):
     #         return render(request, 'admin_Home.html', {'datas': userDatas})
     return render(request,'app/admin_home.html')
 
-
+@staff_member_required
 def user_list(request):
     users = User.objects.all()
     return render(request, 'app/user_list.html', {'users': users})
 
-
+@method_decorator(staff_member_required, name='dispatch')
 class DeleteUserView(View):
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
         user.delete()
         return redirect('user_list')
-
+@method_decorator(staff_member_required, name='dispatch')
 class ProductListView(ListView):
     model = Product
     template_name = 'app/product_list.html'
     context_object_name = 'products'
 
-
+@staff_member_required
 def add_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
@@ -342,7 +329,7 @@ def add_product(request):
 #         form = ProductImageForm()
 #
 #     return render(request, 'app/add_image_to_product.html', {'form': form})
-
+@staff_member_required
 def add_product_images(request):
     if request.method == 'POST':
         formset = ProductImageFormSet(request.POST, request.FILES, queryset=ProductImage.objects.none())
@@ -354,17 +341,52 @@ def add_product_images(request):
 
     return render(request, 'app/add_image_to_product.html', {'formset': formset})
 
+@staff_member_required
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'app/edit_product.html', {'form': form, 'product': product})
+
+# def category_list_and_add(request):
+#     categories = Category.objects.all()
+#     if request.method == 'POST':
+#         form = CategoryForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('category_list_and_add')
+#     else:
+#         form = CategoryForm()
+#     return render(request, 'app/category_list_and_add.html', {'categories': categories, 'form': form})
+
+@staff_member_required
 def category_list_and_add(request):
     categories = Category.objects.all()
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
-            form.save()
+            category_name = form.cleaned_data['name']
+            existing_category = Category.objects.filter(name__iexact=category_name).first()
+            if existing_category:
+                messages.error(request, 'Category with this name already exists.')
+            else:
+                form.save()
+                messages.success(request, 'Category added successfully.')
+
             return redirect('category_list_and_add')
     else:
         form = CategoryForm()
+
     return render(request, 'app/category_list_and_add.html', {'categories': categories, 'form': form})
 
+@staff_member_required
 def delete_category(request, category_id):
     try:
         category = Category.objects.get(pk=category_id)
@@ -377,19 +399,39 @@ def delete_category(request, category_id):
     # Redirect to the page where you list categories
     return redirect('category_list_and_add')
 
+@staff_member_required
+def edit_category(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
 
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('category_list_and_add')
+    else:
+        form = CategoryForm(instance=category)
+
+    return render(request, 'app/edit_category.html', {'form': form, 'category': category})
+
+@staff_member_required
 def brand_list_and_add(request):
     brands = Brand.objects.all()
     if request.method == 'POST':
         form = BrandForm(request.POST)
         if form.is_valid():
-            form.save()
+            brand_name = form.cleaned_data['name']
+            existing_brand = Brand.objects.filter(name__iexact=brand_name).first()
+            if existing_brand:
+                messages.error(request, 'Brand with this name already exists.')
+            else:
+                form.save()
+                messages.success(request, 'Brand added successfully.')
             return redirect('brand_list_and_add')
     else:
-        form = CategoryForm()
+        form = BrandForm()
     return render(request, 'app/brand_list_and_add.html', {'brands': brands, 'form': form})
 
-
+@staff_member_required
 def delete_brand(request, brand_id):
     try:
         brand = Brand.objects.get(pk=brand_id)
@@ -402,3 +444,30 @@ def delete_brand(request, brand_id):
     # Redirect to the page where you list categories
     return redirect('brand_list_and_add')
 
+@staff_member_required
+def edit_brand(request, brand_id):
+    brand = get_object_or_404(Brand, pk=brand_id)
+
+    if request.method == 'POST':
+        form = BrandForm(request.POST, instance=brand)
+        if form.is_valid():
+            form.save()
+            return redirect('brand_list_and_add')
+    else:
+        form = BrandForm(instance=brand)
+
+    return render(request, 'app/edit_brand.html', {'form': form, 'brand': brand})
+
+@staff_member_required
+def toggle_user_status(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    user.is_active = not user.is_active
+    user.save()
+
+    if user.is_active:
+        messages.success(request, f"User '{user.username}' is unblocked.")
+    else:
+        messages.warning(request, f"User '{user.username}' is blocked.")
+
+    return redirect('user_list')
