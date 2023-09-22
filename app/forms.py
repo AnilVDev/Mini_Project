@@ -77,7 +77,7 @@ class ProductImageForm(forms.ModelForm):
         model = ProductImage
         fields = '__all__'
 
-ProductImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=1)
+ProductImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, extra=4)
 
 
 class CustomAdminLoginForm(AuthenticationForm):

@@ -272,21 +272,9 @@ def admin_login(request):
     return render(request, 'app/admin_login.html', {'form': form, 'errors': errors})
 
 
-@method_decorator(staff_member_required, name='dispatch')
-@never_cache
+
+@staff_member_required
 def admin_home(request):
-    # if 'username' in request.session:
-    #     username = request.session['username']
-    #     user = Custom_user.objects.get(username = username)
-    #
-    #     if user.is_superuser:
-    #         search = request.POST.get('search')
-    #
-    #         if search:
-    #             userDatas = Custom_user.objects.filter(username__istartswith = search)
-    #         else:
-    #             userDatas = Custom_user.objects.filter(is_superuser = False)
-    #         return render(request, 'admin_Home.html', {'datas': userDatas})
     return render(request,'app/admin_home.html')
 
 @staff_member_required
@@ -319,27 +307,37 @@ def add_product(request):
     return render(request, 'app/add_product.html', {'form': form})
 
 
-# def add_product_image(request):
+
+
+# @staff_member_required
+# def add_product_images(request):
 #     if request.method == 'POST':
-#         form = ProductImageForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
+#         formset = ProductImageFormSet(request.POST, request.FILES, queryset=ProductImage.objects.none())
+#         if formset.is_valid():
+#             formset.save()
 #             return redirect('product_list')  # Redirect to the product list page or any other appropriate page
 #     else:
-#         form = ProductImageForm()
+#         formset = ProductImageFormSet(queryset=ProductImage.objects.none())
 #
-#     return render(request, 'app/add_image_to_product.html', {'form': form})
+#     return render(request, 'app/add_image_to_product.html', {'formset': formset})
+
 @staff_member_required
-def add_product_images(request):
+def add_product_images(request, product_id):
+    product = Product.objects.get(pk=product_id)
+
     if request.method == 'POST':
         formset = ProductImageFormSet(request.POST, request.FILES, queryset=ProductImage.objects.none())
         if formset.is_valid():
-            formset.save()
+            for form in formset:
+                if form.cleaned_data:
+                    image = form.save(commit=False)
+                    image.product = product
+                    image.save()
             return redirect('product_list')  # Redirect to the product list page or any other appropriate page
     else:
         formset = ProductImageFormSet(queryset=ProductImage.objects.none())
 
-    return render(request, 'app/add_image_to_product.html', {'formset': formset})
+    return render(request, 'app/add_image_to_product.html', {'formset': formset, 'product': product})
 
 @staff_member_required
 def edit_product(request, product_id):
@@ -355,16 +353,6 @@ def edit_product(request, product_id):
 
     return render(request, 'app/edit_product.html', {'form': form, 'product': product})
 
-# def category_list_and_add(request):
-#     categories = Category.objects.all()
-#     if request.method == 'POST':
-#         form = CategoryForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('category_list_and_add')
-#     else:
-#         form = CategoryForm()
-#     return render(request, 'app/category_list_and_add.html', {'categories': categories, 'form': form})
 
 @staff_member_required
 def category_list_and_add(request):

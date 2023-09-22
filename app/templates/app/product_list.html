@@ -43,9 +43,8 @@
                                 View Details
                             </button>
                             <a href="{% url 'edit_product' product.id %}" class="btn btn-success">Edit</a>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteProductModal{{ product.id }}">
-                                Delete
-                            </button>
+                            <a href="{% url 'add_product_image' product.id %}" class="btn btn-success">Add image</a>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteProductModal{{ product.id }}">Delete</button>
                         </td>
                     </tr>
                      <!-- Modal -->
