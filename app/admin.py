@@ -15,8 +15,7 @@ from .models import (
 )
 
 
-
-
+admin.site.login_template = 'app/admin_login.html'
 # Register your models here.
 @admin.register(Customer)
 class CustomerModelAdmin(admin.ModelAdmin):

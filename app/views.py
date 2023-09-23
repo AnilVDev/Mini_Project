@@ -251,22 +251,17 @@ class CustomAdminLoginView(LoginView):
 def admin_login(request):
     errors = None
     if request.method == 'POST':
-        # Use the AuthenticationForm to validate the login data
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            # Get the user from the form
             user = form.get_user()
-
-            # Check if the user is a superuser (admin)
             if user.is_superuser:
-                login(request)  # Log in the user
+                login(request)
                 return redirect('admin_home')
             else:
                 errors = 'You are not an admin. Please use User login.'
 
 
     else:
-        # Display the login form
         form = AuthenticationForm(request)
 
     return render(request, 'app/admin_login.html', {'form': form, 'errors': errors})
