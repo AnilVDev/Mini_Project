@@ -46,19 +46,27 @@
                     <tr>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.is_superuser }}</td>
+                        <td>{{ user.is_staff }}</td>
                         <td>{{ user.is_active }}</td>
                         <td>{{ user.date_joined }}</td>
                         <td>
-                            <a href="" class="btn btn-primary">Edit</a>
+                            <form method="post" action="{% url 'toggle_user_credential' user.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn {% if user.is_staff %}btn-primary{% else %}btn-success{% endif %}">
+                                    {% if user.is_staff %}Make User{% else %}Make Admin{% endif %}
+                                    </button>
+                            </form>
                         </td>
                         <td>
 <!--                            <a href="" class="btn btn-warning">Block</a>-->
-                                <form method="post" action="{% url 'toggle_user_status' user.id %}">
+                                <form method="post" action="">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn {% if user.is_active %}btn-warning{% else %}btn-success{% endif %}">
-                                    {% if user.is_active %}Block{% else %}Unblock{% endif %}
-                                    </button>
+<!--                                    <button type="submit" class="btn {% if user.is_active %}btn-warning{% else %}btn-success{% endif %}">-->
+
+<!--                                    {% if user.is_active %}Block{% else %}Unblock{% endif %}-->
+<!--                                    </button>-->
+                                     <button type="button" class="btn {% if user.is_active %}btn-warning{% else %}btn-success{% endif %}"
+                                             data-toggle="modal" data-target="#blockUserModal{{ user.id }}">{% if user.is_active %}Block{% else %}Unblock{% endif %}</button>
                                 </form>
                         </td>
                         <td>
@@ -81,7 +89,7 @@
 
 
 {% for user in users %}
-<div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+<div class="modal fade" id="blockUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -91,11 +99,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete "{{ user.username }}"?
+                Are you sure you want to change "{{ user.username }}"?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <a href="{% url 'delete_user' user.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'toggle_user_status' user.id %}" class="btn btn-danger">Change</a>
             </div>
         </div>
     </div>

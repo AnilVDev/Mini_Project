@@ -19,6 +19,7 @@ import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.views.generic import ListView
+from django.contrib.auth.hashers import make_password
 
 
 class ProductView(View):
@@ -138,7 +139,7 @@ class OTPVerificationView(View):
                     user = User.objects.create(
                         username=user_data['username'],
                         email=user_data['email'],
-                        password=user_data['password'],  # Replace with your password hashing logic
+                        password=make_password(user_data['password'])  # Replace with your password hashing logic
                     )
                     del request.session['temp_user_data']
                     # Valid OTP
@@ -251,22 +252,17 @@ class CustomAdminLoginView(LoginView):
 def admin_login(request):
     errors = None
     if request.method == 'POST':
-        # Use the AuthenticationForm to validate the login data
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            # Get the user from the form
             user = form.get_user()
-
-            # Check if the user is a superuser (admin)
             if user.is_superuser:
-                login(request)  # Log in the user
+                login(request)
                 return redirect('admin_home')
             else:
                 errors = 'You are not an admin. Please use User login.'
 
 
     else:
-        # Display the login form
         form = AuthenticationForm(request)
 
     return render(request, 'app/admin_login.html', {'form': form, 'errors': errors})
@@ -282,12 +278,6 @@ def user_list(request):
     users = User.objects.all()
     return render(request, 'app/user_list.html', {'users': users})
 
-@method_decorator(staff_member_required, name='dispatch')
-class DeleteUserView(View):
-    def get(self, request, user_id):
-        user = get_object_or_404(User, id=user_id)
-        user.delete()
-        return redirect('user_list')
 @method_decorator(staff_member_required, name='dispatch')
 class ProductListView(ListView):
     model = Product
@@ -458,4 +448,21 @@ def toggle_user_status(request, user_id):
     else:
         messages.warning(request, f"User '{user.username}' is blocked.")
 
+    return redirect('user_list')
+
+@staff_member_required
+def toggle_user_credential(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if user.is_active:
+        user.is_active = False
+        user.is_staff = True
+        user.is_superuser = True
+        messages.success(request, f"User '{user.username}' is now Admin.")
+    else:
+        user.is_active = True
+        user.is_staff = False
+        user.is_superuser = False
+        messages.warning(request, f"User '{user.username}' is now User.")
+    user.save()
     return redirect('user_list')
