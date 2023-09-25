@@ -17,18 +17,45 @@
       <div class="container">
           <!-- templates/app/category_list_and_add.html -->
             <h2>Add Brand</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-success">Add</button>
-            </form>
+<!--           <div class="search-form">-->
+<!--                <form method="get" action="{% url 'brand_list_and_add' %}">-->
+<!--                    <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}">-->
+<!--                    <button type="submit" class="btn btn-primary">Search</button>-->
+<!--                </form>-->
+<!--            </div>-->
+<!--            <form method="post">-->
+<!--                {% csrf_token %}-->
+<!--                {{ form.as_p }}-->
+<!--                <button type="submit" class="btn btn-success">Add</button>-->
+<!--            </form>-->
+>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <form method="get" action="{% url 'brand_list_and_add' %}">
+                            <div class="input-group">
+                                <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-success">Add</button>
+                        </form>
+                    </div>
+                </div>
+
              <ul class="messages">
                 {% for message in messages %}
                     <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                 {% endfor %}
             </ul>
             <h1>Brands</h1>
-
+            {% if brands %}
             <table class="table">
                 <thead>
                     <tr>
@@ -48,6 +75,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% else %}
+            <p>No Brand found.</p>
+            {% endif %}
       </div>
     </div>
   </div>

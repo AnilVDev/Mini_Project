@@ -16,22 +16,38 @@
     <div class="col-lg-9">
       <div class="container">
           <!-- templates/app/category_list_and_add.html -->
-            <h2>Add Category</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-success">Add</button>
-            </form>
-                    {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
+
+              <h2>Add Category</h2>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <form method="get" action="{% url 'category_list_and_add' %}">
+                            <div class="input-group">
+                                <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-success">Add</button>
+                        </form>
+                    </div>
+                </div>
+
+          {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
 
         {% endif %}
             <h1>Categories</h1>
-
+            {% if categories %}
             <table class="table">
                 <thead>
                     <tr>
@@ -51,8 +67,9 @@
                     {% endfor %}
                 </tbody>
             </table>
-
-
+            {% else %}
+            <p>No category found.</p>
+            {% endif %}
 
       </div>
     </div>

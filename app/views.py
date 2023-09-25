@@ -271,18 +271,34 @@ def admin_login(request):
 
 @staff_member_required
 def admin_home(request):
+    # query = request.GET.get('q', '')
+    # users = User.objects.filter(username__icontains=query)
+
     return render(request,'app/admin_home.html')
 
 @staff_member_required
 def user_list(request):
-    users = User.objects.all()
-    return render(request, 'app/user_list.html', {'users': users})
+    query = request.GET.get('q', '')
+    if query:
+        users = User.objects.filter( Q(username__icontains=query) | Q(email__icontains=query))
+    else:
+        users = User.objects.all()
+    return render(request, 'app/user_list.html', {'users': users, 'search_query': query})
+
 
 @method_decorator(staff_member_required, name='dispatch')
 class ProductListView(ListView):
     model = Product
     template_name = 'app/product_list.html'
     context_object_name = 'products'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q', '')
+        if query:
+            return Product.objects.filter(name__icontains=query)
+        else:
+            return Product.objects.all()
+
 
 @staff_member_required
 def add_product(request):
@@ -346,7 +362,12 @@ def edit_product(request, product_id):
 
 @staff_member_required
 def category_list_and_add(request):
-    categories = Category.objects.all()
+    query = request.GET.get('q', '')
+    if query:
+        categories = Category.objects.filter(name__icontains=query)
+    else:
+        categories = Category.objects.all()
+
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
@@ -363,6 +384,7 @@ def category_list_and_add(request):
         form = CategoryForm()
 
     return render(request, 'app/category_list_and_add.html', {'categories': categories, 'form': form})
+
 
 @staff_member_required
 def delete_category(request, category_id):
@@ -393,7 +415,12 @@ def edit_category(request, category_id):
 
 @staff_member_required
 def brand_list_and_add(request):
-    brands = Brand.objects.all()
+    query = request.GET.get('q', '')
+    if query:
+        brands = Brand.objects.filter(name__icontains=query)
+    else:
+        brands = Brand.objects.all()
+
     if request.method == 'POST':
         form = BrandForm(request.POST)
         if form.is_valid():
@@ -466,3 +493,10 @@ def toggle_user_credential(request, user_id):
         messages.warning(request, f"User '{user.username}' is now User.")
     user.save()
     return redirect('user_list')
+
+
+@staff_member_required
+def user_search(request):
+    query = request.GET.get('q', '')
+    users = User.objects.filter(username__icontains=query)
+    return render(request, 'app/user_search.html', {'users': users})

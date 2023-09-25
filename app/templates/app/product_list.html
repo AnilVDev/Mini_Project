@@ -17,6 +17,13 @@
     <div class="row">
 
         <div class="col-lg-9">
+            <h1>Product List</h1>
+            <div class="search-form">
+                <form method="get" action="{% url 'product_list' %}">
+                    <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -47,6 +54,7 @@
                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteProductModal{{ product.id }}">Delete</button>
                         </td>
                     </tr>
+
                      <!-- Modal -->
                     <div class="modal fade" id="productModal{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
@@ -85,6 +93,10 @@
                     <div class="modal fade" id="deleteProductModal{{ product.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
                         <!-- Modal content as before -->
                     </div>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2">No products found.</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
