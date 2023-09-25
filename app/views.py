@@ -339,7 +339,7 @@ def add_product_images(request, product_id):
                     image = form.save(commit=False)
                     image.product = product
                     image.save()
-            return redirect('product_list')  # Redirect to the product list page or any other appropriate page
+            return redirect('product_list')
     else:
         formset = ProductImageFormSet(queryset=ProductImage.objects.none())
 
@@ -358,6 +358,10 @@ def edit_product(request, product_id):
         form = ProductForm(instance=product)
 
     return render(request, 'app/edit_product.html', {'form': form, 'product': product})
+
+
+
+
 
 
 @staff_member_required

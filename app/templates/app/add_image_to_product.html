@@ -15,7 +15,7 @@
     <!-- Product Addition Form -->
     <div class="col-lg-9">
       <div class="container">
-          <h2>Add Images to Product</h2>
+          <h2>Add Images to Product- {{product.title}</h2>
           <form method="post" enctype="multipart/form-data" >
             {% csrf_token %}
             {{ formset.management_form }}
@@ -25,6 +25,7 @@
             {% endfor %}
         </table>
         <button type="submit" class="btn btn-primary">Upload Image</button>
+        <a href="{% url 'product_list' %}" class="btn btn-danger">Cancel</a>
     </form>
       </div>
     </div>

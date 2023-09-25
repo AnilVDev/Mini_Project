@@ -174,7 +174,7 @@
 			<!-- /MAIN HEADER -->
 		</header>
 		<!-- /HEADER -->
-
+{% block navigation %}
 		<!-- NAVIGATION -->
 		<nav id="navigation">
 			<!-- container -->
@@ -198,6 +198,7 @@
 			<!-- /container -->
 		</nav>
 		<!-- /NAVIGATION -->
+{% endblock navigation %}
 
     {% block collections %} {% endblock collections %}
     {% block newproduct %} {% endblock newproduct %}
@@ -207,7 +208,7 @@
 	{% block main-content %} {% endblock main-content %}
 
 
-
+{% block newsletter %}
 		<!-- NEWSLETTER -->
 		<div id="newsletter" class="section">
 			<!-- container -->
@@ -244,6 +245,9 @@
 		</div>
 		<!-- /NEWSLETTER -->
 
+{% endblock %}
+
+{% block footer %}
 		<!-- FOOTER -->
 		<footer id="footer">
 			<!-- top footer -->
@@ -339,6 +343,7 @@
 			<!-- /bottom footer -->
 		</footer>
 		<!-- /FOOTER -->
+{% endblock footer %}
 
 
 
