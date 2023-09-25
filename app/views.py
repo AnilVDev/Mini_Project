@@ -213,10 +213,8 @@ def add_product_with_images(request):
         image_formset = ProductImageFormSet(request.POST, request.FILES, prefix='images')
 
         if product_form.is_valid() and image_formset.is_valid():
-            # Save the product
             product = product_form.save()
 
-            # Associate each image with the product
             for image_form in image_formset:
                 if image_form.cleaned_data:
                     image = image_form.save(commit=False)
@@ -229,6 +227,7 @@ def add_product_with_images(request):
         image_formset = ProductImageFormSet(prefix='images')
 
     return render(request, 'add_product_with_images.html', {'product_form': product_form, 'image_formset': image_formset})
+
 
 
 def password_change_view(request):
@@ -295,7 +294,7 @@ class ProductListView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('q', '')
         if query:
-            return Product.objects.filter(name__icontains=query)
+            return Product.objects.filter(title__icontains=query)
         else:
             return Product.objects.all()
 
@@ -330,6 +329,7 @@ def add_product(request):
 @staff_member_required
 def add_product_images(request, product_id):
     product = Product.objects.get(pk=product_id)
+    images = ProductImage.objects.filter(product=product)
 
     if request.method == 'POST':
         formset = ProductImageFormSet(request.POST, request.FILES, queryset=ProductImage.objects.none())
@@ -339,11 +339,11 @@ def add_product_images(request, product_id):
                     image = form.save(commit=False)
                     image.product = product
                     image.save()
-            return redirect('product_list')
+            return redirect('add_product_image', product_id=product_id)
     else:
         formset = ProductImageFormSet(queryset=ProductImage.objects.none())
 
-    return render(request, 'app/add_image_to_product.html', {'formset': formset, 'product': product})
+    return render(request, 'app/add_image_to_product.html', {'formset': formset, 'product': product, 'images':images})
 
 @staff_member_required
 def edit_product(request, product_id):
@@ -360,6 +360,12 @@ def edit_product(request, product_id):
     return render(request, 'app/edit_product.html', {'form': form, 'product': product})
 
 
+@staff_member_required
+def delete_product_image(request, image_id):
+    image = get_object_or_404(ProductImage, id=image_id)
+    product_id = image.product.id
+    image.delete()
+    return redirect('add_product_image', product_id=product_id)
 
 
 
@@ -481,23 +487,22 @@ def toggle_user_status(request, user_id):
 
     return redirect('user_list')
 
+
 @staff_member_required
 def toggle_user_credential(request, user_id):
     user = get_object_or_404(User, id=user_id)
-
-    if user.is_active:
-        user.is_active = False
-        user.is_staff = True
-        user.is_superuser = True
-        messages.success(request, f"User '{user.username}' is now Admin.")
-    else:
-        user.is_active = True
+    print('hello')
+    if user.is_staff:
         user.is_staff = False
         user.is_superuser = False
-        messages.warning(request, f"User '{user.username}' is now User.")
+        messages.success(request, f"User '{user.username}' is now a regular user.")
+    else:
+        user.is_staff = True
+        user.is_superuser = True
+        messages.warning(request, f"User '{user.username}' is now an admin.")
+
     user.save()
     return redirect('user_list')
-
 
 @staff_member_required
 def user_search(request):
