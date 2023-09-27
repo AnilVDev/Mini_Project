@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="changing user into admin is working now">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="pagination added in user list,brand, category, product list">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/user_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/user_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/app/css/style2.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/app/css/style2.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/productdetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/productdetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -18,6 +21,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -37,6 +41,11 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/templatetags" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.views">
     <configuration name="manage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="payfortech" />
@@ -208,7 +217,31 @@
       <option name="project" value="LOCAL" />
       <updated>1695792424531</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="pagination added in user list">
+      <option name="closed" value="true" />
+      <created>1695805230584</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1695805230584</updated>
+    </task>
+    <task id="LOCAL-00016" summary="pagination added in user list,brand, category, product list">
+      <option name="closed" value="true" />
+      <created>1695820280330</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1695820280330</updated>
+    </task>
+    <task id="LOCAL-00017" summary="pagination added in user list,brand, category, product list">
+      <option name="closed" value="true" />
+      <created>1695820293701</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1695820293702</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -235,6 +268,8 @@
     <MESSAGE value="added search button in user list,product list,brand list" />
     <MESSAGE value="now the image can add without selecting the product" />
     <MESSAGE value="changing user into admin is working now" />
-    <option name="LAST_COMMIT_MESSAGE" value="changing user into admin is working now" />
+    <MESSAGE value="pagination added in user list" />
+    <MESSAGE value="pagination added in user list,brand, category, product list" />
+    <option name="LAST_COMMIT_MESSAGE" value="pagination added in user list,brand, category, product list" />
   </component>
 </project>

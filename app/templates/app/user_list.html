@@ -138,28 +138,29 @@
 </div>
 {% endfor %}
 
+<!--Pagination-->
 <div style="text-align: center; margin-top: 20px;">
 <nav aria-label="Page navigation example">
   <ul class="pagination">
       {% if users.has_previous %}
       <li class="page-item">
-      <a class="page-link" href="{% url 'user_list' %}?page=1" aria-label="First"><span aria-hidden="true">&laquo;</span> first
-      </a>
+        <a class="page-link" href="{% url 'user_list' %}?page=1" aria-label="First"><span aria-hidden="true">&laquo;</span> first
+        </a>
       </li>
     <li class="page-item">
       <a class="page-link" href="{% url 'user_list' %}?page={{ users.previous_page_number }}" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
-      {% endif %}
+     {% endif %}
+     {% for n in page_range %}
+      <li class="page-item{% if n == users.number %} active{% endif %}">
+          <a class="page-link" href="{% url 'user_list' %}?page={{ n }}">{{ n }}</a>
+      </li>
+      {% endfor %}
 <!--      {% for n in totalPagelist %}-->
 <!--    <li class="page-item"><a class="page-link" href="{% url 'user_list' %}?page={{n}}">{{n}}</a></li>-->
 <!--      {% endfor %}-->
-              {% for n in page_range %}
-        <li class="page-item{% if n == users.number %} active{% endif %}">
-            <a class="page-link" href="{% url 'user_list' %}?page={{ n }}">{{ n }}</a>
-        </li>
-        {% endfor %}
       {% if users.has_next %}
     <li class="page-item">
       <a class="page-link" href="{% url 'user_list' %}?page={{ users.next_page_number }}" aria-label="Next">
@@ -174,6 +175,8 @@
   </ul>
 </nav>
 </div>
+<!--Pagination-->
+
 
 <!-- Bootstrap JavaScript and Popper.js -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

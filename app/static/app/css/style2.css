@@ -1032,6 +1032,9 @@ textarea.input {
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
   z-index: 2;
+
+  display: flex; /* Add this line */
+  justify-content: space-between; /* Add this line */
 }
 
 .product:hover .add-to-cart {
@@ -1040,7 +1043,7 @@ textarea.input {
   transform: translateY(100%);
 }
 
-.product .add-to-cart .add-to-cart-btn {
+.product .add-to-cart .add-to-cart-btn,.product .add-to-cart .buy-now-btn {
   position: relative;
   border: 2px solid transparent;
   height: 40px;
@@ -1052,9 +1055,12 @@ textarea.input {
   border-radius: 40px;
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
+
+  flex: 1;
 }
 
-.product .add-to-cart .add-to-cart-btn>i {
+.product .add-to-cart .add-to-cart-btn>i,
+ .product .add-to-cart .buy-now-btn>i{
   position: absolute;
   left: 0;
   top: 0;
@@ -1066,14 +1072,16 @@ textarea.input {
   visibility: hidden;
 }
 
-.product .add-to-cart .add-to-cart-btn:hover {
+.product .add-to-cart .add-to-cart-btn:hover,
+ .product .add-to-cart .buy-now-btn:hover{
   background-color: #FFF;
   color: #D10024;
   border-color: #D10024;
   padding: 0px 30px 0px 50px;
 }
 
-.product .add-to-cart .add-to-cart-btn:hover>i {
+.product .add-to-cart .add-to-cart-btn:hover>i,
+ .product .add-to-cart .buy-now-btn:hover>{
   opacity: 1;
   visibility: visible;
 }
