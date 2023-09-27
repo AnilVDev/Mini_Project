@@ -20,6 +20,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.views.generic import ListView
 from django.contrib.auth.hashers import make_password
+from django.core.paginator import Paginator
 
 
 class ProductView(View):
@@ -282,7 +283,20 @@ def user_list(request):
         users = User.objects.filter( Q(username__icontains=query) | Q(email__icontains=query))
     else:
         users = User.objects.all()
-    return render(request, 'app/user_list.html', {'users': users, 'search_query': query})
+    paginator = Paginator(users,1)
+    page_number = request.GET.get('page')
+    usersfinal = paginator.get_page(page_number)
+    totalpage =usersfinal.paginator.num_pages
+    page_range = range(usersfinal.number, min(usersfinal.number + 3,totalpage+1))
+
+    context = {
+        'users': usersfinal,
+        'search_query': query,
+        'lastpage': totalpage,
+        'page_range':page_range
+    }
+
+    return render(request, 'app/user_list.html', context)
 
 
 @method_decorator(staff_member_required, name='dispatch')
@@ -311,20 +325,6 @@ def add_product(request):
 
     return render(request, 'app/add_product.html', {'form': form})
 
-
-
-
-# @staff_member_required
-# def add_product_images(request):
-#     if request.method == 'POST':
-#         formset = ProductImageFormSet(request.POST, request.FILES, queryset=ProductImage.objects.none())
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect('product_list')  # Redirect to the product list page or any other appropriate page
-#     else:
-#         formset = ProductImageFormSet(queryset=ProductImage.objects.none())
-#
-#     return render(request, 'app/add_image_to_product.html', {'formset': formset})
 
 @staff_member_required
 def add_product_images(request, product_id):
