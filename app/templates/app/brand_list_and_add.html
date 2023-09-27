@@ -105,6 +105,42 @@
 </div>
 {% endfor %}
 
+<!--Pagination-->
+<div style="text-align: center; margin-top: 20px;">
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+      {% if brands.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="{% url 'brand_list_and_add' %}?page=1" aria-label="First"><span aria-hidden="true">&laquo;</span> first
+        </a>
+      </li>
+    <li class="page-item">
+      <a class="page-link" href="{% url 'brand_list_and_add' %}?page={{ brands.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+     {% endif %}
+     {% for n in page_range %}
+      <li class="page-item{% if n == brands.number %} active{% endif %}">
+          <a class="page-link" href="{% url 'brand_list_and_add' %}?page={{ n }}">{{ n }}</a>
+      </li>
+      {% endfor %}
+      {% if brands.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="{% url 'brand_list_and_add' %}?page={{ brands.next_page_number }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+      <li class="page-item">
+      <a class="page-link" href="{% url 'brand_list_and_add' %}?page={{ lastpage }}" aria-label="Last">last <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+      {% endif %}
+  </ul>
+</nav>
+</div>
+<!--Pagination-->
+
 <!-- Bootstrap JavaScript and Popper.js -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

@@ -271,8 +271,6 @@ def admin_login(request):
 
 @staff_member_required
 def admin_home(request):
-    # query = request.GET.get('q', '')
-    # users = User.objects.filter(username__icontains=query)
 
     return render(request,'app/admin_home.html')
 
@@ -283,6 +281,7 @@ def user_list(request):
         users = User.objects.filter( Q(username__icontains=query) | Q(email__icontains=query))
     else:
         users = User.objects.all()
+
     paginator = Paginator(users,1)
     page_number = request.GET.get('page')
     usersfinal = paginator.get_page(page_number)
@@ -299,18 +298,48 @@ def user_list(request):
     return render(request, 'app/user_list.html', context)
 
 
+# @method_decorator(staff_member_required, name='dispatch')
+# class ProductListView(ListView):
+#     model = Product
+#     template_name = 'app/product_list.html'
+#     context_object_name = 'products'
+#
+#     def get_queryset(self):
+#         query = self.request.GET.get('q', '')
+#         if query:
+#             return Product.objects.filter(title__icontains=query)
+#         else:
+#             return Product.objects.all()
+
 @method_decorator(staff_member_required, name='dispatch')
 class ProductListView(ListView):
     model = Product
     template_name = 'app/product_list.html'
     context_object_name = 'products'
+    paginate_by = 1  # Number of products per page
 
-    def get_queryset(self):
+    def get(self, request, *args, **kwargs):
         query = self.request.GET.get('q', '')
+
         if query:
-            return Product.objects.filter(title__icontains=query)
+            products = Product.objects.filter(title__icontains=query)
         else:
-            return Product.objects.all()
+            products = Product.objects.all()
+
+        paginator = Paginator(products, self.paginate_by)
+        page_number = self.request.GET.get('page')
+        productsfinal = paginator.get_page(page_number)
+        totalpage = productsfinal.paginator.num_pages
+        page_range = range(productsfinal.number, min(productsfinal.number + 3, totalpage + 1))
+
+        context = {
+            'products': productsfinal,
+            'search_query': query,
+            'lastpage': totalpage,
+            'page_range': page_range
+        }
+
+        return render(request, self.template_name, context)
 
 
 @staff_member_required
@@ -393,7 +422,21 @@ def category_list_and_add(request):
     else:
         form = CategoryForm()
 
-    return render(request, 'app/category_list_and_add.html', {'categories': categories, 'form': form})
+    paginator = Paginator(categories, 1)
+    page_number = request.GET.get('page')
+    categoriesfinal = paginator.get_page(page_number)
+    totalpage = categoriesfinal.paginator.num_pages
+    page_range = range(categoriesfinal.number, min(categoriesfinal.number + 3, totalpage + 1))
+
+    context = {
+        'form': form,
+        'categories': categoriesfinal,
+        'search_query': query,
+        'lastpage': totalpage,
+        'page_range': page_range
+    }
+
+    return render(request, 'app/category_list_and_add.html', context)
 
 
 @staff_member_required
@@ -421,6 +464,7 @@ def edit_category(request, category_id):
     else:
         form = CategoryForm(instance=category)
 
+
     return render(request, 'app/edit_category.html', {'form': form, 'category': category})
 
 @staff_member_required
@@ -444,7 +488,22 @@ def brand_list_and_add(request):
             return redirect('brand_list_and_add')
     else:
         form = BrandForm()
-    return render(request, 'app/brand_list_and_add.html', {'brands': brands, 'form': form})
+
+    paginator = Paginator(brands, 1)
+    page_number = request.GET.get('page')
+    brandsfinal = paginator.get_page(page_number)
+    totalpage = brandsfinal.paginator.num_pages
+    page_range = range(brandsfinal.number, min(brandsfinal.number + 3, totalpage + 1))
+
+    context = {
+        'form': form,
+        'brands': brandsfinal,
+        'search_query': query,
+        'lastpage': totalpage,
+        'page_range': page_range
+    }
+
+    return render(request, 'app/brand_list_and_add.html', context)
 
 @staff_member_required
 def delete_brand(request, brand_id):
