@@ -140,15 +140,15 @@ class OTPVerificationView(View):
                     user = User.objects.create(
                         username=user_data['username'],
                         email=user_data['email'],
-                        password=make_password(user_data['password'])  # Replace with your password hashing logic
+                        password=make_password(user_data['password'])
                     )
                     del request.session['temp_user_data']
                     # Valid OTP
                     del request.session['registration_otp']
                     del request.session['otp_attempts']
                     messages.success(request, 'OTP verified successfully. Registration complete!')
-                    # Perform your user registration logic here
-                    return redirect('login')  # Redirect to login page or any other desired page
+
+                    return redirect('login')
                 else:
                     otp_attempts += 1
                     request.session['otp_attempts'] = otp_attempts
@@ -297,19 +297,6 @@ def user_list(request):
 
     return render(request, 'app/user_list.html', context)
 
-
-# @method_decorator(staff_member_required, name='dispatch')
-# class ProductListView(ListView):
-#     model = Product
-#     template_name = 'app/product_list.html'
-#     context_object_name = 'products'
-#
-#     def get_queryset(self):
-#         query = self.request.GET.get('q', '')
-#         if query:
-#             return Product.objects.filter(title__icontains=query)
-#         else:
-#             return Product.objects.all()
 
 @method_decorator(staff_member_required, name='dispatch')
 class ProductListView(ListView):
@@ -569,27 +556,111 @@ def user_search(request):
     users = User.objects.filter(username__icontains=query)
     return render(request, 'app/user_search.html', {'users': users})
 
-def product_listing(request,category):
-    category_obj = get_object_or_404(Category, name=category)
+# def product_listing(request,category):
+#     category_obj = get_object_or_404(Category, name=category)
+#
+#     # categories = Category.objects.values_list('name', flat=True).distinct()
+#     categories = Category.objects.all()
+#     print(categories)
+#     brands = Brand.objects.values_list('name', flat=True).distinct()
+#
+#     brand = request.GET.get('brand', None)
+#     min_price = request.GET.get('min_price', None)
+#     max_price = request.GET.get('max_price', None)
+#
+#     products = Product.objects.filter(category=category_obj)
+#     if brand:
+#         products = products.filter(brand=brand)
+#
+#     if min_price and max_price:
+#         products = products.filter(selling_price__gte=min_price, selling_price__lte=max_price)
+#
+#     context = {
+#         'products': products,
+#         'categories':categories,
+#         'brands':brands
+#     }
+#
+#     return render(request, 'app/product_listing.html', context)
 
-    categories = Category.objects.values_list('name', flat=True).distinct()
-    brands = Brand.objects.values_list('name', flat=True).distinct()
 
-    brand = request.GET.get('brand', None)
-    min_price = request.GET.get('min_price', None)
-    max_price = request.GET.get('max_price', None)
 
-    products = Product.objects.filter(category=category_obj)
-    if brand:
-        products = products.filter(brand=brand)
+def product_listing(request, category):
+    print('from-',category)
+    selected_category = request.GET.get('category', 'All Categories')
+    print('sel-',selected_category)
+    search_query = request.GET.get('search_query', '')
+    print(search_query)
+    selected_brands = request.GET.getlist('brand')
+    print(selected_brands)
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
 
-    if min_price and max_price:
-        products = products.filter(selling_price__gte=min_price, selling_price__lte=max_price)
+    categories = Category.objects.all()
+    brands = Brand.objects.all()
+
+    # if category == 'All Categories':
+    #     products = Product.objects.all()
+    #     print('all-',products,category)
+    # else:
+    #     products = Product.objects.filter(Q(category__name=selected_category) | Q(category__name=category))
+    #     print(products)
+    # print(category,products)
+
+    if category != 'All Categories':
+        products = Product.objects.filter(category__name=category)
+    else:
+        if selected_category == 'All Categories':
+            products = Product.objects.all()
+            print('all-',products,category)
+        else:
+            products = Product.objects.filter(category__name=selected_category)
+            print('else-',products)
+    print(category,products)
+
+    if search_query:
+        products = products.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query))
+    print('search query-',products)
+
+    if selected_brands:
+        print(products)
+        products = products.filter(brand__name__in=selected_brands)
+        print('pro from brands-',products)
+
+
+    if min_price:
+        products = products.filter(discount_price__gte=min_price)
+
+    if max_price:
+        products = products.filter(discount_price__lte=max_price)
+
+    # paginator = Paginator(products, 1)
+    # page_number = request.GET.get('page')
+    # productsfinal = paginator.get_page(page_number)
+    # # totalpage = productsfinal.paginator.num_pages
+    # # page_range = range(productsfinal.number, min(productsfinal.number + 3, totalpage + 1))
+
+    products_per_page = 1
+
+    paginator = Paginator(products, products_per_page)
+    page_number = request.GET.get('page')
+    products_page = paginator.get_page(page_number)
+    total_pages = paginator.num_pages
+    page_range = range(1, total_pages + 1)
 
     context = {
-        'products': products,
-        'categories':categories,
-        'brands':brands
+        'category': category,
+        'selected_category': selected_category,
+        'search_query': search_query,
+        'selected_brands': selected_brands,
+        'min_price': min_price,
+        'max_price': max_price,
+        'categories': categories,
+        'brands': brands,
+        # 'products': productsfinal,
+        # 'lastpage': totalpage,
+        'page_range': page_range,
+        'products': products_page,
     }
 
     return render(request, 'app/product_listing.html', context)
