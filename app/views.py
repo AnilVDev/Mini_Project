@@ -27,12 +27,17 @@ class ProductView(View):
     def get(self, request):
         camera = Product.objects.filter(Q(category__name__icontains='camera'))
         smartwatch = Product.objects.filter(Q(category__name__icontains='smart watch'))
+        headphone = Product.objects.filter(Q(category__name__icontains='headphone'))
+        speaker = Product.objects.filter(Q(category__name__icontains='speaker'))
         categories = Product.objects.values_list('category__name', flat=True).distinct()
 
         context = {
             'camera': camera,
             'smartwatch': smartwatch,
+            'headphone':headphone,
+            'speaker':speaker,
             'categories': categories,
+
         }
         return render(request, 'app/index.html', context)
 
@@ -52,6 +57,34 @@ def buy_now(request):
 def address(request):
  add = Customer.objects.filter(user=request.user)
  return render(request, 'app/address.html', {'add':add,'active':'bg-danger'})
+
+
+@login_required
+def edit_address(request, address_id):
+    address = get_object_or_404(Customer, pk=address_id)
+
+    if request.method == 'POST':
+        form = CustomerProfileForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            return redirect('address')
+    else:
+        form = CustomerProfileForm(instance=address)
+
+    return render(request, 'app/edit_address.html', {'form': form, 'address': address})
+
+
+@login_required
+def delete_address(request, address_id):
+    try:
+        address = Customer.objects.get(pk=address_id)
+        address.delete()
+        messages.success(request, 'Address deleted successfully.')
+    except Brand.DoesNotExist:
+        messages.error(request, 'Address not found.')
+
+    return redirect('address')
+
 
 def orders(request):
  return render(request, 'app/orders.html')
@@ -206,6 +239,8 @@ class ProfileView(View):
             reg = Customer(user=usr, name=name, phone_number=phone_number, locality=locality, city=city, state=state, pincode=pincode)
             reg.save()
             messages.success(request, 'Congratulations!! Profile Updated Successfully')
+
+        form = CustomerProfileForm()
         return render(request, 'app/profile.html',{'form':form,'active':'bg-danger'})
 @method_decorator(staff_member_required, name='dispatch')
 def add_product_with_images(request):
@@ -282,7 +317,7 @@ def user_list(request):
     else:
         users = User.objects.all()
 
-    paginator = Paginator(users,1)
+    paginator = Paginator(users,5)
     page_number = request.GET.get('page')
     usersfinal = paginator.get_page(page_number)
     totalpage =usersfinal.paginator.num_pages
@@ -303,7 +338,7 @@ class ProductListView(ListView):
     model = Product
     template_name = 'app/product_list.html'
     context_object_name = 'products'
-    paginate_by = 1  # Number of products per page
+    paginate_by = 5
 
     def get(self, request, *args, **kwargs):
         query = self.request.GET.get('q', '')
@@ -476,7 +511,7 @@ def brand_list_and_add(request):
     else:
         form = BrandForm()
 
-    paginator = Paginator(brands, 1)
+    paginator = Paginator(brands, 5)
     page_number = request.GET.get('page')
     brandsfinal = paginator.get_page(page_number)
     totalpage = brandsfinal.paginator.num_pages
@@ -556,34 +591,6 @@ def user_search(request):
     users = User.objects.filter(username__icontains=query)
     return render(request, 'app/user_search.html', {'users': users})
 
-# def product_listing(request,category):
-#     category_obj = get_object_or_404(Category, name=category)
-#
-#     # categories = Category.objects.values_list('name', flat=True).distinct()
-#     categories = Category.objects.all()
-#     print(categories)
-#     brands = Brand.objects.values_list('name', flat=True).distinct()
-#
-#     brand = request.GET.get('brand', None)
-#     min_price = request.GET.get('min_price', None)
-#     max_price = request.GET.get('max_price', None)
-#
-#     products = Product.objects.filter(category=category_obj)
-#     if brand:
-#         products = products.filter(brand=brand)
-#
-#     if min_price and max_price:
-#         products = products.filter(selling_price__gte=min_price, selling_price__lte=max_price)
-#
-#     context = {
-#         'products': products,
-#         'categories':categories,
-#         'brands':brands
-#     }
-#
-#     return render(request, 'app/product_listing.html', context)
-
-
 
 def product_listing(request, category):
     print('from-',category)
@@ -598,14 +605,6 @@ def product_listing(request, category):
 
     categories = Category.objects.all()
     brands = Brand.objects.all()
-
-    # if category == 'All Categories':
-    #     products = Product.objects.all()
-    #     print('all-',products,category)
-    # else:
-    #     products = Product.objects.filter(Q(category__name=selected_category) | Q(category__name=category))
-    #     print(products)
-    # print(category,products)
 
     if category != 'All Categories':
         products = Product.objects.filter(category__name=category)
@@ -634,13 +633,7 @@ def product_listing(request, category):
     if max_price:
         products = products.filter(discount_price__lte=max_price)
 
-    # paginator = Paginator(products, 1)
-    # page_number = request.GET.get('page')
-    # productsfinal = paginator.get_page(page_number)
-    # # totalpage = productsfinal.paginator.num_pages
-    # # page_range = range(productsfinal.number, min(productsfinal.number + 3, totalpage + 1))
-
-    products_per_page = 1
+    products_per_page = 3
 
     paginator = Paginator(products, products_per_page)
     page_number = request.GET.get('page')
@@ -657,8 +650,6 @@ def product_listing(request, category):
         'max_price': max_price,
         'categories': categories,
         'brands': brands,
-        # 'products': productsfinal,
-        # 'lastpage': totalpage,
         'page_range': page_range,
         'products': products_page,
     }

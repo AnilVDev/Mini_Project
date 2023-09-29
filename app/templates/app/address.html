@@ -3,6 +3,22 @@
 {% block title %}Address{% endblock title %}
 {% block main-content %}
 
+<style>
+    .custom-nav .nav-item {
+    margin-bottom: 10px;
+}
+
+.custom-nav .nav-link {
+    color: #0f0f0f;
+    transition: color 0.3s;
+}
+
+.custom-nav .nav-link:hover {
+    color: #007bff;
+}
+</style>
+
+
     <div class="container-fluid">
         <div class="row">
             <!-- Left Sidebar Navigation -->
@@ -10,15 +26,26 @@
                 <div id="custom-navigation">
                     <div class="container">
                         <div id="responsive-nav">
-                            <ul class=" custom-nav">
-                                <h5>Welcome <span class=" active text-capitalize h2 text-primary">{{request.user}}</span></h5>
-<!--                                <li class="active"><a href="#">{{request.user}}</a></li>-->
-                                <li><a href="{% url 'profile' %}" >Profile</a></li>
-                                <li><a href="{% url 'address' %}" class="{{active}}">Address</a></li>
-                                <li><a href="{% url 'passwordchange' %}">Change Password</a></li>
-                                <li><a href="#">Orders</a></li>
-                                <li><a href="#">Wishlist</a></li>
-                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                            <ul class="custom-nav">
+                                <h5>Welcome <span class="active text-capitalize h2 text-primary">{{ request.user }}</span></h5>
+                                <li class="nav-item">
+                                    <a href="{% url 'profile' %}" class="nav-link">Profile</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'address' %}" class="nav-link {{ active }}">Address</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'passwordchange' %}" class="nav-link">Change Password</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">Orders</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">Wishlist</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -32,7 +59,6 @@
    <div class="row">
     {% for ad in add %}
 
-
     <div class="col-sm-6">
      <div class="card">
       <div class="card-body">
@@ -43,6 +69,10 @@
        <p>State: {{ad.state}}</p>
        <p>Pincode: {{ad.pincode}}</p>
        <p>Phone Number: {{ad.phone_number}}</p>
+            <div class="btn-group" role="group" aria-label="Address Actions">
+                <a href="{% url 'edit_address' ad.id %}" class="btn btn-primary">Edit</a>
+                <a href="{% url 'delete_address' ad.id %}" class="btn btn-danger">Delete</a>
+            </div>
       </div>
      </div>
     </div>

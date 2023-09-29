@@ -70,7 +70,6 @@
                             </form>
                         </td>
                         <td>
-<!--                            <a href="" class="btn btn-warning">Block</a>-->
                                 <form method="post" action="">
                                     {% csrf_token %}
                                      <button type="button" class="btn {% if user.is_active %}btn-warning{% else %}btn-success{% endif %}"

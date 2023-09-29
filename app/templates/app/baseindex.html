@@ -198,10 +198,10 @@
 						<li class="active"><a href="/">Home</a></li>
 						<li><a href="#">Hot Deals</a></li>
 						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
+						<li><a href="{% url 'product_listing' category='Camera' %}">Camera</a></li>
+						<li><a href="{% url 'product_listing' category='Smart watch' %}">Smart Watch</a></li>
+						<li><a href="{% url 'product_listing' category='Headphone' %}">Headphone</a></li>
+						<li><a href="{% url 'product_listing' category='Speaker' %}">Speaker</a></li>
 					</ul>
 					<!-- /NAV -->
 				</div>
