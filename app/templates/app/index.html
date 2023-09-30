@@ -117,8 +117,15 @@
 													<i class="fa fa-star"></i>
 												</div>
 												<div class="product-btns">
-													<button class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
-<!--													<button class="add-to-compare"><i class="far fa-exchange"></i><span class="tooltipp">add to compare</span></button>-->
+													<form method="POST" action="{% url 'add_to_wishlist' c.id %}" class="product-btns">
+														{% csrf_token %}
+														<button type="submit" class="add-to-wishlist">
+															<i class="fa fa-heart"></i>
+															<span class="tooltipp">
+																{% if c.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
+															</span>
+														</button>
+													</form>
 													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>
@@ -182,8 +189,16 @@
 													<i class="fa fa-star"></i>
 												</div>
 												<div class="product-btns">
-													<button class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
-													<button class="add-to-compare"><i class="far fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+													<form method="POST" action="{% url 'add_to_wishlist' s.id %}" class="product-btns">
+														{% csrf_token %}
+														<button type="submit" class="add-to-wishlist">
+															<i class="fa fa-heart"></i>
+															<span class="tooltipp">
+																{% if s.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
+															</span>
+														</button>
+													</form>
+
 													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>
@@ -247,9 +262,17 @@
 													<i class="fa fa-star"></i>
 												</div>
 												<div class="product-btns">
-													<button class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+													<form method="POST" action="{% url 'add_to_wishlist' h.id %}" class="product-btns">
+														{% csrf_token %}
+														<button type="submit" class="add-to-wishlist">
+															<i class="fa fa-heart"></i>
+															<span class="tooltipp">
+																{% if h.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
+															</span>
+														</button>
+													</form>
 <!--													<button class="add-to-compare"><i class="far fa-exchange"></i><span class="tooltipp">add to compare</span></button>-->
-													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+<!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
 											<div class="add-to-cart">
@@ -303,7 +326,7 @@
 											</div>
 											<div class="product-body">
 												<p class="product-category">Category</p>
-												<h3 class="product-name"><a href="{% url 'product-detail' sp.id %}">{{c.title}}</a></h3>
+												<h3 class="product-name"><a href="{% url 'product-detail' sp.id %}">{{sp.title}}</a></h3>
 												<h4 class="product-price">Rs.{{sp.discount_price}} <del class="product-old-price">Rs.{{sp.selling_price}}</del></h4>
 												<div class="product-rating">
 													<i class="fa fa-star"></i>
@@ -314,13 +337,16 @@
 												</div>
 												<div class="product-btns">
 <!--													<button class="add-to-wishlist" href="{% url 'add_to_wishlist' sp.id %}"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>-->
-<!--													<button class="add-to-compare"><i class="far fa-exchange"></i><span class="tooltipp">add to compare</span></button>-->
 													<form method="POST" action="{% url 'add_to_wishlist' sp.id %}" class="product-btns">
 														{% csrf_token %}
-														<button type="submit" class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+														<button type="submit" class="add-to-wishlist">
+															<i class="fa fa-heart"></i>
+															<span class="tooltipp">
+																{% if sp.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
+															</span>
+														</button>
 													</form>
-
-													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+<!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
 											<div class="add-to-cart">
@@ -881,6 +907,27 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const wishlistForm = document.getElementById("wishlist-form");
+        const wishlistText = document.getElementById("wishlist-text");
+
+        wishlistForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            setTimeout(function () {
+                if (wishlistText.textContent.includes("Add to Wishlist")) {
+                    wishlistText.textContent = "Added to your Wishlist";
+                } else {
+                    wishlistText.textContent = "Add to Wishlist";
+                }
+            }, 1000); // Simulated delay of 1 second
+        });
+    });
+</script>
+
+
 		{% endblock widgets %}
 
 

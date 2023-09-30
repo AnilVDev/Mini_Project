@@ -86,14 +86,23 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>Image</th>
                     <th>Product</th>
+                    <th>Description</th>
+                    <th>Price</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in wishlist_items %}
                 <tr>
-                    <td>{{ item.product.title }}</td>
+
+					{% if item.product.images.all %}
+                    <td><img src="{{ item.product.images.first.image.url }}" alt="" id="main-product-img" style="width: 120px; height: 90px;"></td>
+					{% endif %}
+                    <td><a href="{% url 'product-detail' pk=item.product.pk %}">{{ item.product.title }}</a></td>
+                    <td>{{ item.product.description }}</td>
+                    <td><h5 class="product-price">Rs.{{item.product.discount_price}} <del class="product-old-price">Rs.{{item.product.selling_price}}</del></h5></td>
                     <td>
                         <a href="{% url 'remove_from_wishlist' item.product.id %}" class="btn btn-danger">
                             Remove

@@ -4,6 +4,12 @@
 
 
 {% block main-content %}
+<style>
+
+
+</style>
+
+
 		<!-- BREADCRUMB -->
 
 
@@ -35,34 +41,27 @@
 				<!-- row -->
 				<div class="row">
 					<!-- Product main img -->
-					<div class="col-md-4 col-md-push-2">
-						<div id="product-main-img">
-							{% if product.images.all %}
-							<div class="product-preview">
+						<div class="col-md-4 col-md-push-2">
+							<div id="product-main-img">
 
-								<img src="{{ product.images.first.image.url }}" alt="" id="main-product-img">
+								<img src="{% if product.images.all %}{{ product.images.first.image.url }}{% endif %}" alt="" id="main-product-img">
 
 							</div>
-							{% endif %}
 						</div>
-					</div>
-					<!-- /Product main img -->
 
-					<!-- Product thumb imgs -->
-					<div class="col-md-2  col-md-pull-5">
-						<div id="product-imgs">
-							{% if product.images.all %}
-							<div class="product-preview" >
-								{% for image in product.images.all %}
-								<img src="{{ image.image.url }}" alt="" class="thumb-image" onclick="changeMainImage('{{ image.image.url }}')">
-								{% endfor %}
+						<!-- Product thumb imgs -->
+						<div class="col-md-2 col-md-pull-5">
+							<div id="product-imgs">
+								{% if product.images.all %}
+								<div class="product-preview">
+									{% for image in product.images.all %}
+									<img src="{{ image.image.url }}" alt="" class="thumb-image" data-large-image="{{ image.image.url }}" onclick="changeMainImage('{{ image.image.url }}')">
+									{% endfor %}
+								</div>
+								{% endif %}
 							</div>
-							{% endif %}
 						</div>
-					</div>
-					<!-- /Product thumb imgs -->
-
-
+						<!-- /Product thumb imgs -->
 
 
 					<!-- Product details -->
@@ -100,7 +99,9 @@
 							</div>
 
 							<ul class="product-btns">
-								<li><a href="{% url 'add_to_wishlist' product.id %}"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
+<!--								<li><a href="{% url 'add_to_wishlist' product.id %}"><i class="fa fa-heart"></i> add to wishlist</a></li>-->
+								<li><a href="{% url 'add_to_wishlist' product.id %}"><i class="fa fa-heart"></i>
+        								{% if product.id in user_wishlist %} Added to your Wishlist {% else %} Add to Wishlist {% endif %}</a></li>
 								<li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
 							</ul>
 
@@ -481,12 +482,15 @@
 		</div>
 		<!-- /Section -->
 
-<!-- JavaScript to handle image switching -->
+
 <script>
-    function changeMainImage(imageUrl) {
-        // Update the source of the main product image with the clicked thumbnail's URL
-        document.getElementById('main-product-img').src = imageUrl;
-    }
+function changeMainImage(imageUrl) {
+    const mainProductImg = document.getElementById("main-product-img");
+    mainProductImg.src = imageUrl;
+}
+
+
+
 </script>
 
 {% endblock main-content %}

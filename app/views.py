@@ -30,6 +30,7 @@ class ProductView(View):
         headphone = Product.objects.filter(Q(category__name__icontains='headphone'))
         speaker = Product.objects.filter(Q(category__name__icontains='speaker'))
         categories = Product.objects.values_list('category__name', flat=True).distinct()
+        user_wishlist = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
 
         context = {
             'camera': camera,
@@ -37,6 +38,7 @@ class ProductView(View):
             'headphone':headphone,
             'speaker':speaker,
             'categories': categories,
+            'user_wishlist': user_wishlist,
 
         }
         return render(request, 'app/index.html', context)
@@ -45,7 +47,12 @@ class ProductView(View):
 class ProductDetailView(View):
     def get(self, request,pk):
         product = Product.objects.get(pk=pk)
-        return render(request, 'app/productdetails.html', {'product':product})
+        user_wishlist = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+        context = {
+            'product': product,
+            'user_wishlist': user_wishlist,
+        }
+        return render(request, 'app/productdetails.html', context)
 
 def add_to_cart(request):
  return render(request, 'app/addtocart.html')
@@ -633,6 +640,13 @@ def product_listing(request, category):
     if max_price:
         products = products.filter(discount_price__lte=max_price)
 
+    # sort_by_price = request.GET.get('sort_by_price', '0')
+
+    # if sort_by_price == '0':
+    #     products = products.order_by('discount_price')
+    # elif sort_by_price == '1':
+    #     products = products.order_by('-discount_price')
+
     products_per_page = 3
 
     paginator = Paginator(products, products_per_page)
@@ -652,6 +666,8 @@ def product_listing(request, category):
         'brands': brands,
         'page_range': page_range,
         'products': products_page,
+        # 'sort_by_price': sort_by_price,
+
     }
 
     return render(request, 'app/product_listing.html', context)
