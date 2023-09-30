@@ -313,8 +313,13 @@
 													<i class="fa fa-star"></i>
 												</div>
 												<div class="product-btns">
-													<button class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+<!--													<button class="add-to-wishlist" href="{% url 'add_to_wishlist' sp.id %}"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>-->
 <!--													<button class="add-to-compare"><i class="far fa-exchange"></i><span class="tooltipp">add to compare</span></button>-->
+													<form method="POST" action="{% url 'add_to_wishlist' sp.id %}" class="product-btns">
+														{% csrf_token %}
+														<button type="submit" class="add-to-wishlist"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>
+													</form>
+
 													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>

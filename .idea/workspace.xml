@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="product listing 25% is completed">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="user address - edit,delete option added ,">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/address.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/address.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/baseindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/baseindex.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/passwordchange.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/passwordchange.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/product_listing.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_listing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/productdetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/productdetails.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
@@ -245,7 +244,15 @@
       <option name="project" value="LOCAL" />
       <updated>1695820293702</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="user address - edit,delete option added ,">
+      <option name="closed" value="true" />
+      <created>1696057151544</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1696057151544</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -276,6 +283,18 @@
     <MESSAGE value="pagination added in user list,brand, category, product list" />
     <MESSAGE value="product listing 25% is completed.." />
     <MESSAGE value="product listing 25% is completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="product listing 25% is completed" />
+    <MESSAGE value="user address - edit,delete option added ," />
+    <option name="LAST_COMMIT_MESSAGE" value="user address - edit,delete option added ," />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/views.py</url>
+          <line>640</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

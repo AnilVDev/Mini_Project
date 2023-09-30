@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
-from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand
+from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist
 from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -655,3 +655,19 @@ def product_listing(request, category):
     }
 
     return render(request, 'app/product_listing.html', context)
+
+def add_to_wishlist(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    user = request.user
+    if not Wishlist.objects.filter(user=user, product=product).exists():
+        Wishlist.objects.create(user=request.user, product=product)
+    return redirect('product-detail', pk=product_id)
+
+def remove_from_wishlist(request, product_id):
+    product = Product.objects.get(pk=product_id)
+    Wishlist.objects.filter(user=request.user, product=product).delete()
+    return redirect('wishlist')
+
+def wishlist(request):
+    wishlist_items = Wishlist.objects.filter(user=request.user)
+    return render(request, 'app/wishlist.html', {'wishlist_items': wishlist_items})

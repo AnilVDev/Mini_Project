@@ -1,0 +1,115 @@
+{% extends 'app/baseindex.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+{% block main-content %}
+
+<style>
+    .custom-nav .nav-item {
+    margin-bottom: 10px;
+}
+
+.custom-nav .nav-link {
+    color: #0f0f0f;
+    transition: color 0.3s;
+}
+
+.custom-nav .nav-link:hover {
+    color: #007bff;
+}
+</style>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Left Sidebar Navigation -->
+                <div class="col-md-3 bg-dark text-light">
+                    <div id="custom-navigation">
+                        <div class="container">
+                            <div id="responsive-nav">
+                                <ul class="custom-nav">
+                                    <h5>Welcome <span class="active text-capitalize h2 text-primary">{{ request.user }}</span></h5>
+                                    <li class="nav-item">
+                                        <a href="{% url 'profile' %}" class="nav-link ">Profile</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'address' %}" class="nav-link ">Address</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'passwordchange' %}" class="nav-link">Change Password</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">Orders</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link {{ active }}">Wishlist</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- /Left Sidebar Navigation -->
+
+            <!-- Right Content -->
+<!--            <div class="col-md-9">-->
+<!--                <div class="container my-5">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-sm-8 offset-sm-1">-->
+<!--                            <h4 class="mb-5 text-danger">Add New Address</h4>-->
+<!--                            <form action="" method="post" novalidate>-->
+<!--                                {% csrf_token %}-->
+<!--                                {% for fm in form %}-->
+<!--                                <div class="form-group col-lg-6 mb-3">-->
+<!--                                    {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>-->
+<!--                                </div>-->
+<!--                                {% endfor %}-->
+<!--                                <div class="col-12 mt-3">-->
+<!--                                    <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--                                </div>-->
+<!--                            </form>-->
+<!--                            {% if messages %}-->
+<!--                            {% for message in messages %}-->
+<!--                            <p {% if message.tags %} class="alert alert-{{message.tags}} mb-5" {% endif %}>{{message}}</p>-->
+<!--                            {% endfor %}-->
+<!--                            {% endif %}-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+
+    <div class="container my-5">
+        <h1>Your Wishlist</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in wishlist_items %}
+                <tr>
+                    <td>{{ item.product.title }}</td>
+                    <td>
+                        <a href="{% url 'remove_from_wishlist' item.product.id %}" class="btn btn-danger">
+                            Remove
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+            <!-- /Right Content -->
+        </div>
+    </div>
+<!--</body>-->
+<!--</html>-->
+
+{% endblock main-content %}
