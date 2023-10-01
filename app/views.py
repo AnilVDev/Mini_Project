@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist
@@ -25,13 +26,25 @@ from django.core.paginator import Paginator
 
 class ProductView(View):
     def get(self, request):
-        camera = Product.objects.filter(Q(category__name__icontains='camera'))
-        smartwatch = Product.objects.filter(Q(category__name__icontains='smart watch'))
-        headphone = Product.objects.filter(Q(category__name__icontains='headphone'))
-        speaker = Product.objects.filter(Q(category__name__icontains='speaker'))
+        products_c = Product.objects.filter(Q(category__name__icontains='camera'))
+        products_sw = Product.objects.filter(Q(category__name__icontains='smart watch'))
+        products_h = Product.objects.filter(Q(category__name__icontains='headphone'))
+        products_sp = Product.objects.filter(Q(category__name__icontains='speaker'))
         categories = Product.objects.values_list('category__name', flat=True).distinct()
         user_wishlist = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+        products = Product.objects.all()
+        # random.shuffle(products)
 
+        def sample_products(products, num_samples):
+            if len(products) >= num_samples:
+                return random.sample(list(products), num_samples)
+            else:
+                return list(products)
+
+        camera = sample_products(list(products_c), 5)
+        smartwatch = sample_products(list(products_sw), 5)
+        headphone = sample_products(list(products_h), 5)
+        speaker = sample_products(list(products_sp), 5)
         context = {
             'camera': camera,
             'smartwatch': smartwatch,
@@ -39,6 +52,7 @@ class ProductView(View):
             'speaker':speaker,
             'categories': categories,
             'user_wishlist': user_wishlist,
+            'products':products
 
         }
         return render(request, 'app/index.html', context)
@@ -647,7 +661,7 @@ def product_listing(request, category):
     # elif sort_by_price == '1':
     #     products = products.order_by('-discount_price')
 
-    products_per_page = 3
+    products_per_page = 6
 
     paginator = Paginator(products, products_per_page)
     page_number = request.GET.get('page')
@@ -677,8 +691,12 @@ def add_to_wishlist(request, product_id):
     user = request.user
     if not Wishlist.objects.filter(user=user, product=product).exists():
         Wishlist.objects.create(user=request.user, product=product)
-    return redirect('product-detail', pk=product_id)
-
+    # return redirect('product-detail', pk=product_id)
+    next_url = request.POST.get('next')
+    if next_url:
+        return redirect(next_url)
+    else:
+        return redirect(reverse('home'))
 def remove_from_wishlist(request, product_id):
     product = Product.objects.get(pk=product_id)
     Wishlist.objects.filter(user=request.user, product=product).delete()

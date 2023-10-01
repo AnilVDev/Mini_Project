@@ -83,6 +83,7 @@
 
     <div class="container my-5">
         <h1>Your Wishlist</h1>
+        {% if wishlist_items %}
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -112,6 +113,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <p>No item in your cart</p>
+        {% endif %}
     </div>
 
 

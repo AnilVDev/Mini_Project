@@ -119,6 +119,7 @@
 												<div class="product-btns">
 													<form method="POST" action="{% url 'add_to_wishlist' c.id %}" class="product-btns">
 														{% csrf_token %}
+														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
 															<i class="fa fa-heart"></i>
 															<span class="tooltipp">
@@ -126,7 +127,7 @@
 															</span>
 														</button>
 													</form>
-													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+<!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
 											<div class="add-to-cart">
@@ -191,6 +192,7 @@
 												<div class="product-btns">
 													<form method="POST" action="{% url 'add_to_wishlist' s.id %}" class="product-btns">
 														{% csrf_token %}
+														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
 															<i class="fa fa-heart"></i>
 															<span class="tooltipp">
@@ -199,7 +201,7 @@
 														</button>
 													</form>
 
-													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+<!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
 											<div class="add-to-cart">
@@ -264,6 +266,7 @@
 												<div class="product-btns">
 													<form method="POST" action="{% url 'add_to_wishlist' h.id %}" class="product-btns">
 														{% csrf_token %}
+														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
 															<i class="fa fa-heart"></i>
 															<span class="tooltipp">
@@ -339,6 +342,7 @@
 <!--													<button class="add-to-wishlist" href="{% url 'add_to_wishlist' sp.id %}"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>-->
 													<form method="POST" action="{% url 'add_to_wishlist' sp.id %}" class="product-btns">
 														{% csrf_token %}
+														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
 															<i class="fa fa-heart"></i>
 															<span class="tooltipp">
@@ -631,84 +635,52 @@
 						<div class="products-widget-slick" data-nav="#slick-nav-3">
 							<div>
 								<!-- product widget -->
-								<div class="product-widget">
-									<div class="product-img">
-										<img src="./img/product07.png" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-									</div>
-								</div>
-								<!-- /product widget -->
+								{% for product in products %}
+									{% if product.category.name == "Camera" %}
+										{% if forloop.counter <= 3 %}
 
-								<!-- product widget -->
 								<div class="product-widget">
 									<div class="product-img">
-										<img src="./img/product08.png" alt="">
+										{% if product.images.all %}
+											<img src="{{product.images.first.image.url}}" alt="">
+										{% endif %}
 									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-									</div>
-								</div>
-								<!-- /product widget -->
 
-								<!-- product widget -->
-								<div class="product-widget">
-									<div class="product-img">
-										<img src="./img/product09.png" alt="">
-									</div>
 									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+										<p class="product-category">{{ product.category}}</p>
+										<h3 class="product-name"><a href="#">{{product.title}}</a></h3>
+										<h4 class="product-price">Rs{{product.discount_price}} <del class="product-old-price">Rs{{product.selling_price}}</del></h4>
 									</div>
 								</div>
-								<!-- product widget -->
+										{% endif %}
+									{% endif %}
+								{% endfor %}
+								<!-- /product widget -->
 							</div>
 
 							<div>
 								<!-- product widget -->
+								{% for product in products %}
+									{% if product.category.name == "Smart watch" %}
+									{% if forloop.counter <= 3 %}
+
 								<div class="product-widget">
 									<div class="product-img">
-										<img src="./img/product01.png" alt="">
+										{% if product.images.all %}
+											<img src="{{product.images.first.image.url}}" alt="">
+										{% endif %}
 									</div>
 									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+										<p class="product-category">{{ product.category}}</p>
+										<h3 class="product-name"><a href="#">{{product.title}}</a></h3>
+										<h4 class="product-price">Rs{{product.discount_price}} <del class="product-old-price">Rs{{product.selling_price}}</del></h4>
 									</div>
 								</div>
+										{% endif %}
+									{% endif %}
+								{% endfor %}
 								<!-- /product widget -->
 
-								<!-- product widget -->
-								<div class="product-widget">
-									<div class="product-img">
-										<img src="./img/product02.png" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-									</div>
-								</div>
-								<!-- /product widget -->
-
-								<!-- product widget -->
-								<div class="product-widget">
-									<div class="product-img">
-										<img src="./img/product03.png" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-									</div>
-								</div>
-								<!-- product widget -->
 							</div>
 						</div>
 					</div>
@@ -723,6 +695,30 @@
 
 						<div class="products-widget-slick" data-nav="#slick-nav-4">
 							<div>
+
+								<!-- product widget -->
+								{% for product in products %}
+									{% if product.category.name == "Camera" %}
+										{% if forloop.counter <= 3 %}
+
+								<div class="product-widget">
+									<div class="product-img">
+										{% if product.images.all %}
+											<img src="{{product.images.first.image.url}}" alt="">
+										{% endif %}
+									</div>
+
+									<div class="product-body">
+										<p class="product-category">{{ product.category}}</p>
+										<h3 class="product-name"><a href="#">{{product.title}}</a></h3>
+										<h4 class="product-price">Rs{{product.discount_price}} <del class="product-old-price">Rs{{product.selling_price}}</del></h4>
+									</div>
+								</div>
+										{% endif %}
+									{% endif %}
+								{% endfor %}
+								<!-- /product widget -->
+
 								<!-- product widget -->
 								<div class="product-widget">
 									<div class="product-img">

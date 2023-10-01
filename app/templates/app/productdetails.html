@@ -64,6 +64,7 @@
 						<!-- /Product thumb imgs -->
 
 
+
 					<!-- Product details -->
 					<div class="col-md-6">
 						<div class="product-details">
@@ -99,9 +100,22 @@
 							</div>
 
 							<ul class="product-btns">
-<!--								<li><a href="{% url 'add_to_wishlist' product.id %}"><i class="fa fa-heart"></i> add to wishlist</a></li>-->
-								<li><a href="{% url 'add_to_wishlist' product.id %}"><i class="fa fa-heart"></i>
-        								{% if product.id in user_wishlist %} Added to your Wishlist {% else %} Add to Wishlist {% endif %}</a></li>
+
+								<li>
+									<form method="POST" action="{% url 'add_to_wishlist' product.id %}">
+										{% csrf_token %}
+										<input type="hidden" name="next" value="{{ request.get_full_path }}">
+										<a href="#" onclick="this.closest('form').submit(); return false;">
+											<i class="fa fa-heart"></i>
+											{% if product.id in user_wishlist %}
+												Added to your Wishlist
+											{% else %}
+												Add to Wishlist
+											{% endif %}
+										</a>
+									</form>
+								</li>
+
 								<li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
 							</ul>
 

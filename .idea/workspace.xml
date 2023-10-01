@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="wishllist added,but there is some problem(in frontend the item should be displayed as added in wishlist)">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="image zooming is not working..all other okay..wishlist almost completed">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_09_23,_12_12_pm_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_24_09_23__12_12_pm__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/baseindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/baseindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/app/css/magnifier.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/app/js/Magnifier.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/product_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/product_listing.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_listing.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/productdetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/productdetails.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/wishlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/wishlist.html" afterDir="false" />
@@ -259,7 +263,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696074860795</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="image zooming is not working..all other okay..wishlist almost completed">
+      <option name="closed" value="true" />
+      <created>1696172463962</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1696172463962</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -292,14 +304,15 @@
     <MESSAGE value="product listing 25% is completed" />
     <MESSAGE value="user address - edit,delete option added ," />
     <MESSAGE value="wishllist added,but there is some problem(in frontend the item should be displayed as added in wishlist)" />
-    <option name="LAST_COMMIT_MESSAGE" value="wishllist added,but there is some problem(in frontend the item should be displayed as added in wishlist)" />
+    <MESSAGE value="image zooming is not working..all other okay..wishlist almost completed" />
+    <option name="LAST_COMMIT_MESSAGE" value="image zooming is not working..all other okay..wishlist almost completed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/views.py</url>
-          <line>654</line>
+          <line>668</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
