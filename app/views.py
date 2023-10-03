@@ -31,9 +31,9 @@ class ProductView(View):
         products_h = Product.objects.filter(Q(category__name__icontains='headphone'))
         products_sp = Product.objects.filter(Q(category__name__icontains='speaker'))
         categories = Product.objects.values_list('category__name', flat=True).distinct()
-        user_wishlist = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
-        products = Product.objects.all()
-        # random.shuffle(products)
+        # user_wishlist = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+        products = list(Product.objects.all())
+        random.shuffle(products)
 
         def sample_products(products, num_samples):
             if len(products) >= num_samples:
@@ -51,7 +51,7 @@ class ProductView(View):
             'headphone':headphone,
             'speaker':speaker,
             'categories': categories,
-            'user_wishlist': user_wishlist,
+            # 'user_wishlist': user_wishlist,
             'products':products
 
         }

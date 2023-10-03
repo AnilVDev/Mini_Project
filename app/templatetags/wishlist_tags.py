@@ -1,6 +1,7 @@
 from django import template
 from app.models import Wishlist
 
+
 register = template.Library()
 
 @register.simple_tag
