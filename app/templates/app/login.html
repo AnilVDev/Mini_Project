@@ -1,10 +1,19 @@
 {% extends 'app/baseindex.html' %}
 {% load static %}
 {% block title %}Login{% endblock title %}
+{% block main-header %}{% endblock main-header %}
+{% block navigation %}{% endblock navigation %}
+
 {% block main-content %}
+<style>
+    .my-main-div-class {
+    margin-top: 80px;
+}
+</style>
+
 <div class="container">
  <div class="row my-3">
-  <div class="col-sm-6 offset-sm-3">
+  <div class="col-sm-6 offset-sm-3 my-main-div-class">
    <h3>Login</h3>
    <hr>
    <form action="" method="post" novalidate class="shadow p-5">
@@ -23,6 +32,10 @@
                 <p class="alert alert-danger my-3">{{error}}</p>
             {% endfor %}
        {% endif %}
+       {% for message in messages %}
+            <p> {{message }}</p>
+       {% endfor %}
+
 
    </form>
   </div>

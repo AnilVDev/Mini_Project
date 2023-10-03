@@ -54,7 +54,11 @@
                         <p class="alert alert-danger my-3">{{ error }}</p>
                     {% endfor %}
                 {% endif %}
+
             </form>
+        {% for message in messages %}
+            <p> {{message }}</p>
+       {% endfor %}
         </div>
     </div>
 </div>

@@ -23,7 +23,6 @@ from django.views.generic import ListView
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 
-
 class ProductView(View):
     def get(self, request):
         products_c = Product.objects.filter(Q(category__name__icontains='camera'))
@@ -31,7 +30,6 @@ class ProductView(View):
         products_h = Product.objects.filter(Q(category__name__icontains='headphone'))
         products_sp = Product.objects.filter(Q(category__name__icontains='speaker'))
         categories = Product.objects.values_list('category__name', flat=True).distinct()
-        # user_wishlist = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
         products = list(Product.objects.all())
         random.shuffle(products)
 
@@ -51,7 +49,6 @@ class ProductView(View):
             'headphone':headphone,
             'speaker':speaker,
             'categories': categories,
-            # 'user_wishlist': user_wishlist,
             'products':products
 
         }
@@ -60,11 +57,9 @@ class ProductView(View):
 
 class ProductDetailView(View):
     def get(self, request,pk):
-        product = Product.objects.get(pk=pk)
-        user_wishlist = Wishlist.objects.filter(user=request.user).values_list('product_id', flat=True)
+        product = get_object_or_404(Product, pk=pk)
         context = {
             'product': product,
-            'user_wishlist': user_wishlist,
         }
         return render(request, 'app/productdetails.html', context)
 
@@ -197,7 +192,6 @@ class OTPVerificationView(View):
                         password=make_password(user_data['password'])
                     )
                     del request.session['temp_user_data']
-                    # Valid OTP
                     del request.session['registration_otp']
                     del request.session['otp_attempts']
                     messages.success(request, 'OTP verified successfully. Registration complete!')
@@ -278,7 +272,7 @@ def add_product_with_images(request):
                     image.product = product
                     image.save()
 
-            return redirect('product_list')  # Redirect to a success page or product list
+            return redirect('product_list')
     else:
         product_form = ProductForm()
         image_formset = ProductImageFormSet(prefix='images')
@@ -431,6 +425,17 @@ def edit_product(request, product_id):
 
     return render(request, 'app/edit_product.html', {'form': form, 'product': product})
 
+
+@staff_member_required
+def delete_product(request, product_id):
+    try:
+        product = Product.objects.get(pk=product_id)
+        product.delete()
+        messages.success(request, 'Product deleted successfully.')
+    except Product.DoesNotExist:
+        messages.error(request, 'Product not found.')
+
+    return redirect('product_list')
 
 @staff_member_required
 def delete_product_image(request, image_id):
@@ -627,8 +632,9 @@ def product_listing(request, category):
     categories = Category.objects.all()
     brands = Brand.objects.all()
 
-    if category != 'All Categories':
+    if category != 'All Categories' and selected_category == 'All Categories':
         products = Product.objects.filter(category__name=category)
+        print('from all category',products)
     else:
         if selected_category == 'All Categories':
             products = Product.objects.all()
@@ -685,13 +691,12 @@ def product_listing(request, category):
     }
 
     return render(request, 'app/product_listing.html', context)
-
+@login_required
 def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     user = request.user
     if not Wishlist.objects.filter(user=user, product=product).exists():
         Wishlist.objects.create(user=request.user, product=product)
-    # return redirect('product-detail', pk=product_id)
     next_url = request.POST.get('next')
     if next_url:
         return redirect(next_url)

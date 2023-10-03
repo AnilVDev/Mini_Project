@@ -4,12 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="wishlist corrected...almost all other are corrected">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="wishlist error corrected">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/baseindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/baseindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/customerregistration.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/customerregistration.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templatetags/wishlist_tags.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/templatetags/wishlist_tags.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/password_reset.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/password_reset.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/password_reset_complete.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/password_reset_complete.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/password_reset_confirm.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/password_reset_confirm.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/password_reset_done.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/password_reset_done.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/product_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/verify_otp.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/verify_otp.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/payfortech/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/payfortech/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -272,7 +282,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696318354480</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="wishlist error corrected">
+      <option name="closed" value="true" />
+      <created>1696322063524</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1696322063524</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -308,14 +326,15 @@
     <MESSAGE value="image zooming is not working..all other okay..wishlist almost completed" />
     <MESSAGE value="image zooming is not working.." />
     <MESSAGE value="wishlist corrected...almost all other are corrected" />
-    <option name="LAST_COMMIT_MESSAGE" value="wishlist corrected...almost all other are corrected" />
+    <MESSAGE value="wishlist error corrected" />
+    <option name="LAST_COMMIT_MESSAGE" value="wishlist error corrected" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/views.py</url>
-          <line>668</line>
+          <line>674</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
