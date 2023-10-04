@@ -90,14 +90,19 @@
 								<div class="qty-label">
 									Qty
 									<div class="input-number">
-										<input type="number">
+										<input type="number" id="quantity" min="1" value="1">
 										<span class="qty-up">+</span>
 										<span class="qty-down">-</span>
 									</div>
 								</div>
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-								<button class="add-to-cart-btn"><i class="fa fa-bolt"></i> buy now</button>
+								<form method="post" action="{% url 'add_to_cart' product.id %}">
+									{% csrf_token %}
+									<input type="hidden" name="quantity" id="selected-quantity"  >
+									<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+									<button type="submit" formaction="{% url 'buy_now' product.id %}" class="add-to-cart-btn"><i class="fa fa-bolt"></i> Buy Now</button>
+								</form>
 							</div>
+
 
 							<ul class="product-btns">
 
@@ -504,7 +509,39 @@ function changeMainImage(imageUrl) {
 }
 
 
-
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const quantityInput = document.getElementById('quantity');
+        const selectedQuantityInput = document.getElementById('selected-quantity');
+        const qtyUpButton = document.querySelector('.qty-up');
+        const qtyDownButton = document.querySelector('.qty-down');
+
+        qtyUpButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent the default behavior
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            selectedQuantityInput.value = quantityInput.value; // Update selected-quantity
+            console.log(selectedQuantityInput.value);
+        });
+
+        qtyDownButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent the default behavior
+            const newValue = parseInt(quantityInput.value) - 1;
+            quantityInput.value = newValue >= 1 ? newValue : 1;
+            selectedQuantityInput.value = quantityInput.value; // Update selected-quantity
+            console.log(selectedQuantityInput.value);
+        });
+
+        // Add a submit event listener to the form
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            // Set the selected-quantity input field's value to the updated quantity before submitting
+            selectedQuantityInput.value = quantityInput.value;
+        });
+    });
+</script>
+
+
 
 {% endblock main-content %}

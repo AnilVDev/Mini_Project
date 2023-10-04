@@ -1,7 +1,7 @@
 import random
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
-from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist
+from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem
 from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -492,12 +492,10 @@ def delete_category(request, category_id):
     try:
         category = Category.objects.get(pk=category_id)
         category.delete()
-        # Optionally, you can add a success message
         messages.success(request, 'Category deleted successfully.')
     except Category.DoesNotExist:
         messages.error(request, 'Category not found.')
 
-    # Redirect to the page where you list categories
     return redirect('category_list_and_add')
 
 @staff_member_required
@@ -558,12 +556,10 @@ def delete_brand(request, brand_id):
     try:
         brand = Brand.objects.get(pk=brand_id)
         brand.delete()
-        # Optionally, you can add a success message
         messages.success(request, 'Brand deleted successfully.')
     except Brand.DoesNotExist:
         messages.error(request, 'Brand not found.')
 
-    # Redirect to the page where you list categories
     return redirect('brand_list_and_add')
 
 @staff_member_required
@@ -710,3 +706,79 @@ def remove_from_wishlist(request, product_id):
 def wishlist(request):
     wishlist_items = Wishlist.objects.filter(user=request.user)
     return render(request, 'app/wishlist.html', {'wishlist_items': wishlist_items})
+
+
+def cart(request):
+    if request.user.is_authenticated:
+        user_cart = Cart.objects.filter(user=request.user).first()
+
+        if user_cart:
+            cart_items = CartItem.objects.filter(cart=user_cart)
+            total_price = calculate_cart_total(cart_items)
+        else:
+            cart_items = []
+            total_price = 0
+
+        context = {
+            'cart_items': cart_items,
+            'total_price': total_price,
+        }
+
+        return render(request, 'app/cart.html', context)
+    else:
+        return render(request, 'app/cart.html')
+
+def calculate_cart_total(cart_items):
+    total_price = 0
+
+    for item in cart_items:
+        product = item.product
+        quantity = item.quantity
+        item_price = product.discount_price * quantity
+        total_price += item_price
+
+    return total_price
+
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        quantity = request.POST.get('quantity',1)
+        print(quantity)
+        try:
+            quantity = int(quantity)
+        except ValueError:
+            quantity = 1
+
+        # Check if there is enough stock available
+        if quantity > product.stock:
+            return redirect('product-detail', pk=product_id)
+
+        # Check if the product is already in the cart, and increment the quantity
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if not created:
+            # Check if adding more quantity exceeds available stock
+            if cart_item.quantity + quantity > product.stock:
+                return redirect('product-detail', pk=product_id)
+            cart_item.quantity += quantity
+            cart_item.save()
+        next_url = request.POST.get('next')
+        if next_url:
+            return redirect(next_url)
+        else:
+            return redirect('product-detail', pk=product_id)
+    else:
+        return redirect('login')
+
+
+def delete_cart_item(request, item_id):
+    if request.user.is_authenticated:
+        cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+        cart_item.delete()
+        next_url = request.POST.get('next')
+        if next_url:
+            return redirect(next_url)
+        else:
+            return redirect('cart')
+    # return redirect('cart')

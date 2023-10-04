@@ -8,6 +8,7 @@ from .models import (
     Customer,
     Product,
     Cart,
+    CartItem,
     OrderPlaced,
     ProductImage,
     Brand,
@@ -44,6 +45,16 @@ class CategoryModelAdmin(admin.ModelAdmin):
 @admin.register(Brand)
 class BrandModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
+
+@admin.register(Cart)
+class CartModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user']
+
+
+@admin.register(CartItem)
+class CartItemModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'cart', 'product', 'quantity']
+
 
 # class CustomUserAdmin(UserAdmin):
 #     add_form = CustomerRegistrationForm

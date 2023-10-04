@@ -43,6 +43,9 @@
                                         <a href="#" class="nav-link {{ active }}">Wishlist</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a href="{% url 'cart' %}" class="nav-link">Cart</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a href="{% url 'logout' %}" class="nav-link">Logout</a>
                                     </li>
                                 </ul>
@@ -105,8 +108,8 @@
                     <td>{{ item.product.description }}</td>
                     <td><h5 class="product-price">Rs.{{item.product.discount_price}} <del class="product-old-price">Rs.{{item.product.selling_price}}</del></h5></td>
                     <td>
-                        <a href="{% url 'remove_from_wishlist' item.product.id %}" class="btn btn-danger">
-                            Remove
+                        <a href="{% url 'remove_from_wishlist' item.product.id %}" class="btn ">
+                            <i class="fas fa-trash"></i>
                         </a>
                     </td>
                 </tr>
@@ -114,7 +117,7 @@
             </tbody>
         </table>
         {% else %}
-        <p>No item in your cart</p>
+        <p>No item in your wishlist</p>
         {% endif %}
     </div>
 

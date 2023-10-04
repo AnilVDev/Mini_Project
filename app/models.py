@@ -103,15 +103,26 @@ class Product(models.Model):
     details = models.TextField(max_length=255, default='No details available')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    stock = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title
 
+
+
 class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.id)
+        return f"Cart for {self.user.username}"
 
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.title}"
 
 class OrderPlaced(models.Model):
     pass

@@ -43,6 +43,9 @@
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">Wishlist</a>
                                 </li>
+                                    <li class="nav-item">
+                                        <a href="{% url 'cart' %}" class="nav-link">Cart</a>
+                                    </li>
                                 <li class="nav-item">
                                     <a href="{% url 'logout' %}" class="nav-link">Logout</a>
                                 </li>
@@ -70,8 +73,8 @@
        <p>Pincode: {{ad.pincode}}</p>
        <p>Phone Number: {{ad.phone_number}}</p>
             <div class="btn-group" role="group" aria-label="Address Actions">
-                <a href="{% url 'edit_address' ad.id %}" class="btn btn-primary">Edit</a>
-                <a href="{% url 'delete_address' ad.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'edit_address' ad.id %}" class="btn "><i class="fas fa-edit"></i></a>
+                <a href="{% url 'delete_address' ad.id %}" class="btn "><i class="fas fa-trash"></i></a>
             </div>
       </div>
      </div>

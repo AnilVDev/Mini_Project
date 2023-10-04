@@ -130,9 +130,14 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
+											<form method="post" action="{% url 'add_to_cart' c.id %}">
+												{% csrf_token %}
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+<!--												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>-->
+													<input type="hidden" name="next" value="{{ request.get_full_path }}">
+													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
+											</form>
 										</div>
 										{% endfor %}
 										<!-- /product -->
@@ -204,9 +209,13 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
+											<form method="post" action="{% url 'add_to_cart' s.id %}">
+												{% csrf_token %}
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+													<input type="hidden" name="next" value="{{ request.get_full_path }}">
+													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
+											</form>
 										</div>
 										{% endfor %}
 										<!-- /product -->
@@ -278,9 +287,13 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
+											<form method="post" action="{% url 'add_to_cart' h.id %}">
+												{% csrf_token %}
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+													<input type="hidden" name="next" value="{{ request.get_full_path }}">
+													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
+											</form>
 										</div>
 										{% endfor %}
 										<!-- /product -->
@@ -353,9 +366,13 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
+											<form method="post" action="{% url 'add_to_cart' sp.id %}">
+												{% csrf_token %}
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+													<input type="hidden" name="next" value="{{ request.get_full_path }}">
+													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
+											</form>
 										</div>
 										{% endfor %}
 										<!-- /product -->
@@ -493,9 +510,13 @@
 													</form>
 												</div>
 											</div>
+											<form method="post" action="{% url 'add_to_cart' product.id %}">
+												{% csrf_token %}
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+													<input type="hidden" name="next" value="{{ request.get_full_path }}">
+													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 											</div>
+											</form>
 										</div>
 										{% endfor %}
 										<!-- /product -->

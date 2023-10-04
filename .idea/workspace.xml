@@ -4,18 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="wishlist error corrected">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="solved almost all error, show success message after registration, category filter working, product deleting working">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_27_09_23,_10_57_am_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_27_09_23__10_57_am__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/context_processors.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/context_processors.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/address.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/address.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/baseindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/baseindex.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/customerregistration.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/customerregistration.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/brand_list_and_add.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/brand_list_and_add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/category_list_and_add.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/category_list_and_add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/edit_address.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/edit_address.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/password_reset.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/password_reset.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/password_reset_complete.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/password_reset_complete.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/password_reset_confirm.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/password_reset_confirm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/password_reset_done.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/password_reset_done.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/passwordchange.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/passwordchange.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/product_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/verify_otp.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/verify_otp.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/product_listing.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_listing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/productdetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/productdetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/wishlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/wishlist.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
@@ -29,8 +36,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -290,7 +297,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696322063524</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="solved almost all error, show success message after registration, category filter working, product deleting working">
+      <option name="closed" value="true" />
+      <created>1696421542503</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1696421542503</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -327,14 +342,15 @@
     <MESSAGE value="image zooming is not working.." />
     <MESSAGE value="wishlist corrected...almost all other are corrected" />
     <MESSAGE value="wishlist error corrected" />
-    <option name="LAST_COMMIT_MESSAGE" value="wishlist error corrected" />
+    <MESSAGE value="solved almost all error, show success message after registration, category filter working, product deleting working" />
+    <option name="LAST_COMMIT_MESSAGE" value="solved almost all error, show success message after registration, category filter working, product deleting working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/views.py</url>
-          <line>674</line>
+          <line>670</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

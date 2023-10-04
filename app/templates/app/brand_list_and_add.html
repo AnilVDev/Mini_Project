@@ -28,12 +28,12 @@
 <!--                {{ form.as_p }}-->
 <!--                <button type="submit" class="btn btn-success">Add</button>-->
 <!--            </form>-->
->
+
                 <div class="row">
                     <div class="col-lg-6">
                         <form method="get" action="{% url 'brand_list_and_add' %}">
                             <div class="input-group">
-                                <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}" class="form-control">
+                                <input type="text" name="q" placeholder="Search brands..." value="{{ search_query }}" class="form-control">
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-primary">Search</button>
                                 </div>
@@ -68,8 +68,8 @@
                     <tr>
                         <td>{{ brand.name }}</td>
                         <td>
-                            <a href="{% url 'edit_brand' brand.id %}" class="btn btn-primary">Edit</a>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUserModal{{ brand.id }}">Delete</button>
+                            <a href="{% url 'edit_brand' brand.id %}" class="btn"><i class="fas fa-edit"></i></a>
+                            <button type="button" class="btn btn-dange" data-toggle="modal" data-target="#deleteUserModal{{ brand.id }}"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
                     {% endfor %}

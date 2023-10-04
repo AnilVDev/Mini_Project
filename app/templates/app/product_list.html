@@ -33,6 +33,7 @@
                         <th>Price</th>
                         <th>Brand</th>
                         <th>Category</th>
+                        <th>Stock</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -45,13 +46,14 @@
                         <td>₹{{ product.selling_price }}</td>
                         <td>{{ product.brand }}</td>
                         <td>{{ product.category }}</td>
+                        <td>{{ product.stock }}2</td>
                         <td>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#productModal{{ product.id }}">
                                 View Details
                             </button>
-                            <a href="{% url 'edit_product' product.id %}" class="btn btn-success">Edit</a>
-                            <a href="{% url 'add_product_image' product.id %}" class="btn btn-success">Add image</a>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#changeUserModal{{ product.id }}">Delete</button>
+                            <a href="{% url 'add_product_image' product.id %}" class="btn btn-success">Add image</a><br>
+                            <a href="{% url 'edit_product' product.id %}" class="btn "><i class="fas fa-edit"></i></a>
+                            <button type="button" class="btn" data-toggle="modal" data-target="#changeUserModal{{ product.id }}"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
 
@@ -79,6 +81,7 @@
                                             <p>Selling Price: ₹{{ product.selling_price }}</p>
                                             <p>Brand: {{ product.brand }}</p>
                                             <p>Category: {{ product.category }}</p>
+                                            <p>Details: {{product.details}}</p>
                                             <!-- Add more details here -->
                                         </div>
                                     </div>
