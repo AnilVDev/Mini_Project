@@ -1,5 +1,6 @@
 {% extends 'app/baseindex.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block title %}Home{% endblock title %}
 
 		{% block collections %}
@@ -130,14 +131,34 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
-											<form method="post" action="{% url 'add_to_cart' c.id %}">
-												{% csrf_token %}
-											<div class="add-to-cart">
-<!--												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>-->
-													<input type="hidden" name="next" value="{{ request.get_full_path }}">
-													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-											</div>
-											</form>
+<!--											<form method="post" action="{% url 'add_to_cart' c.id %}">-->
+<!--												{% csrf_token %}-->
+<!--											<div class="add-to-cart">-->
+<!--&lt;!&ndash;												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>&ndash;&gt;-->
+<!--													<input type="hidden" name="next" value="{{ request.get_full_path }}">-->
+<!--													<button type="submit" class="add-to-cart-btn" id="add-to-cart-button"><i class="fa fa-shopping-cart"></i> add to cart</button>-->
+<!--											</div>-->
+<!--											</form>-->
+
+
+													{% if c|is_in_cart:request.user %}
+													<form method="post" action="{% url 'cart' %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+														<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Go to Cart</button>
+														</div>
+													</form>
+													{% else %}
+														<form method="post" action="{% url 'add_to_cart' c.id %}">
+															{% csrf_token %}
+															<div class="add-to-cart">
+																<input type="hidden" name="next" value="{{ request.get_full_path }}">
+																<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+															</div>
+														</form>
+													{% endif %}
+
+
 										</div>
 										{% endfor %}
 										<!-- /product -->
@@ -209,13 +230,22 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
+										{% if s|is_in_cart:request.user %}
+													<form method="post" action="{% url 'cart' %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+														<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Go to Cart</button>
+														</div>
+													</form>
+										{% else %}
 											<form method="post" action="{% url 'add_to_cart' s.id %}">
 												{% csrf_token %}
-											<div class="add-to-cart">
+												<div class="add-to-cart">
 													<input type="hidden" name="next" value="{{ request.get_full_path }}">
-													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-											</div>
+													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+												</div>
 											</form>
+										{% endif %}
 										</div>
 										{% endfor %}
 										<!-- /product -->
@@ -287,13 +317,21 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
-											<form method="post" action="{% url 'add_to_cart' h.id %}">
-												{% csrf_token %}
-											<div class="add-to-cart">
-													<input type="hidden" name="next" value="{{ request.get_full_path }}">
-													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-											</div>
-											</form>
+												{% if h|is_in_cart:request.user %}
+													<form method="post" action="{% url 'cart' %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+														<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Go to Cart</button>
+														</div>
+													</form>
+													<form method="post" action="{% url 'add_to_cart' h.id %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+															<input type="hidden" name="next" value="{{ request.get_full_path }}">
+															<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+														</div>
+													</form>
+												{% endif %}
 										</div>
 										{% endfor %}
 										<!-- /product -->
@@ -366,13 +404,22 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
-											<form method="post" action="{% url 'add_to_cart' sp.id %}">
-												{% csrf_token %}
-											<div class="add-to-cart">
-													<input type="hidden" name="next" value="{{ request.get_full_path }}">
-													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-											</div>
-											</form>
+												{% if sp|is_in_cart:request.user %}
+													<form method="post" action="{% url 'cart' %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+														<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Go to Cart</button>
+														</div>
+													</form>
+												{% else %}
+													<form method="post" action="{% url 'add_to_cart' sp.id %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+															<input type="hidden" name="next" value="{{ request.get_full_path }}">
+															<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+														</div>
+													</form>
+												{% endif %}
 										</div>
 										{% endfor %}
 										<!-- /product -->
@@ -510,13 +557,23 @@
 													</form>
 												</div>
 											</div>
-											<form method="post" action="{% url 'add_to_cart' product.id %}">
-												{% csrf_token %}
-											<div class="add-to-cart">
-													<input type="hidden" name="next" value="{{ request.get_full_path }}">
-													<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-											</div>
-											</form>
+												{% if product|is_in_cart:request.user %}
+													<form method="post" action="{% url 'cart' %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+														<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Go to Cart</button>
+														</div>
+													</form>
+												{% else %}
+													<form method="post" action="{% url 'add_to_cart' product.id %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+															<input type="hidden" name="next" value="{{ request.get_full_path }}">
+															<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+														</div>
+													</form>
+												{% endif %}
+
 										</div>
 										{% endfor %}
 										<!-- /product -->
@@ -750,6 +807,44 @@
             }, 1000); // Simulated delay of 1 second
         });
     });
+
+</script>>
+<script>
+const addToCartButton = document.getElementById('add-to-cart-button');
+
+addToCartButton.addEventListener('click', async (event) => {
+    event.preventDefault();
+
+    const form = event.target.closest('form');
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: new URLSearchParams(new FormData(form)),
+        });
+
+        if (response.ok) {
+            addToCartButton.textContent = 'Go to Cart';
+            addToCartButton.href = '{% url "cart" %}';
+        } else {
+            console.error('Error:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Network Error:', error);
+    }
+});
+
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 </script>
 
 

@@ -1,13 +1,23 @@
 {% extends 'app/baseindex.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block title %}Product Details{% endblock title %}
 
 
 {% block main-content %}
 <style>
-
-
-</style>
+    .button-style {
+        /* Add your desired styles here */
+        display: inline-block;
+        padding: 10px 20px; /* Adjust padding as needed */
+        font-size: 16px; /* Adjust font size as needed */
+        background-color: #007bff; /* Change to your preferred background color */
+        color: #fff; /* Change to your preferred text color */
+        text-decoration: none; /* Remove underline for links */
+        border: none;
+        cursor: pointer;
+    }
+</style>>
 
 
 		<!-- BREADCRUMB -->
@@ -87,20 +97,45 @@
 
 
 							<div class="add-to-cart">
-								<div class="qty-label">
-									Qty
-									<div class="input-number">
-										<input type="number" id="quantity" min="1" value="1">
-										<span class="qty-up">+</span>
-										<span class="qty-down">-</span>
-									</div>
-								</div>
-								<form method="post" action="{% url 'add_to_cart' product.id %}">
-									{% csrf_token %}
-									<input type="hidden" name="quantity" id="selected-quantity"  >
-									<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-									<button type="submit" formaction="{% url 'buy_now' product.id %}" class="add-to-cart-btn"><i class="fa fa-bolt"></i> Buy Now</button>
-								</form>
+<!--								<div class="qty-label">-->
+<!--									Qty-->
+<!--									<div class="input-number">-->
+<!--										<input type="number" id="product-quantity" min="1" value="1">-->
+<!--										<span class="qty-up">+</span>-->
+<!--										<span class="qty-down">-</span>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<form method="post" action="{% url 'add_to_cart' product.id %}">-->
+<!--									{% csrf_token %}-->
+<!--									<input type="hidden" value="{{product.id}}" class="product-id" name="" id="">-->
+<!--									<input type="hidden" value="{{product.title}}" class="product-title" name="" id="">-->
+
+<!--&lt;!&ndash;									<input type="hidden" name="quantity" id="selected-quantity"  >&ndash;&gt;-->
+<!--									<button type="submit" class="add-to-cart-btn" id="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>-->
+<!--									<button type="submit" formaction="{% url 'buy_now' product.id %}" class="add-to-cart-btn"><i class="fa fa-bolt"></i> Buy Now</button>-->
+<!--								</form>-->
+
+
+												{% if product|is_in_cart:request.user %}
+													<form method="post" action="{% url 'cart' %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+														<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Go to Cart</button>
+														<button type="submit" formaction="{% url 'buy_now' product.id %}" class="add-to-cart-btn"><i class="fa fa-bolt"></i> Buy Now</button>
+														</div>
+													</form>
+
+												{% else %}
+													<form method="post" action="{% url 'add_to_cart' product.id %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+															<input type="hidden" name="next" value="{{ request.get_full_path }}">
+															<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+															<button type="submit" formaction="{% url 'buy_now' product.id %}" class="add-to-cart-btn"><i class="fa fa-bolt"></i> Buy Now</button>
+														</div>
+													</form>
+												{% endif %}
+
 							</div>
 
 
@@ -509,37 +544,6 @@ function changeMainImage(imageUrl) {
 }
 
 
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const quantityInput = document.getElementById('quantity');
-        const selectedQuantityInput = document.getElementById('selected-quantity');
-        const qtyUpButton = document.querySelector('.qty-up');
-        const qtyDownButton = document.querySelector('.qty-down');
-
-        qtyUpButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent the default behavior
-            quantityInput.value = parseInt(quantityInput.value) + 1;
-            selectedQuantityInput.value = quantityInput.value; // Update selected-quantity
-            console.log(selectedQuantityInput.value);
-        });
-
-        qtyDownButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent the default behavior
-            const newValue = parseInt(quantityInput.value) - 1;
-            quantityInput.value = newValue >= 1 ? newValue : 1;
-            selectedQuantityInput.value = quantityInput.value; // Update selected-quantity
-            console.log(selectedQuantityInput.value);
-        });
-
-        // Add a submit event listener to the form
-        const form = document.querySelector('form');
-        form.addEventListener('submit', (e) => {
-            // Set the selected-quantity input field's value to the updated quantity before submitting
-            selectedQuantityInput.value = quantityInput.value;
-        });
-    });
 </script>
 
 

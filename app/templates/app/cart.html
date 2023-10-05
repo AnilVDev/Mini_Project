@@ -1,20 +1,40 @@
 {% extends 'app/baseindex.html' %}
 {% load static %}
 {% block title %}Profile{% endblock title %}
+
 {% block main-content %}
 
 <style>
-
+.container-fluid{
+margin-bottom:200px;
+}
 .gradient-custom {
 background: #f6f7fb;
 background: rgb(224, 233, 235);
 
 }
 
+.delete-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    color: #f00; /* Change the color to your preference */
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+
+.card {
+    position: relative;
+}
+
+
 </style>
 
-<div class="container-fluid">
-    <div class="row">
+<div class="container-fluid ">
+    <div class="row ">
         <!-- Left Content (Cart Items) -->
         <div class="col-md-8">
             <h1>Your Cart</h1>
@@ -48,49 +68,18 @@ background: rgb(224, 233, 235);
                                         </div>
                                         <div class="col-lg-5 col-md-6 mb-4 mb-lg-0"  >
                                             <!-- Data -->
-                                            <p><strong>{{ item.product.title }}</strong></p>
+<!--                                            <p><strong>{{ item.product.title }}</strong></p>-->
+                                            <p><strong><a href="{% url 'product-detail' item.product.id %}">{{ item.product.title }}</a></strong></p>
+
                                             <p>Price: Rs. {{ item.product.discount_price }}</p>
                                             <p>Brand: {{ item.product.brand }}</p>
-                                            <form method="post" action="{% url 'delete_cart_item' item.id %}" >
-                                            {% csrf_token %}
-                                            <button type="submit"
-                                                class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
-                                                title="Remove item">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                            </form>
-                                          <form method="post"  action="{% url 'add_to_wishlist' item.product.id %}">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                                                <button type="submit" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip" title="Move to the wishlist">
-                                                    <i class="fas fa-heart"></i>
-                                                </button>
-                                            </form>
 
                                             <!-- Data -->
                                         </div>
                                         <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
                                             <!-- Quantity -->
-<!--                                            <div class="d-flex mb-4">-->
-<!--                                                <button class="btn btn-primary px-2"-->
-<!--                                                    onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-->
-<!--                                                    <i class="fas fa-minus"></i>-->
-<!--                                                </button>-->
-<!--                                                <div class="form-outline">-->
-<!--                                                    <input id="form1" min="0" name="quantity"-->
-<!--                                                        value="{{ item.quantity }}" type="number"-->
-<!--                                                        class="form-control" style="width: 50px;" />-->
-<!--                                                    <label class="form-label" for="form1">Quantity</label>-->
-<!--                                                </div>-->
-<!--                                                <button class="btn btn-primary px-2"-->
-<!--                                                    onclick="this.parentNode.querySelector('input[type=number]').stepUp()">-->
-<!--                                                    <i class="fas fa-plus"></i>-->
-<!--                                                </button>-->
-<!--                                            </div>-->
-                                            <!-- Quantity -->
-
                                               <div class="d-flex flex-row">
-                                                <button class="btn btn-link px-2"
+                                                <button class="btn btn-link px-2" id="plus-cart" data-product-id="{{ item.product.id }}"
                                                   onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
                                                   <i class="fas fa-minus"></i>
                                                 </button>
@@ -98,16 +87,29 @@ background: rgb(224, 233, 235);
                                                 <input id="form1" min="1" name="quantity" value="1" type="number"
                                                   class="form-control form-control-sm" style="width: 50px;" />
 
-                                                <button class="btn btn-link px-2"
+
+                                                <button class="btn btn-link px-2" id="minus-cart"
                                                   onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
                                                   <i class="fas fa-plus"></i>
                                                 </button>
                                               </div>
+                                            <!-- Quantity -->
+
+                                            <form method="post" action="{% url 'delete_cart_item' item.id %}" >
+                                            {% csrf_token %}
+                                            <button type="submit"
+                                                class="btn  btn-sm me-1 mb-2 delete-button" data-mdb-toggle="tooltip"
+                                                title="Remove item">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            </form>
 
                                             <!-- Price -->
                                             <p class="text-center">
-                                                <strong>Rs. {{ item.product.discount_price }}</strong>
+                                                <strong id="item-price">Rs. {{ item.product.discount_price }}</strong>
                                             </p>
+
+
                                             <!-- Price -->
                                         </div>
                                     </div>
@@ -150,12 +152,13 @@ background: rgb(224, 233, 235);
                                 </strong>
                             </div>
                             <span><strong>Rs. {{ total_price }}</strong></span>
+
                         </li>
                     </ul>
-
+                        <a href="{% url 'checkout' %}">
                     <button type="button" class="btn btn-primary btn-lg btn-block">
                         Go to checkout
-                    </button>
+                    </button></a>
                 </div>
             </div>
         </div>
@@ -164,7 +167,40 @@ background: rgb(224, 233, 235);
     </div>
 </div>
 
+<script>
+    const quantityInput = document.getElementById('form1');
+    const itemPriceElement = document.getElementById('item-price');
+    const productPrice = parseFloat("{{ item.product.discount_price }}");
+
+    quantityInput.addEventListener('input', () => {
+        updateItemPrice();
+    });
+
+    function updateQuantity(action) {
+        let currentValue = parseInt(quantityInput.value);
+        if (action === 'increment') {
+            currentValue++;
+        } else if (action === 'decrement' && currentValue > 1) {
+            currentValue--;
+        }
+        quantityInput.value = currentValue;
+        updateItemPrice();
+        updateProductPrice(productId, quantity);
+        updateGrandTotal();
+
+    }
+
+    function updateItemPrice() {
+        const quantity = parseInt(quantityInput.value);
+        const totalPrice = quantity * productPrice;
+        itemPriceElement.textContent = `Rs. ${totalPrice.toFixed(2)}`;
+    }
+
+
+</script>
+<!--<script src="{% static 'app/js/quantity.js' %}"></script>-->
 
 
 
 {% endblock main-content %}
+{% block newsletter %}{% endblock newsletter %}

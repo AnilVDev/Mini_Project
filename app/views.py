@@ -22,6 +22,8 @@ from django.contrib.auth.models import User
 from django.views.generic import ListView
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+
 
 class ProductView(View):
     def get(self, request):
@@ -49,7 +51,7 @@ class ProductView(View):
             'headphone':headphone,
             'speaker':speaker,
             'categories': categories,
-            'products':products
+            'products':products,
 
         }
         return render(request, 'app/index.html', context)
@@ -724,9 +726,9 @@ def cart(request):
             'total_price': total_price,
         }
 
-        return render(request, 'app/cart.html', context)
+        return render(request, 'app/cart2.html', context)
     else:
-        return render(request, 'app/cart.html')
+        return render(request, 'app/cart2.html')
 
 def calculate_cart_total(cart_items):
     total_price = 0
@@ -739,30 +741,31 @@ def calculate_cart_total(cart_items):
 
     return total_price
 
+
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
-        quantity = request.POST.get('quantity',1)
-        print(quantity)
+        quantity = request.POST.get('quantity', 1)
+
         try:
             quantity = int(quantity)
         except ValueError:
             quantity = 1
 
-        # Check if there is enough stock available
         if quantity > product.stock:
             return redirect('product-detail', pk=product_id)
 
-        # Check if the product is already in the cart, and increment the quantity
+        # Check if the product is already in the cart
         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
         if not created:
-            # Check if adding more quantity exceeds available stock
-            if cart_item.quantity + quantity > product.stock:
-                return redirect('product-detail', pk=product_id)
-            cart_item.quantity += quantity
+            cart_item_exists = True
+        else:
+            cart_item_exists = False
+            cart_item.quantity = quantity  # Set the initial quantity
             cart_item.save()
+
         next_url = request.POST.get('next')
         if next_url:
             return redirect(next_url)
@@ -770,6 +773,7 @@ def add_to_cart(request, product_id):
             return redirect('product-detail', pk=product_id)
     else:
         return redirect('login')
+
 
 
 def delete_cart_item(request, item_id):
@@ -781,4 +785,56 @@ def delete_cart_item(request, item_id):
             return redirect(next_url)
         else:
             return redirect('cart')
-    # return redirect('cart')
+
+def plus_cart(request):
+    if request.method == 'GET':
+        prod_id = request.GET.get('prod_id')
+        c = CartItem.objects.get(Q(product=prod_id) & Q(cart__user=request.user))
+        if c.quantity < c.product.stock:
+            c.quantity += 1
+            c.save()
+
+        cart_items = CartItem.objects.filter(cart__user=request.user)
+
+        total_price = 0
+
+        for item in cart_items:
+            product = item.product
+            quantity = item.quantity
+            item_price = product.discount_price * quantity
+            total_price += item_price
+
+
+        data = {
+            'quantity': c.quantity,
+            'amount': total_price,
+
+        }
+        return JsonResponse(data)
+
+def minus_cart(request):
+    if request.method == 'GET':
+        print('hai')
+        prod_id = request.GET.get('prod_id')
+        c = CartItem.objects.get(Q(product=prod_id) & Q(cart__user=request.user))
+        if c.quantity > 1:
+            c.quantity -= 1
+            c.save()
+
+        cart_items = CartItem.objects.filter(cart__user=request.user)
+
+        total_price = 0
+
+        for item in cart_items:
+            product = item.product
+            quantity = item.quantity
+            item_price = product.discount_price * quantity
+            total_price += item_price
+
+        data = {
+            'quantity': c.quantity,
+            'amount': total_price,
+
+        }
+        return JsonResponse(data)
+
