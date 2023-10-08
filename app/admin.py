@@ -9,10 +9,12 @@ from .models import (
     Product,
     Cart,
     CartItem,
-    OrderPlaced,
     ProductImage,
     Brand,
-    Category
+    Category,
+    Order,
+    OrderItem,
+    BillingAddress,ShippingAddress
 )
 
 
@@ -23,7 +25,7 @@ class CustomerModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'name','phone_number', 'locality', 'city', 'pincode', 'state']
 @admin.register(Product)
 class ProductModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'selling_price', 'discount_price', 'description', 'details', 'brand', 'category', 'display_product_images']
+    list_display = ['id', 'title','stock', 'selling_price', 'discount_price', 'description', 'details', 'brand', 'category', 'display_product_images']
 
     def display_product_images(self, obj):
         if obj.images.all():  # Check if there are associated images
@@ -54,6 +56,25 @@ class CartModelAdmin(admin.ModelAdmin):
 @admin.register(CartItem)
 class CartItemModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'cart', 'product', 'quantity']
+
+
+@admin.register(Order)
+class OrderModelAdmin(admin.ModelAdmin):
+    list_display = ['id','user', 'billing_address', 'shipping_address', 'order_status', 'ordered_date', 'username', 'total_price']
+
+@admin.register(OrderItem)
+class OrderItemModelAdmin(admin.ModelAdmin):
+    list_display = ['id','order', 'product', 'quantity', 'price_per_product']
+
+
+@admin.register(BillingAddress)
+class BillingAddressModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'name','phone_number', 'locality', 'city', 'pincode', 'state']
+
+@admin.register(ShippingAddress)
+class ShippingAddressModelAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user', 'name','phone_number', 'locality', 'city', 'pincode', 'state']
+
 
 
 # class CustomUserAdmin(UserAdmin):

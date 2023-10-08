@@ -1,7 +1,7 @@
 import random
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
-from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem
+from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem,Order,OrderItem,BillingAddress,ShippingAddress
 from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -68,8 +68,30 @@ class ProductDetailView(View):
 def add_to_cart(request):
  return render(request, 'app/addtocart.html')
 
-def buy_now(request):
- return render(request, 'app/buynow.html')
+def buy_now(request,product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        quantity = request.POST.get('quantity', 1)
+
+        try:
+            quantity = int(quantity)
+        except ValueError:
+            quantity = 1
+
+        if quantity > product.stock:
+            return redirect('product-detail', pk=product_id)
+
+        # Check if the product is already in the cart
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+        if not created:
+            cart_item_exists = True
+        else:
+            cart_item_exists = False
+            cart_item.quantity = quantity  # Set the initial quantity
+            cart_item.save()
+        return redirect('checkout')
 
 @login_required
 def address(request):
@@ -104,11 +126,6 @@ def delete_address(request, address_id):
     return redirect('address')
 
 
-def orders(request):
- return render(request, 'app/orders.html')
-
-
-
 def mobile(request):
  return render(request, 'app/mobile.html')
 
@@ -119,8 +136,7 @@ def login(request):
 
 
 
-def checkout(request):
- return render(request, 'app/checkout.html')
+
 
 class CustomerRegistrationView(View):
     def get(self, request):
@@ -255,7 +271,7 @@ class ProfileView(View):
             pincode = form.cleaned_data['pincode']
             reg = Customer(user=usr, name=name, phone_number=phone_number, locality=locality, city=city, state=state, pincode=pincode)
             reg.save()
-            messages.success(request, 'Congratulations!! Profile Updated Successfully')
+            messages.success(request, 'Congratulations!! Address Updated Successfully')
 
         form = CustomerProfileForm()
         return render(request, 'app/profile.html',{'form':form,'active':'bg-danger'})
@@ -330,9 +346,9 @@ def admin_home(request):
 def user_list(request):
     query = request.GET.get('q', '')
     if query:
-        users = User.objects.filter( Q(username__icontains=query) | Q(email__icontains=query))
+        users = User.objects.filter( Q(username__icontains=query) | Q(email__icontains=query),is_staff=False)
     else:
-        users = User.objects.all()
+        users = User.objects.filter(is_staff=False)
 
     paginator = Paginator(users,5)
     page_number = request.GET.get('page')
@@ -348,6 +364,31 @@ def user_list(request):
     }
 
     return render(request, 'app/user_list.html', context)
+
+
+@staff_member_required
+def is_admin_list(request):
+    query = request.GET.get('q', '')
+    if query:
+        users = User.objects.filter( Q(username__icontains=query) | Q(email__icontains=query),is_staff=True)
+        print(users)
+    else:
+        users = User.objects.filter(is_staff=True)
+
+    paginator = Paginator(users,5)
+    page_number = request.GET.get('page')
+    usersfinal = paginator.get_page(page_number)
+    totalpage =usersfinal.paginator.num_pages
+    page_range = range(usersfinal.number, min(usersfinal.number + 3,totalpage+1))
+
+    context = {
+        'users': usersfinal,
+        'search_query': query,
+        'lastpage': totalpage,
+        'page_range':page_range
+    }
+
+    return render(request, 'app/is_admin_list.html', context)
 
 
 @method_decorator(staff_member_required, name='dispatch')
@@ -838,3 +879,222 @@ def minus_cart(request):
         }
         return JsonResponse(data)
 
+
+class CheckoutView(View):
+    def get(self, request):
+        form = CustomerProfileForm()
+        if request.user.is_authenticated:
+            address = Customer.objects.filter(user=request.user)
+            product_data, final_price = self.get_product_data(request.user)
+
+            context = {
+                'form': form,
+                'product_data': product_data,
+                'final_price': final_price,
+                'address': address,
+            }
+
+            return render(request, 'app/checkout.html', context)
+
+    def post(self, request):
+        form = CustomerProfileForm(request.POST)
+        if form.is_valid():
+            usr = request.user
+            name = form.cleaned_data['name']
+            phone_number = form.cleaned_data['phone_number']
+            locality = form.cleaned_data['locality']
+            city = form.cleaned_data['city']
+            state = form.cleaned_data['state']
+            pincode = form.cleaned_data['pincode']
+            reg = Customer(
+                user=usr,
+                name=name,
+                phone_number=phone_number,
+                locality=locality,
+                city=city,
+                state=state,
+                pincode=pincode
+            )
+            reg.save()
+            messages.success(request, 'Congratulations!! Address Updated Successfully')
+
+        product_data, final_price = self.get_product_data(request.user)
+        address = Customer.objects.filter(user=request.user)
+
+        context = {
+            'form': form,
+            'product_data': product_data,
+            'final_price': final_price,
+            'address': address,
+        }
+
+        return render(request, 'app/checkout.html', context)
+
+    def get_product_data(self, user):
+        cart_items = CartItem.objects.filter(cart__user=user)
+
+        product_data = []
+        final_price = 0
+
+        for item in cart_items:
+            product = item.product
+            quantity = item.quantity
+            total_price = product.discount_price * quantity
+            product_data.append({
+                'product': product,
+                'quantity': quantity,
+                'total_price': total_price,
+            })
+            final_price += total_price
+
+        return product_data, final_price
+
+
+
+from django.shortcuts import render, redirect
+from .models import Order, BillingAddress, ShippingAddress, Customer, Cart, OrderItem
+
+def order_placed(request):
+    if request.method == 'POST':
+        user = request.user
+        billing_address_id = request.POST.get('billing_address_id')
+        shipping_address_id = request.POST.get('shipping_address_id')
+
+        try:
+            customer = Customer.objects.get(id=billing_address_id)
+
+            billing_address = BillingAddress(
+                user=customer.user,
+                name=customer.name,
+                locality=customer.locality,
+                city=customer.city,
+                pincode=customer.pincode,
+                state=customer.state,
+                phone_number=customer.phone_number
+            )
+
+            billing_address.save()
+
+            customer = Customer.objects.get(id=shipping_address_id)
+
+            shipping_address = ShippingAddress(
+                user=customer.user,
+                name=customer.name,
+                locality=customer.locality,
+                city=customer.city,
+                pincode=customer.pincode,
+                state=customer.state,
+                phone_number=customer.phone_number
+            )
+
+            shipping_address.save()
+
+            cart_items = CartItem.objects.filter(cart__user=user)
+            total_price = sum(item.product.discount_price * item.quantity for item in cart_items)
+
+
+            order = Order(
+                user=user,
+                billing_address=billing_address,
+                shipping_address=shipping_address,
+                total_price=total_price,
+            )
+            order.save()
+            print(order)
+
+            for cart_item in cart_items:
+                order_item = OrderItem(
+                    order=order,
+                    product=cart_item.product,
+                    quantity=cart_item.quantity,
+                    price_per_product=cart_item.product.discount_price
+                )
+                order_item.save()
+                print(order_item)
+                product = cart_item.product
+                product.stock -= cart_item.quantity
+                product.save()
+
+            cart_items.delete()
+
+            return render(request, 'app/order_placed.html')
+        except Customer.DoesNotExist:
+            # in case where the Customer with the specified ID does not exist
+            pass
+
+    return redirect('checkout')
+
+def user_orders(request):
+    orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product').order_by('-ordered_date')
+
+
+    paginator = Paginator(orders, 5)
+    page_number = request.GET.get('page')
+    orders_page = paginator.get_page(page_number)
+    total_pages = paginator.num_pages
+    page_range = range(orders_page.number, min(orders_page.number + 3, total_pages + 1))
+
+    context = {
+        # 'orders': orders,
+        'page_range': page_range,
+        'orders': orders_page,
+    }
+
+    return render(request, 'app/user_orders.html', context)
+
+
+
+
+def cancel_order(request, order_id):
+    try:
+        order = Order.objects.get(id=order_id)
+
+
+        if order.user == request.user:
+            order.order_status = 'Cancelled'
+            order.save()
+
+            for order_item in order.orderitem_set.all():
+                product = order_item.product
+                product.stock += order_item.quantity
+                product.save()
+
+            return redirect('user_orders')  # Redirect to the user's order history page
+        else:
+            return HttpResponse("You are not authorized to cancel this order.")
+    except Order.DoesNotExist:
+        return HttpResponse("Order not found.")
+
+
+def admin_orders(request):
+    search_query = request.GET.get('search', '')
+
+    orders = Order.objects.filter(username__icontains=search_query)
+
+    paginator = Paginator(orders, 5)
+    page_number = request.GET.get('page')
+    orders_page = paginator.get_page(page_number)
+    total_pages = paginator.num_pages
+    page_range = range(orders_page.number, min(orders_page.number + 3, total_pages + 1))
+
+    context = {
+        'page_range': page_range,
+        'orders': orders_page,
+    }
+
+    return render(request, 'app/admin_orders.html', context)
+
+def admin_edit_order_status(request, order_id):
+    if request.method == 'POST':
+        try:
+            order = Order.objects.get(id=order_id)
+            new_status = request.POST.get('order_status')
+
+            order.order_status = new_status
+            order.save()
+
+            messages.success(request, f"Order status for Order ID {order_id} updated to {new_status}.")
+        except Order.DoesNotExist:
+            messages.error(request, f"Order with ID {order_id} does not exist.")
+
+    return redirect(reverse('admin_orders'))

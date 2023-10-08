@@ -27,24 +27,24 @@
 </style>
 <body>
 <div class="container-fluid">
-    <div class="row ">
+    <div class="row">
         <!-- Left Side - Navigation Bar -->
-        <nav class="sidebar sidebar-offcanvas col-lg-3 " id="sidebar">
+        <nav class="sidebar sidebar-offcanvas col-lg-3" id="sidebar">
             <!-- Navigation content (your existing code) -->
             <!-- ... -->
         </nav>
 
         <!-- Right Side - User List -->
         <div class="col-lg-10 card-body">
-            <h1>User List</h1>
+            <h1>Admin List</h1>
             <div class="search-form">
-                <form method="get" action="{% url 'user_list' %}">
+                <form method="get" action="{% url 'is_admin_list' %}">
                     <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}">
                     <button type="submit" class="btn btn-primary">Search</button>
                 </form>
             </div>
             {% if users %}
-            <table class="table ">
+            <table class="table">
                 <thead>
                     <tr>
                         <th>Username</th>

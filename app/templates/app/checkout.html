@@ -1,12 +1,14 @@
 {% extends 'app/baseindex.html' %}
 {% load static %}
-{% block title %}Profile{% endblock title %}
+{% block title %}Checkout{% endblock title %}
 
 {% block main-content %}
 	<body>
 
-
+<form method="post" action="{% url 'order_placed' %}">
+  {% csrf_token %}
 		<!-- BREADCRUMB -->
+
 		<div id="breadcrumb" class="section">
 			<!-- container -->
 			<div class="container">
@@ -40,42 +42,70 @@
 								<h3 class="title">Billing address</h3>
 							</div>
 							<div class="form-group">
-								<input class="input" type="text" name="first-name" placeholder="First Name">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="last-name" placeholder="Last Name">
-							</div>
-							<div class="form-group">
-								<input class="input" type="email" name="email" placeholder="Email">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="address" placeholder="Address">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="city" placeholder="City">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="country" placeholder="Country">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
-							</div>
-							<div class="form-group">
-								<input class="input" type="tel" name="tel" placeholder="Telephone">
-							</div>
-							<div class="form-group">
+								{% for add in address %}
+									<div class="payment-method">
+										<div class="input-radio">
+											<input type="radio" name="billing_address_id" id="billaddress{{ forloop.counter }}" value="{{add.id}}">
+											<label for="billaddress{{ forloop.counter }}">
+												<span></span>
+												<strong>Address {{ forloop.counter }}</strong>
+											</label>
+											<div class="caption">
+												<h5>{{add.name}}</h5>
+												<p>{{add.locality}}, {{add.city}}, {{add.state}} - {{add.pincode}}<br>{{add.phone_number}}</p>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
 								<div class="input-checkbox">
+
 									<input type="checkbox" id="create-account">
 									<label for="create-account">
 										<span></span>
-										Create Account?
+										Create New Address?
 									</label>
+<!--									<div class="caption">-->
+<!--										<div class="form-group">-->
+<!--											<input class="input" type="text" name="first-name" placeholder="First Name">-->
+<!--										</div>-->
+<!--										<div class="form-group">-->
+<!--											<input class="input" type="text" name="last-name" placeholder="Last Name">-->
+<!--										</div>-->
+<!--										<div class="form-group">-->
+<!--											<input class="input" type="email" name="email" placeholder="Email">-->
+<!--										</div>-->
+<!--										<div class="form-group">-->
+<!--											<input class="input" type="text" name="address" placeholder="Address">-->
+<!--										</div>-->
+<!--										<div class="form-group">-->
+<!--											<input class="input" type="text" name="city" placeholder="City">-->
+<!--										</div>-->
+<!--										<div class="form-group">-->
+<!--											<input class="input" type="text" name="country" placeholder="Country">-->
+<!--										</div>-->
+<!--										<div class="form-group">-->
+<!--											<input class="input" type="text" name="zip-code" placeholder="ZIP Code">-->
+<!--										</div>-->
+<!--										<div class="form-group">-->
+<!--											<input class="input" type="tel" name="tel" placeholder="Telephone">-->
+<!--										</div>-->
+<!--									</div>-->
 									<div class="caption">
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
-										<input class="input" type="password" name="password" placeholder="Enter Your Password">
+                            <form action="" method="post" novalidate>
+                                {% csrf_token %}
+                                {% for fm in form %}
+                                <div class="form-group col-lg-6 mb-3">
+                                    {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
+                                </div>
+                                {% endfor %}
+                                <div class="col-12 mt-3">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
 									</div>
 								</div>
 							</div>
+
 						</div>
 						<!-- /Billing Details -->
 
@@ -84,6 +114,21 @@
 							<div class="section-title">
 								<h3 class="title">Shiping address</h3>
 							</div>
+								{% for add in address %}
+									<div class="payment-method">
+										<div class="input-radio">
+											<input type="radio" name="shipping_address_id" id="shipaddress{{ forloop.counter }}" value="{{add.id}}">
+											<label for="shipaddress{{ forloop.counter }}">
+												<span></span>
+												<strong>Address {{ forloop.counter }}</strong>
+											</label>
+											<div class="caption">
+												<h5>{{add.name}}</h5>
+												<p>{{add.locality}}, {{add.city}}, {{add.state}} - {{add.pincode}}<br>{{add.phone_number}}</p>
+											</div>
+										</div>
+									</div>
+								{% endfor %}
 							<div class="input-checkbox">
 								<input type="checkbox" id="shiping-address">
 								<label for="shiping-address">
@@ -91,30 +136,17 @@
 									Ship to a diffrent address?
 								</label>
 								<div class="caption">
-									<div class="form-group">
-										<input class="input" type="text" name="first-name" placeholder="First Name">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="last-name" placeholder="Last Name">
-									</div>
-									<div class="form-group">
-										<input class="input" type="email" name="email" placeholder="Email">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="address" placeholder="Address">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="city" placeholder="City">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="country" placeholder="Country">
-									</div>
-									<div class="form-group">
-										<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
-									</div>
-									<div class="form-group">
-										<input class="input" type="tel" name="tel" placeholder="Telephone">
-									</div>
+									<form action="" method="post" novalidate>
+										{% csrf_token %}
+										{% for fm in form %}
+										<div class="form-group col-lg-6 mb-3">
+											{{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
+										</div>
+										{% endfor %}
+										<div class="col-12 mt-3">
+											<button type="submit" class="btn btn-primary">Submit</button>
+										</div>
+									</form>
 								</div>
 							</div>
 						</div>
@@ -137,23 +169,21 @@
 								<div><strong>PRODUCT</strong></div>
 								<div><strong>TOTAL</strong></div>
 							</div>
+							{% for item in product_data %}
 							<div class="order-products">
 								<div class="order-col">
-									<div>1x Product Name Goes Here</div>
-									<div>$980.00</div>
-								</div>
-								<div class="order-col">
-									<div>2x Product Name Goes Here</div>
-									<div>$980.00</div>
+									<div>{{ item.quantity }}x {{ item.product }}</div>
+									<div>₹{{ item.total_price }}</div>
 								</div>
 							</div>
+							{% endfor %}
 							<div class="order-col">
 								<div>Shiping</div>
 								<div><strong>FREE</strong></div>
 							</div>
 							<div class="order-col">
 								<div><strong>TOTAL</strong></div>
-								<div><strong class="order-total">$2940.00</strong></div>
+								<div><strong class="order-total">₹{{ final_price }}</strong></div>
 							</div>
 						</div>
 						<div class="payment-method">
@@ -164,7 +194,7 @@
 									Direct Bank Transfer
 								</label>
 								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+									<p>Once the bank transfer is completed, please email us the payment confirmation at our Email Address. Your order will be processed once we verify the payment.</p>
 								</div>
 							</div>
 							<div class="input-radio">
@@ -174,7 +204,7 @@
 									Cheque Payment
 								</label>
 								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+									<p>Please make your cheque payable. Send your cheque to our Address. Your order will be processed once we receive and verify the cheque.</p>
 								</div>
 							</div>
 							<div class="input-radio">
@@ -184,7 +214,17 @@
 									Paypal System
 								</label>
 								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+									<p>Pay securely with PayPal, a trusted and convenient payment method.</p>
+								</div>
+							</div>
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-4">
+								<label for="payment-4">
+									<span></span>
+									Cash on delivery
+								</label>
+								<div class="caption">
+									<p>Pay with cash when your order is delivered to your doorstep. Please have the exact amount ready.</p>
 								</div>
 							</div>
 						</div>
@@ -195,7 +235,9 @@
 								I've read and accept the <a href="#">terms & conditions</a>
 							</label>
 						</div>
-						<a href="#" class="primary-btn order-submit">Place order</a>
+						  <div class="col-12 text-center">
+							<button type="submit" class="primary-btn order-submit " style="width:100%" formnovalidate>Place order</button>
+						  </div>
 					</div>
 					<!-- /Order Details -->
 				</div>
@@ -205,6 +247,7 @@
 		</div>
 		<!-- /SECTION -->
 
+</form>
 
 
 

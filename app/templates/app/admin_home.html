@@ -11,12 +11,15 @@
   text-transform: capitalize;
   font-size: 30px;
 }
+.nav-item {
+  background-color: ;
+}
 </style>
 
 
 
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
-  <ul class="nav col-lg-3">
+  <ul class="nav col-lg-2">
     <!-- Profile Section -->
     <li class="nav-item nav-profile border-bottom">
       <a href="#" class="nav-link flex-column">
@@ -40,6 +43,12 @@
       <a class="nav-link" href="{% url 'user_list' %}">
         <i class="mdi mdi-compass-outline menu-icon"></i>
         <span class="menu-title font-weight-bold">Users</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'is_admin_list' %}">
+        <i class="mdi mdi-contacts menu-icon"></i>
+        <span class="menu-title font-weight-bold">Is Admin</span>
       </a>
     </li>
 
@@ -76,6 +85,14 @@
       <a class="nav-link" href="{% url 'brand_list_and_add' %}">
         <i class="mdi mdi-format-list-bulleted menu-icon"></i>
         <span class="menu-title font-weight-bold">Brand</span>
+      </a>
+    </li>
+
+<!--    Orders-->
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'admin_orders' %}">
+        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+        <span class="menu-title font-weight-bold">Orders</span>
       </a>
     </li>
 

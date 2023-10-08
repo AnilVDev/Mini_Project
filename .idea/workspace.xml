@@ -4,22 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="Merge remote-tracking branch 'origin/newbranch' into newbranch">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="cart completed successfully">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/context_processors.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/context_processors.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/static/app/js/myscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/app/js/myscript.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/baseindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/baseindex.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/cart.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/cart.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/add_image_to_product.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/add_image_to_product.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/add_product.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/add_product.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/admin_home.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/admin_home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/brand_list_and_add.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/brand_list_and_add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/cart2.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/cart2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/category_list_and_add.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/category_list_and_add.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/checkout.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/checkout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/product_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/product_listing.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_listing.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/productdetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/productdetails.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templatetags/custom_filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/templatetags/custom_filters.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/user_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/user_list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/payfortech/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/payfortech/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,7 +307,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696526447065</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="cart completed successfully">
+      <option name="closed" value="true" />
+      <created>1696785942814</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1696785942818</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -321,7 +330,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="product and image added successfully. Product side cleared" />
     <MESSAGE value="product side cleared with all html pages, corrected with new templates" />
     <MESSAGE value="product side cleared with all html pages, corrected with new templates (2)" />
     <MESSAGE value="admin login and admin home is cleared" />
@@ -346,6 +354,7 @@
     <MESSAGE value="solved almost all error, show success message after registration, category filter working, product deleting working" />
     <MESSAGE value="add to cart almost done..dynamic changes to be implement" />
     <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
+    <MESSAGE value="cart completed successfully" />
+    <option name="LAST_COMMIT_MESSAGE" value="cart completed successfully" />
   </component>
 </project>

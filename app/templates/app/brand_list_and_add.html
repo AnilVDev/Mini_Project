@@ -5,15 +5,26 @@
 
 
 {% block admin %}
+
+<style>
+    .card-body{
+    background-color: #e1e8e4;
+    margin-top:3rem;
+    margin-bottom:5rem;
+    border-radius:2rem;
+    padding:1.5rem;
+    }
+</style>
+
 <div class="container-fluid">
   <div class="row">
     <!-- Sidebar -->
-    <nav class="sidebar sidebar-offcanvas col-lg-3" id="sidebar">
+    <nav class="sidebar sidebar-offcanvas col-lg-2" id="sidebar">
       <!-- Your existing sidebar content -->
     </nav>
 
     <!-- Product Addition Form -->
-    <div class="col-lg-9">
+    <div class="col-lg-10 card-body">
       <div class="container">
           <!-- templates/app/category_list_and_add.html -->
             <h2>Add Brand</h2>

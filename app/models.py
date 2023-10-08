@@ -135,3 +135,76 @@ class Wishlist(models.Model):
         return f'{self.user.username} - {self.product.title}'
 
 
+
+
+
+class BillingAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=200)
+    locality = models.CharField(max_length=200)
+    city = models.CharField(max_length=50)
+    pincode = models.IntegerField()
+    state = models.CharField(choices=STATE_CHOICES,max_length=50)
+
+    phone_regex = RegexValidator(
+        regex=r'^\d{10}$',  # Matches a 10-digit number
+        message="Phone number must be 10 digits long."
+    )
+    phone_number = models.CharField(validators=[phone_regex], max_length=10)
+
+
+    def __str__(self):
+        return str(self.id)
+
+class ShippingAddress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    name = models.CharField(max_length=200)
+    locality = models.CharField(max_length=200)
+    city = models.CharField(max_length=50)
+    pincode = models.IntegerField()
+    state = models.CharField(choices=STATE_CHOICES,max_length=50)
+
+    phone_regex = RegexValidator(
+        regex=r'^\d{10}$',  # Matches a 10-digit number
+        message="Phone number must be 10 digits long."
+    )
+    phone_number = models.CharField(validators=[phone_regex], max_length=10)
+
+
+    def __str__(self):
+        return str(self.id)
+
+class Order(models.Model):
+    ORDER_STATUS_CHOICES = (
+        ('Processing', 'Processing'),
+        ('Confirmed', 'Confirmed'),
+        ('Shipped', 'Shipped'),
+        ('Out for Delivery', 'Out for Delivery'),
+        ('Delivered', 'Delivered'),
+        ('Cancelled', 'Cancelled'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    billing_address = models.OneToOneField(BillingAddress, on_delete=models.CASCADE, null=True)
+    shipping_address = models.OneToOneField(ShippingAddress, on_delete=models.CASCADE, null=True)
+    order_status = models.CharField(max_length=100, choices=ORDER_STATUS_CHOICES, default='Processing')
+    ordered_date = models.DateTimeField(auto_now_add=True)
+    username = models.CharField(max_length=150, blank=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Order for {self.username}"
+
+    def save(self, *args, **kwargs):
+        if self.user:
+            self.username = self.user.username
+        super(Order, self).save(*args, **kwargs)
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    quantity = models.PositiveIntegerField(default=1)
+    price_per_product = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.title} in Order {self.order.id}"
