@@ -5,7 +5,7 @@
 {% block main-content %}
 	<body>
 
-<form method="post" action="{% url 'order_placed' %}">
+<form method="post" action="{% url 'order_placed' %}" id="paymentform">
   {% csrf_token %}
 		<!-- BREADCRUMB -->
 
@@ -58,38 +58,11 @@
 									</div>
 								{% endfor %}
 								<div class="input-checkbox">
-
-									<input type="checkbox" id="create-account">
-									<label for="create-account">
+									<input type="checkbox" id="create-accounts">
+									<label for="create-accounts" >
 										<span></span>
 										Create New Address?
 									</label>
-<!--									<div class="caption">-->
-<!--										<div class="form-group">-->
-<!--											<input class="input" type="text" name="first-name" placeholder="First Name">-->
-<!--										</div>-->
-<!--										<div class="form-group">-->
-<!--											<input class="input" type="text" name="last-name" placeholder="Last Name">-->
-<!--										</div>-->
-<!--										<div class="form-group">-->
-<!--											<input class="input" type="email" name="email" placeholder="Email">-->
-<!--										</div>-->
-<!--										<div class="form-group">-->
-<!--											<input class="input" type="text" name="address" placeholder="Address">-->
-<!--										</div>-->
-<!--										<div class="form-group">-->
-<!--											<input class="input" type="text" name="city" placeholder="City">-->
-<!--										</div>-->
-<!--										<div class="form-group">-->
-<!--											<input class="input" type="text" name="country" placeholder="Country">-->
-<!--										</div>-->
-<!--										<div class="form-group">-->
-<!--											<input class="input" type="text" name="zip-code" placeholder="ZIP Code">-->
-<!--										</div>-->
-<!--										<div class="form-group">-->
-<!--											<input class="input" type="tel" name="tel" placeholder="Telephone">-->
-<!--										</div>-->
-<!--									</div>-->
 									<div class="caption">
                             <form action="" method="post" novalidate>
                                 {% csrf_token %}
@@ -133,7 +106,7 @@
 								<input type="checkbox" id="shiping-address">
 								<label for="shiping-address">
 									<span></span>
-									Ship to a diffrent address?
+									Create new address?
 								</label>
 								<div class="caption">
 									<form action="" method="post" novalidate>
@@ -153,9 +126,9 @@
 						<!-- /Shiping Details -->
 
 						<!-- Order notes -->
-						<div class="order-notes">
-							<textarea class="input" placeholder="Order Notes"></textarea>
-						</div>
+<!--						<div class="order-notes">-->
+<!--							<textarea class="input" placeholder="Order Notes"></textarea>-->
+<!--						</div>-->
 						<!-- /Order notes -->
 					</div>
 
@@ -187,26 +160,26 @@
 							</div>
 						</div>
 						<div class="payment-method">
-							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-1">
-								<label for="payment-1">
-									<span></span>
-									Direct Bank Transfer
-								</label>
-								<div class="caption">
-									<p>Once the bank transfer is completed, please email us the payment confirmation at our Email Address. Your order will be processed once we verify the payment.</p>
-								</div>
-							</div>
-							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-2">
-								<label for="payment-2">
-									<span></span>
-									Cheque Payment
-								</label>
-								<div class="caption">
-									<p>Please make your cheque payable. Send your cheque to our Address. Your order will be processed once we receive and verify the cheque.</p>
-								</div>
-							</div>
+<!--							<div class="input-radio">-->
+<!--								<input type="radio" name="payment" id="payment-1">-->
+<!--								<label for="payment-1">-->
+<!--									<span></span>-->
+<!--									Direct Bank Transfer-->
+<!--								</label>-->
+<!--								<div class="caption">-->
+<!--									<p>Once the bank transfer is completed, please email us the payment confirmation at our Email Address. Your order will be processed once we verify the payment.</p>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--							<div class="input-radio">-->
+<!--								<input type="radio" name="payment" id="payment-2">-->
+<!--								<label for="payment-2">-->
+<!--									<span></span>-->
+<!--									Cheque Payment-->
+<!--								</label>-->
+<!--								<div class="caption">-->
+<!--									<p>Please make your cheque payable. Send your cheque to our Address. Your order will be processed once we receive and verify the cheque.</p>-->
+<!--								</div>-->
+<!--							</div>-->
 							<div class="input-radio">
 								<input type="radio" name="payment" id="payment-3">
 								<label for="payment-3">
@@ -236,8 +209,10 @@
 							</label>
 						</div>
 						  <div class="col-12 text-center">
-							<button type="submit" class="primary-btn order-submit " style="width:100%" formnovalidate>Place order</button>
+							<button type="submit" class="primary-btn order-submit " style="width:100%" id="place-order-button" formnovalidate>Place order</button>
 						  </div>
+						<!-- Set up a container element for the button -->
+    <div id="paypal-button-container"></div>
 					</div>
 					<!-- /Order Details -->
 				</div>
@@ -253,5 +228,231 @@
 
 
 	</body>
+
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Get the submit button, payment radio buttons, and terms checkbox
+    var submitButton = document.getElementById("place-order-button");
+    var paymentRadios = document.querySelectorAll("input[name='payment']");
+    var paypalContainer = document.getElementById("paypal-button-container");
+    var termsCheckbox = document.getElementById("terms");
+
+    // Disable the submit button and hide the PayPal container by default
+    submitButton.disabled = true;
+    paypalContainer.style.display = "none";
+
+    // Add a change event listener to the payment radio buttons
+    for (var i = 0; i < paymentRadios.length; i++) {
+      paymentRadios[i].addEventListener("change", function() {
+        var selectedBillingAddress = document.querySelector("input[name='billing_address_id']:checked");
+        var selectedShippingAddress = document.querySelector("input[name='shipping_address_id']:checked");
+        var selectedPayment = document.querySelector("input[name='payment']:checked");
+
+        // Check if billing address, shipping address, and payment method are selected
+        if (selectedBillingAddress && selectedShippingAddress && selectedPayment) {
+          var selectedPaymentId = selectedPayment.id;
+
+          if (selectedPaymentId === "payment-1" || selectedPaymentId === "payment-2") {
+            alert("This payment method is not available right now. Please try another method.");
+            submitButton.disabled = true;
+            paypalContainer.style.display = "none";
+          } else if (selectedPaymentId === "payment-3" && termsCheckbox.checked) {
+            paypalContainer.style.display = "block";
+            submitButton.disabled = true;
+          } else if (selectedPaymentId === "payment-4" && termsCheckbox.checked) {
+            submitButton.disabled = false;
+            paypalContainer.style.display = "none";
+          } else {
+            submitButton.disabled = true;
+            paypalContainer.style.display = "none";
+          }
+        } else {
+          submitButton.disabled = true;
+          paypalContainer.style.display = "none";
+        }
+      });
+    }
+
+    // Add a change event listener to the terms and conditions checkbox
+    termsCheckbox.addEventListener("change", function() {
+      var selectedBillingAddress = document.querySelector("input[name='billing_address_id']:checked");
+      var selectedShippingAddress = document.querySelector("input[name='shipping_address_id']:checked");
+      var selectedPayment = document.querySelector("input[name='payment']:checked");
+
+      if (selectedBillingAddress && selectedShippingAddress && selectedPayment && termsCheckbox.checked) {
+        var selectedPaymentId = selectedPayment.id;
+
+        if (selectedPaymentId === "payment-3") {
+          paypalContainer.style.display = "block";
+          submitButton.disabled = true;
+        } else if (selectedPaymentId === "payment-4") {
+          submitButton.disabled = false;
+          paypalContainer.style.display = "none";
+        } else {
+          submitButton.disabled = true;
+          paypalContainer.style.display = "none";
+        }
+      } else {
+        submitButton.disabled = true;
+        paypalContainer.style.display = "none";
+      }
+    });
+  });
+</script>
+
+
+
+
+
+
+
+    <!-- Include the PayPal JavaScript SDK -->
+	<script src="https://www.paypal.com/sdk/js?client-id=AVqCTpTO6jvHt-nKCYg3QMdHxJM_kGFNYfHHsfmn_NQYbWgA6ginY7xE6xzFfOs6djOGXk0QC_L_ojV4&currency=USD&disable-funding=credit"></script>
+
+	<script>
+		var total = '{{ final_price }}'
+        // Render the PayPal button into #paypal-button-container
+        paypal.Buttons({
+
+        	style: {
+                color:  'blue',
+                shape:  'rect',
+            },
+
+            // Set up the transaction
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value:parseFloat(total).toFixed(2)
+                        }
+                    }]
+                });
+            },
+
+            // Finalize the transaction
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Show a success message to the buyer
+                    //submitFormData()
+                    document.getElementById("paymentform").submit();
+                });
+            }
+
+        }).render('#paypal-button-container');
+    </script>
+
+
+
+<!--<script>-->
+<!--  document.addEventListener("DOMContentLoaded", function() {-->
+<!--    // Get the submit button and payment radio buttons-->
+<!--    var submitButton = document.getElementById("place-order-button");-->
+<!--    var paymentRadios = document.querySelectorAll("input[name='payment']");-->
+<!--    var paypalContainer = document.getElementById("paypal-button-container");-->
+<!--    var termsCheckbox = document.getElementById("terms");-->
+
+<!--    // Disable the submit button by default-->
+<!--    submitButton.disabled = true;-->
+<!--    paypalContainer.style.display = "none";-->
+
+<!--    // Add a change event listener to the payment radio buttons-->
+<!--    for (var i = 0; i < paymentRadios.length; i++) {-->
+<!--      paymentRadios[i].addEventListener("change", function() {-->
+<!--        // Check if a payment method is selected and terms are accepted-->
+<!--        var selectedPayment = document.querySelector("input[name='payment']:checked");-->
+<!--        if (selectedPayment) {-->
+<!--          var selectedPaymentId = selectedPayment.id;-->
+<!--          if (selectedPaymentId === "payment-1" || selectedPaymentId === "payment-2") {-->
+<!--            alert("This payment method is not available right now. Please try another method.");-->
+<!--            submitButton.disabled = true;-->
+<!--            paypalContainer.style.display = "none";-->
+<!--          } else if (selectedPaymentId === "payment-3" && termsCheckbox.checked) {-->
+<!--            paypalContainer.style.display = "block";-->
+<!--            submitButton.disabled = true;-->
+<!--          } else if (selectedPaymentId === "payment-4" && termsCheckbox.checked) {-->
+<!--            submitButton.disabled = false;-->
+<!--            paypalContainer.style.display = "none";-->
+<!--          } else {-->
+<!--            submitButton.disabled = true;-->
+<!--            paypalContainer.style.display = "none";-->
+<!--          }-->
+<!--        } else {-->
+<!--          submitButton.disabled = true;-->
+<!--          paypalContainer.style.display = "none";-->
+<!--        }-->
+<!--      });-->
+<!--    }-->
+
+<!--    // Add a change event listener to the terms and conditions checkbox-->
+<!--    termsCheckbox.addEventListener("change", function() {-->
+<!--      var selectedPayment = document.querySelector("input[name='payment']:checked");-->
+<!--      if (selectedPayment && termsCheckbox.checked) {-->
+<!--        var selectedPaymentId = selectedPayment.id;-->
+<!--        if (selectedPaymentId === "payment-3") {-->
+<!--          paypalContainer.style.display = "block";-->
+<!--          submitButton.disabled = true;-->
+<!--        } else if (selectedPaymentId === "payment-4") {-->
+<!--          submitButton.disabled = false;-->
+<!--          paypalContainer.style.display = "none";-->
+<!--        } else {-->
+<!--          submitButton.disabled = true;-->
+<!--          paypalContainer.style.display = "none";-->
+<!--        }-->
+<!--      } else {-->
+<!--        submitButton.disabled = true;-->
+<!--        paypalContainer.style.display = "none";-->
+<!--      }-->
+<!--    });-->
+<!--  });-->
+<!--</script>-->
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        const paymentRadios = document.querySelectorAll('input[type="radio"][name="payment"]');-->
+<!--        const termsCheckbox = document.getElementById('terms');-->
+<!--        const placeOrderButton = document.getElementById('place-order-button');-->
+
+<!--        // Initially disable the button-->
+<!--        placeOrderButton.disabled = true;-->
+
+<!--        // Add a change event listener to each payment radio button-->
+<!--        paymentRadios.forEach(function (radio) {-->
+<!--            radio.addEventListener('change', function () {-->
+<!--                // Enable the button if any radio button is selected and the terms checkbox is checked-->
+<!--                placeOrderButton.disabled = !(-->
+<!--                    Array.from(paymentRadios).some(radio => radio.checked) &&-->
+<!--                    termsCheckbox.checked-->
+<!--                );-->
+<!--            });-->
+<!--        });-->
+
+<!--        // Add a change event listener to the terms checkbox-->
+<!--        termsCheckbox.addEventListener('change', function () {-->
+<!--            // Enable the button if any radio button is selected and the terms checkbox is checked-->
+<!--            placeOrderButton.disabled = !(-->
+<!--                Array.from(paymentRadios).some(radio => radio.checked) &&-->
+<!--                termsCheckbox.checked-->
+<!--            );-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+
+
 </html>
 {% endblock main-content %}

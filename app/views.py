@@ -882,6 +882,9 @@ def minus_cart(request):
 
 class CheckoutView(View):
     def get(self, request):
+        if not CartItem.objects.filter(cart__user=request.user).exists():
+            messages.error(request, "Your cart is empty. Add items to your cart before checking out.")
+            return redirect('cart')
         form = CustomerProfileForm()
         if request.user.is_authenticated:
             address = Customer.objects.filter(user=request.user)
@@ -899,6 +902,7 @@ class CheckoutView(View):
     def post(self, request):
         form = CustomerProfileForm(request.POST)
         if form.is_valid():
+            print('hai')
             usr = request.user
             name = form.cleaned_data['name']
             phone_number = form.cleaned_data['phone_number']

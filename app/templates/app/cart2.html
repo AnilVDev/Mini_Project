@@ -109,8 +109,24 @@ background: rgb(224, 233, 235);
         {% else %}
         <p>No items in your cart</p>
         {% endif %}
+<div class="card">
+    <div class="card-body bg-info">
+        {% if messages %}
+            <ul class="list-unstyled">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                <span>{{ message }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     </div>
 </div>
+
+    </div>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
