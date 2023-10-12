@@ -1039,7 +1039,7 @@ def user_orders(request):
     page_range = range(orders_page.number, min(orders_page.number + 3, total_pages + 1))
 
     context = {
-        # 'orders': orders,
+        'lastpage': total_pages,
         'page_range': page_range,
         'orders': orders_page,
     }
@@ -1063,7 +1063,7 @@ def cancel_order(request, order_id):
                 product.stock += order_item.quantity
                 product.save()
 
-            return redirect('user_orders')  # Redirect to the user's order history page
+            return redirect('user_orders')
         else:
             return HttpResponse("You are not authorized to cancel this order.")
     except Order.DoesNotExist:
@@ -1073,7 +1073,8 @@ def cancel_order(request, order_id):
 def admin_orders(request):
     search_query = request.GET.get('search', '')
 
-    orders = Order.objects.filter(username__icontains=search_query)
+    # orders = Order.objects.filter(username__icontains=search_query)
+    orders = Order.objects.filter(Q(username__icontains=search_query) | Q(orderitem__product__title__icontains=search_query)).distinct()
 
     paginator = Paginator(orders, 5)
     page_number = request.GET.get('page')
@@ -1082,6 +1083,7 @@ def admin_orders(request):
     page_range = range(orders_page.number, min(orders_page.number + 3, total_pages + 1))
 
     context = {
+        'lastpage' : total_pages,
         'page_range': page_range,
         'orders': orders_page,
     }

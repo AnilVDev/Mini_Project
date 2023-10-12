@@ -212,7 +212,7 @@
 							<button type="submit" class="primary-btn order-submit " style="width:100%" id="place-order-button" formnovalidate>Place order</button>
 						  </div>
 						<!-- Set up a container element for the button -->
-    <div id="paypal-button-container"></div>
+   						<div id="paypal-button-container"></div>
 					</div>
 					<!-- /Order Details -->
 				</div>
@@ -262,8 +262,10 @@
           } else if (selectedPaymentId === "payment-3" && termsCheckbox.checked) {
             paypalContainer.style.display = "block";
             submitButton.disabled = true;
+            submitButton.style.display = "none";
           } else if (selectedPaymentId === "payment-4" && termsCheckbox.checked) {
             submitButton.disabled = false;
+            submitButton.style.display = "block";
             paypalContainer.style.display = "none";
           } else {
             submitButton.disabled = true;
@@ -288,8 +290,10 @@
         if (selectedPaymentId === "payment-3") {
           paypalContainer.style.display = "block";
           submitButton.disabled = true;
+          submitButton.style.display = "none";
         } else if (selectedPaymentId === "payment-4") {
           submitButton.disabled = false;
+          submitButton.style.display = "block";
           paypalContainer.style.display = "none";
         } else {
           submitButton.disabled = true;
@@ -310,7 +314,7 @@
 
 
     <!-- Include the PayPal JavaScript SDK -->
-	<script src="https://www.paypal.com/sdk/js?client-id=AVqCTpTO6jvHt-nKCYg3QMdHxJM_kGFNYfHHsfmn_NQYbWgA6ginY7xE6xzFfOs6djOGXk0QC_L_ojV4&currency=USD&disable-funding=credit"></script>
+	<script src="https://www.paypal.com/sdk/js?client-id=AVqCTpTO6jvHt-nKCYg3QMdHxJM_kGFNYfHHsfmn_NQYbWgA6ginY7xE6xzFfOs6djOGXk0QC_L_ojV4&currency=USD&disable-funding=credit,card"></script>
 
 	<script>
 		var total = '{{ final_price }}'
@@ -319,7 +323,7 @@
 
         	style: {
                 color:  'blue',
-                shape:  'rect',
+                shape:  'pill',
             },
 
             // Set up the transaction

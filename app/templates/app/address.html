@@ -16,6 +16,12 @@
 .custom-nav .nav-link:hover {
     color: #007bff;
 }
+.card-body{
+    border-radius:1rem;
+    background-color:#d4d5d9;
+    padding:0.5rem;
+}
+
 </style>
 
 
@@ -64,8 +70,8 @@
 
     <div class="col-sm-6">
      <div class="card">
+         <h3>Address {{forloop.counter}}</h3>
       <div class="card-body">
-       <h3>Address {{forloop.counter}}</h3>
        <p>Name: {{ad.name}}</p>
        <p>Localiry: {{ad.locality}}</p>
        <p>City: {{ad.city}}</p>

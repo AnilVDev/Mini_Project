@@ -38,6 +38,7 @@
                 <th>Order ID</th>
                 <th>User</th>
                 <th>Ordered Date</th>
+                <th>Address</th>
                 <th>Order items</th>
                 <th>Total Price</th>
                 <th>Order Status</th>
@@ -50,6 +51,12 @@
                 <td>{{ order.id }}</td>
                 <td>{{ order.username }}</td>
                 <td>{{ order.ordered_date }}</td>
+                <td>
+                    <li><strong>Billing Address:  </strong>{{ order.billing_address.name }}, {{ order.billing_address.locality }},
+                        <br>{{ order.billing_address.city }}, {{ order.billing_address.state }}-{{ order.billing_address.pincode }}, Ph-{{ order.billing_address.phone_number }}</li>
+                    <li><strong>Shipping Address:  </strong>{{ order.shipping_address.name }}, {{ order.shipping_address.locality }},
+                        <br>{{ order.shipping_address.city }}, {{ order.shipping_address.state }}-{{ order.shipping_address.pincode }}, Ph-{{ order.shipping_address.phone_number }}</li>
+                </td>
                 <td>
                     {% for order_item in order.orderitem_set.all %}
                     <li><strong>{{ order_item.product.title }}</strong> - Qty {{ order_item.quantity }} x {{order_item.price_per_product}}</li>
