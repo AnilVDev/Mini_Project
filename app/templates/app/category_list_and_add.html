@@ -1,4 +1,4 @@
-{% extends 'app/admin_home.html' %}
+{% extends 'app/admin-dashboard.html' %}
 {% load static %}
 {% block title %}User List{% endblock title %}
 
@@ -7,15 +7,7 @@
 {% block admin %}
 
 
-<style>
-    .card-body{
-    background-color: #e1e8e4;
-    margin-top:3rem;
-    margin-bottom:5rem;
-    border-radius:2rem;
-    padding:1.5rem;
-    }
-</style>
+
 
 <div class="container-fluid">
   <div class="row">
@@ -42,10 +34,11 @@
                         </form>
                     </div>
                     <div class="col-lg-6">
-                        <form method="post">
+                        <form method="post" class="input-group-append">
                             {% csrf_token %}
                             {{ form.as_p }}
                             <button type="submit" class="btn btn-success">Add</button>
+
                         </form>
                     </div>
                 </div>
@@ -72,8 +65,8 @@
                     <tr>
                         <td>{{ category.name }}</td>
                         <td>
-                            <a href="{% url 'edit_category' category.id %}" class="btn "><i class="fas fa-edit"></i></a>
-                            <button type="button" class="btn" data-toggle="modal" data-target="#deleteUserModal{{ category.id }}"><i class="fas fa-trash"></i></button>
+                            <a href="{% url 'edit_category' category.id %}" class="btn "><i class="fa fa-edit"></i></a>
+                            <button type="button" class="btn" data-toggle="modal" data-target="#deleteUserModal{{ category.id }}"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                     {% endfor %}

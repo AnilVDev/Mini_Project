@@ -340,7 +340,7 @@ def admin_login(request):
 @staff_member_required
 def admin_home(request):
 
-    return render(request,'app/admin_home.html')
+    return render(request,'app/admin-dashboard.html')
 
 @staff_member_required
 def user_list(request):
@@ -746,6 +746,27 @@ def remove_from_wishlist(request, product_id):
     Wishlist.objects.filter(user=request.user, product=product).delete()
     return redirect('wishlist')
 
+
+@login_required
+def toggle_wishlist(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    user = request.user
+
+    in_wishlist = Wishlist.objects.filter(user=user, product=product).exists()
+
+    if in_wishlist:
+        Wishlist.objects.filter(user=user, product=product).delete()
+    else:
+        Wishlist.objects.create(user=user, product=product)
+
+    next_url = request.POST.get('next')
+    if next_url:
+        return redirect(next_url)
+    else:
+        return redirect(reverse('home'))
+
+
+
 def wishlist(request):
     wishlist_items = Wishlist.objects.filter(user=request.user)
     return render(request, 'app/wishlist.html', {'wishlist_items': wishlist_items})
@@ -1074,7 +1095,7 @@ def admin_orders(request):
     search_query = request.GET.get('search', '')
 
     # orders = Order.objects.filter(username__icontains=search_query)
-    orders = Order.objects.filter(Q(username__icontains=search_query) | Q(orderitem__product__title__icontains=search_query)).distinct()
+    orders = Order.objects.filter(Q(username__icontains=search_query) | Q(orderitem__product__title__icontains=search_query)).order_by('-ordered_date')
 
     paginator = Paginator(orders, 5)
     page_number = request.GET.get('page')

@@ -1,93 +1,17 @@
-{% extends 'app/baseindex.html' %}
+{% extends 'app/user_profile.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block title %}Profile{% endblock title %}
-{% block main-content %}
-
-<style>
-    .custom-nav .nav-item {
-    margin-bottom: 10px;
-}
-
-.custom-nav .nav-link {
-    color: #0f0f0f;
-    transition: color 0.3s;
-}
-
-.custom-nav .nav-link:hover {
-    color: #007bff;
-}
-</style>
+{% block leftcontent %}
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Left Sidebar Navigation -->
-                <div class="col-md-3 bg-dark text-light">
-                    <div id="custom-navigation">
-                        <div class="container">
-                            <div id="responsive-nav">
-                                <ul class="custom-nav">
-                                    <h5>Welcome <span class="active text-capitalize h2 text-primary">{{ request.user }}</span></h5>
-                                    <li class="nav-item">
-                                        <a href="{% url 'profile' %}" class="nav-link ">Profile</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'address' %}" class="nav-link ">Address</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'passwordchange' %}" class="nav-link">Change Password</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'user_orders' %}" class="nav-link">Orders</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'wishlist' %}" class="nav-link {{ active }}">Wishlist</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'cart' %}" class="nav-link">Cart</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'logout' %}" class="nav-link">Logout</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            <!-- /Left Sidebar Navigation -->
-
-            <!-- Right Content -->
-<!--            <div class="col-md-9">-->
-<!--                <div class="container my-5">-->
-<!--                    <div class="row">-->
-<!--                        <div class="col-sm-8 offset-sm-1">-->
-<!--                            <h4 class="mb-5 text-danger">Add New Address</h4>-->
-<!--                            <form action="" method="post" novalidate>-->
-<!--                                {% csrf_token %}-->
-<!--                                {% for fm in form %}-->
-<!--                                <div class="form-group col-lg-6 mb-3">-->
-<!--                                    {{fm.label_tag}} {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>-->
-<!--                                </div>-->
-<!--                                {% endfor %}-->
-<!--                                <div class="col-12 mt-3">-->
-<!--                                    <button type="submit" class="btn btn-primary">Submit</button>-->
-<!--                                </div>-->
-<!--                            </form>-->
-<!--                            {% if messages %}-->
-<!--                            {% for message in messages %}-->
-<!--                            <p {% if message.tags %} class="alert alert-{{message.tags}} mb-5" {% endif %}>{{message}}</p>-->
-<!--                            {% endfor %}-->
-<!--                            {% endif %}-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
 
 
-    <div class="container my-5">
+    <div class="container col-md-10 my-2">
         <h1>Your Wishlist</h1>
         {% if wishlist_items %}
-        <table class="table table-bordered">
+        <table class="table table-bordered card-body2">
             <thead>
                 <tr>
                     <th>Image</th>
@@ -108,11 +32,32 @@
                     <td>{{ item.product.description }}</td>
                     <td><h5 class="product-price">Rs.{{item.product.discount_price}} <del class="product-old-price">Rs.{{item.product.selling_price}}</del></h5></td>
                     <td>
+
                         <a href="{% url 'remove_from_wishlist' item.product.id %}" class="btn ">
                             <i class="fas fa-trash"></i>
                         </a>
+                                                <div class="product-btns">
+												{% if item.product|is_in_cart:request.user %}
+													<form method="post" action="{% url 'cart' %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+														<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart red-heart"></i> Go to Cart</button>
+														</div>
+													</form>
+
+												{% else %}
+													<form method="post" action="{% url 'add_to_cart' item.product.id %}">
+														{% csrf_token %}
+														<div class="add-to-cart">
+															<input type="hidden" name="next" value="{{ request.get_full_path }}">
+															<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+														</div>
+													</form>
+												{% endif %}
+                        </div>
                     </td>
                 </tr>
+
                 {% endfor %}
             </tbody>
         </table>
@@ -125,7 +70,6 @@
             <!-- /Right Content -->
         </div>
     </div>
-<!--</body>-->
-<!--</html>-->
 
-{% endblock main-content %}
+
+{% endblock leftcontent %}

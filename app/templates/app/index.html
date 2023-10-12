@@ -118,11 +118,11 @@
 													<i class="fa fa-star"></i>
 												</div>
 												<div class="product-btns">
-													<form method="POST" action="{% url 'add_to_wishlist' c.id %}" class="product-btns">
+													<form method="POST" action="{% url 'toggle_wishlist' c.id %}" class="product-btns">
 														{% csrf_token %}
 														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
-															<i class="fa fa-heart"></i>
+															<i class="fa fa-heart {% if c.id in user_wishlist %}red-heart{% else %}black-heart{% endif %}"></i>
 															<span class="tooltipp">
 																{% if c.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
 															</span>
@@ -131,15 +131,6 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
-<!--											<form method="post" action="{% url 'add_to_cart' c.id %}">-->
-<!--												{% csrf_token %}-->
-<!--											<div class="add-to-cart">-->
-<!--&lt;!&ndash;												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>&ndash;&gt;-->
-<!--													<input type="hidden" name="next" value="{{ request.get_full_path }}">-->
-<!--													<button type="submit" class="add-to-cart-btn" id="add-to-cart-button"><i class="fa fa-shopping-cart"></i> add to cart</button>-->
-<!--											</div>-->
-<!--											</form>-->
-
 
 													{% if c|is_in_cart:request.user %}
 													<form method="post" action="{% url 'cart' %}">
@@ -216,11 +207,11 @@
 													<i class="fa fa-star"></i>
 												</div>
 												<div class="product-btns">
-													<form method="POST" action="{% url 'add_to_wishlist' s.id %}" class="product-btns">
+													<form method="POST" action="{% url 'toggle_wishlist' s.id %}" class="product-btns">
 														{% csrf_token %}
 														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
-															<i class="fa fa-heart"></i>
+															<i class="fa fa-heart {% if s.id in user_wishlist %}red-heart{% else %}black-heart{% endif %}"></i>
 															<span class="tooltipp">
 																{% if s.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
 															</span>
@@ -303,11 +294,11 @@
 													<i class="fa fa-star"></i>
 												</div>
 												<div class="product-btns">
-													<form method="POST" action="{% url 'add_to_wishlist' h.id %}" class="product-btns">
+													<form method="POST" action="{% url 'toggle_wishlist' h.id %}" class="product-btns">
 														{% csrf_token %}
 														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
-															<i class="fa fa-heart"></i>
+															<i class="fa fa-heart {% if h.id in user_wishlist %}red-heart{% else %}black-heart{% endif %}"></i>
 															<span class="tooltipp">
 																{% if h.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
 															</span>
@@ -391,11 +382,11 @@
 												</div>
 												<div class="product-btns">
 <!--													<button class="add-to-wishlist" href="{% url 'add_to_wishlist' sp.id %}"><i class="fa fa-heart"></i><span class="tooltipp">add to wishlist</span></button>-->
-													<form method="POST" action="{% url 'add_to_wishlist' sp.id %}" class="product-btns">
+													<form method="POST" action="{% url 'toggle_wishlist' sp.id %}" class="product-btns">
 														{% csrf_token %}
 														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
-															<i class="fa fa-heart"></i>
+															<i class="fa fa-heart {% if sp.id in user_wishlist %}red-heart{% else %}black-heart{% endif %}"></i>
 															<span class="tooltipp">
 																{% if sp.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
 															</span>
@@ -545,11 +536,11 @@
 													<i class="fa fa-star"></i>
 												</div>
 												<div class="product-btns">
-													<form method="POST" action="{% url 'add_to_wishlist' product.id %}" class="product-btns">
+													<form method="POST" action="{% url 'toggle_wishlist' product.id %}" class="product-btns">
 														{% csrf_token %}
 														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
-															<i class="fa fa-heart"></i>
+															<i class="fa fa-heart {% if product.id in user_wishlist %}red-heart{% else %}black-heart{% endif %}"></i>
 															<span class="tooltipp">
 																{% if product.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
 															</span>
@@ -849,7 +840,3 @@ function getCookie(name) {
 
 
 		{% endblock widgets %}
-
-
-
-

@@ -164,11 +164,11 @@
 											<i class="fa fa-star"></i>
 										</div>
 										<div class="product-btns">
-													<form method="POST" action="{% url 'add_to_wishlist' product.id %}" class="product-btns">
+													<form method="POST" action="{% url 'toggle_wishlist' product.id %}" class="product-btns">
 														{% csrf_token %}
 														<input type="hidden" name="next" value="{{ request.get_full_path }}">
 														<button type="submit" class="add-to-wishlist">
-															<i class="fa fa-heart"></i>
+															<i class="fa fa-heart {% if product.id in user_wishlist %}red-heart{% else %}black-heart{% endif %}"></i>
 															<span class="tooltipp">
 																{% if product.id in user_wishlist %}Added to your Wishlist{% else %}Add to Wishlist{% endif %}
 															</span>

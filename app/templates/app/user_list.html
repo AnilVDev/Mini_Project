@@ -1,4 +1,4 @@
-{% extends 'app/admin_home.html' %}
+{% extends 'app/admin-dashboard.html' %}
 {% load static %}
 {% block title %}User List{% endblock title %}
 
@@ -17,13 +17,7 @@
     .search-form {
         margin-bottom: 20px;
     }
-.card-body{
-    background-color: #e1e8e4;
-    margin-top:3rem;
-    margin-bottom:5rem;
-    border-radius:2rem;
-    padding:1.5rem;
-    }
+
 </style>
 <body>
 <div class="container-fluid">
@@ -37,12 +31,14 @@
         <!-- Right Side - User List -->
         <div class="col-lg-10 card-body">
             <h1>User List</h1>
-            <div class="search-form">
-                <form method="get" action="{% url 'user_list' %}">
-                    <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}">
+            <form method="get" action="{% url 'user_list' %}">
+            <div class="input-group">
+                    <input type="text" name="q" placeholder="Search users..." value="{{ search_query }}" class="form-control">
+
                     <button type="submit" class="btn btn-primary">Search</button>
-                </form>
-            </div>
+                  </div>
+            </form>
+
             {% if users %}
             <table class="table ">
                 <thead>

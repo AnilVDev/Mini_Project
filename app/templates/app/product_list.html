@@ -1,4 +1,4 @@
-{% extends 'app/admin_home.html' %}
+{% extends 'app/admin-dashboard.html' %}
 {% load static %}
 {% block title %}User List{% endblock title %}
 
@@ -12,23 +12,29 @@
     max-height: 150px; /* Set the maximum height */
 }
 .card-body{
-    background-color: #e8edea;
+    background-color: e8edea;
     margin-top:3rem;
     margin-bottom:5rem;
     border-radius:2rem;
     padding:1.5rem;
     }
+        .text-black {
+        color: #000; /* This sets the text color to black */
+    }
+
 </style>
 
-<div class="container-fluid">
+<div class="container-fliud">
     <div class="row">
 
-        <div class="col-lg-10 card-body">
+        <div class="col-lg-9 card-body">
             <h1>Product List</h1>
             <div class="search-form">
                 <form method="get" action="{% url 'product_list' %}">
-                    <input type="text" name="q" placeholder="Search product..." value="{{ search_query }}">
+                    <div class="input-group">
+                    <input type="text" name="q" placeholder="Search product..." value="{{ search_query }}" class="form-control">
                     <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
                 </form>
             </div>
             <table class="table table-bordered">
@@ -36,7 +42,7 @@
                     <tr>
                         <th>Image</th>
                         <th>Title</th>
-                        <th>Description</th>
+<!--                        <th>Description</th>-->
                         <th>Price</th>
                         <th>Brand</th>
                         <th>Category</th>
@@ -49,7 +55,7 @@
                     <tr>
                         <td><img src="{{ product.images.first.image.url }}" alt="{{ product.title }}" width="80"></td>
                         <td>{{ product.title }}</td>
-                        <td>{{ product.description }}</td>
+<!--                        <td>{{ product.description }}</td>-->
                         <td>₹{{ product.selling_price }}</td>
                         <td>{{ product.brand }}</td>
                         <td>{{ product.category }}</td>
@@ -59,8 +65,8 @@
                                 View Details
                             </button>
                             <a href="{% url 'add_product_image' product.id %}" class="btn btn-success">Add image</a><br>
-                            <a href="{% url 'edit_product' product.id %}" class="btn "><i class="fas fa-edit"></i></a>
-                            <button type="button" class="btn" data-toggle="modal" data-target="#changeUserModal{{ product.id }}"><i class="fas fa-trash"></i></button>
+                            <a href="{% url 'edit_product' product.id %}" class="btn "><i class="fa fa-edit"></i></a>
+                            <button type="button" class="btn" data-toggle="modal" data-target="#changeUserModal{{ product.id }}"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
 
@@ -69,7 +75,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="productModalLabel">{{ product.title }}</h5>
+                                    <h5 class="modal-title text-black" id="productModalLabel">{{ product.title }}</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -83,12 +89,12 @@
                                             {% endfor %}
                                         </div>
                                         <div class="col-md-6">
-                                            <p>Description: {{ product.description }}</p>
-                                            <p>Discount Price: ₹{{ product.discount_price }}</p>
-                                            <p>Selling Price: ₹{{ product.selling_price }}</p>
-                                            <p>Brand: {{ product.brand }}</p>
-                                            <p>Category: {{ product.category }}</p>
-                                            <p>Details: {{product.details}}</p>
+                                            <p class="text-black">Description: {{ product.description }}</p>
+                                            <p class="text-black">Discount Price: ₹{{ product.discount_price }}</p>
+                                            <p class="text-black">Selling Price: ₹{{ product.selling_price }}</p>
+                                            <p class="text-black">Brand: {{ product.brand }}</p>
+                                            <p class="text-black">Category: {{ product.category }}</p>
+                                            <p class="text-black">Details: {{product.details}}</p>
                                             <!-- Add more details here -->
                                         </div>
                                     </div>

@@ -1,4 +1,4 @@
-{% extends 'app/admin_home.html' %}
+{% extends 'app/admin-dashboard.html' %}
 {% load static %}
 {% block title %}User List{% endblock title %}
 
@@ -11,13 +11,7 @@
     max-width: 150px; /* Set the maximum width */
     max-height: 150px; /* Set the maximum height */
 }
-.card-body{
-    background-color: #e8edea;
-    margin-top:3rem;
-    margin-bottom:5rem;
-    border-radius:2rem;
-    padding:1.5rem;
-    }
+
 </style>
 
 <div class="container-fluid">
@@ -25,13 +19,15 @@
 
         <div class="col-lg-10 card-body">
     <h1>Admin Orders</h1>
-
+    <div class="input-group">
     <form method="GET">
         <label for="search">Search Product:</label>
-        <input type="text" name="search" id="search">
+        <div class="input-group-append">
+        <input type="text" name="search" id="search" class="form-control">
         <input type="submit" class="btn-success" value="Search">
+        </div>
     </form>
-
+    </div>
     <table class="table table-bordered">
         <thead>
             <tr>

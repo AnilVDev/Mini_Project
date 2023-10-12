@@ -1,58 +1,7 @@
-{% extends 'app/baseindex.html' %}
+{% extends 'app/user_profile.html' %}
 {% load static %}
 {% block title %}Profile{% endblock title %}
-{% block main-content %}
-
-<style>
-    .custom-nav .nav-item {
-    margin-bottom: 10px;
-}
-
-.custom-nav .nav-link {
-    color: #0f0f0f;
-    transition: color 0.3s;
-}
-
-.custom-nav .nav-link:hover {
-    color: #007bff;
-}
-</style>
-
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Left Sidebar Navigation -->
-                <div class="col-md-3 bg-dark text-light">
-                    <div id="custom-navigation">
-                        <div class="container">
-                            <div id="responsive-nav">
-                                <ul class="custom-nav">
-                                    <h5>Welcome <span class="active text-capitalize h2 text-primary">{{ request.user }}</span></h5>
-                                    <li class="nav-item">
-                                        <a href="{% url 'profile' %}" class="nav-link ">Profile</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'address' %}" class="nav-link {{ active }}">Address</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'passwordchange' %}" class="nav-link">Change Password</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">Orders</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">Wishlist</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'cart' %}" class="nav-link">Cart</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{% url 'logout' %}" class="nav-link">Logout</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{% block leftcontent %}
 
             <!-- /Left Sidebar Navigation -->
 
@@ -84,9 +33,6 @@
                 </div>
             </div>
             <!-- /Right Content -->
-        </div>
-    </div>
-<!--</body>-->
-<!--</html>-->
 
-{% endblock main-content %}
+
+{% endblock leftcontent %}

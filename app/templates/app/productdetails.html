@@ -17,6 +17,7 @@
         border: none;
         cursor: pointer;
     }
+
 </style>>
 
 
@@ -142,11 +143,11 @@
 							<ul class="product-btns">
 
 								<li>
-									<form method="POST" action="{% url 'add_to_wishlist' product.id %}">
+									<form method="POST" action="{% url 'toggle_wishlist' product.id %}">
 										{% csrf_token %}
 										<input type="hidden" name="next" value="{{ request.get_full_path }}">
 										<a href="#" onclick="this.closest('form').submit(); return false;">
-											<i class="fa fa-heart"></i>
+											<i class="fa fa-heart {% if product.id in user_wishlist %}red-heart{% else %}black-heart{% endif %}"></i>
 											{% if product.id in user_wishlist %}
 												Added to your Wishlist
 											{% else %}
