@@ -20,6 +20,8 @@ urlpatterns = [
     path('address/edit-address/<int:address_id>/',views.edit_address, name = 'edit_address'),
     path('address/delete/<int:address_id>/', views.delete_address, name='delete_address'),
     path('user-orders/', views.user_orders, name='user_orders'),
+    path('order/<int:order_id>/', views.order_details, name='order_details'),
+    path('order/<int:order_id>/cancel/', views.cancel_order, name='cancel_order'),
     path('mobile/', views.mobile, name='mobile'),
     path('accounts/login/', auth_views.LoginView.as_view(template_name= 'app/login.html',authentication_form=LoginForm), name='login'),
     path('logout/',auth_views.LogoutView.as_view(next_page='login'),name= 'logout'),
@@ -63,4 +65,5 @@ urlpatterns = [
     path('checkout/', views.CheckoutView.as_view(), name='checkout'),
     path('order-placed',views.order_placed, name='order_placed'),
     path('cancel-order/<int:order_id>/', views.cancel_order, name='cancel_order'),
+    path('generate-invoice/<int:order_id>/',views.generate_pdf, name='generate_pdf'),
          ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

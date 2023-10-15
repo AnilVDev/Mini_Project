@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxLengthValidator,MinValueValidator, RegexValidator
-
+from decimal import Decimal
 
 
 STATE_CHOICES = (
@@ -200,11 +200,28 @@ class Order(models.Model):
             self.username = self.user.username
         super(Order, self).save(*args, **kwargs)
 
+# class OrderItem(models.Model):
+#     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+#     quantity = models.PositiveIntegerField(default=1)
+#     price_per_product = models.DecimalField(max_digits=10, decimal_places=2)
+#
+#     def __str__(self):
+#         return f"{self.quantity} x {self.product.title} in Order {self.order.id}"
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     quantity = models.PositiveIntegerField(default=1)
     price_per_product = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price_product = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return f"{self.quantity} x {self.product.title} in Order {self.order.id}"
+
+    def calculate_total_price(self):
+        return Decimal(self.quantity) * self.price_per_product  # Ensure Decimal is used
+
+    def save(self, *args, **kwargs):
+        self.total_price_product = self.calculate_total_price()
+        super(OrderItem, self).save(*args, **kwargs)

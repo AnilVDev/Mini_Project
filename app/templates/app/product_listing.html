@@ -45,12 +45,14 @@
 								<div class="input-checkbox">
 								    <input type="checkbox" id="category-{{ category.id }}" name="category" value="{{ category.name }}">
 									{% if category.name in selected_categories %}checked{% endif %}>
+
 								    <label for="category-{{ category.id }}">
 								        <span></span>
 								        {{ category.name }}
 								        <small>({{ category.product_set.count }})</small>
 								    </label>
 								</div>
+
 								{% endfor %}
 
 
@@ -89,7 +91,8 @@
 								</div>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-primary" id="apply-filter">Apply</button>
+    					<button type="button" class="btn btn-secondary" id="clear-filter">Clear</button>
+    					<button type="submit" class="btn btn-primary" id="apply-filter">Apply</button>
 						</form>
 						<!-- /aside Widget -->
 
@@ -300,6 +303,42 @@ $(document).ready(function() {
     });
 });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get references to the form elements you want to clear
+        const categoryCheckboxes = document.querySelectorAll('input[name="category"]');
+        const brandCheckboxes = document.querySelectorAll('input[name="brand"]');
+        const minPriceInput = document.getElementById('min_price');
+        const maxPriceInput = document.getElementById('max_price');
+
+        // Get reference to the Clear button
+        const clearButton = document.getElementById('clear-filter');
+
+        // Get reference to the filter form
+        const filterForm = document.getElementById('filter-form');
+
+        // Add a click event listener to the Clear button
+        clearButton.addEventListener('click', function() {
+            // Uncheck category checkboxes
+            categoryCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+
+            // Uncheck brand checkboxes
+            brandCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = false;
+            });
+
+            // Clear min and max price inputs
+            minPriceInput.value = '';
+            maxPriceInput.value = '';
+
+            // Submit the filter form to refresh the product listing
+            filterForm.submit();
+        });
+    });
+</script>
+
 
 
 

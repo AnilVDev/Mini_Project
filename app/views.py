@@ -257,7 +257,12 @@ def max_attempts_exceeded(request):
 class ProfileView(View):
     def get(self, request):
         form = CustomerProfileForm()
-        return render(request, 'app/profile.html', {'form':form, 'active':'bg-danger'})
+        user = request.user
+        context = {
+            'user': user,
+            'form': form,
+        }
+        return render(request, 'app/profile.html', context)
 
     def post(self, request):
         form = CustomerProfileForm(request.POST)
@@ -274,7 +279,12 @@ class ProfileView(View):
             messages.success(request, 'Congratulations!! Address Updated Successfully')
 
         form = CustomerProfileForm()
-        return render(request, 'app/profile.html',{'form':form,'active':'bg-danger'})
+        user = request.user
+        context = {
+            'user': user,
+            'form': form,
+        }
+        return render(request, 'app/profile.html',context)
 @method_decorator(staff_member_required, name='dispatch')
 def add_product_with_images(request):
     if request.method == 'POST':
@@ -1125,3 +1135,39 @@ def admin_edit_order_status(request, order_id):
             messages.error(request, f"Order with ID {order_id} does not exist.")
 
     return redirect(reverse('admin_orders'))
+
+
+def order_details(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    return render(request, 'app/order_details.html', {'order': order})
+
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    if request.method == 'POST':
+        order.order_status = 'Cancelled'
+        order.save()
+
+        return redirect('user_orders')
+
+    return render(request, 'app/order_details.html', order_id=order.id)
+
+def generate_pdf(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    #
+    # template_path = 'invoice.html'
+    # response = HttpResponse(content_type='application/pdf')
+    # response['Content-Disposition'] = f'attachment; filename="invoice_{order.id}.pdf"'
+    #
+    # with open(template_path, 'r') as template_file:
+    #     template = template_file.read()
+    #     pdf = pisa.pisaDocument(template, dest=response)
+    #
+    # if not pdf.err:
+    #     return response
+    #
+    # return HttpResponse('Error generating the PDF')
+
+    return render(request, 'app/invoice.html',{ 'order':order})
