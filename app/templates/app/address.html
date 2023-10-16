@@ -22,7 +22,8 @@
        <p>Phone Number: {{ad.phone_number}}</p>
             <div class="btn-group" role="group" aria-label="Address Actions">
                 <a href="{% url 'edit_address' ad.id %}" class="btn "><i class="fas fa-edit"></i></a>
-                <a href="{% url 'delete_address' ad.id %}" class="btn "><i class="fas fa-trash"></i></a>
+<!--                <a href="{% url 'delete_address' ad.id %}" class="btn "><i class="fas fa-trash"></i></a>-->
+                <button type="button" class="btn btn-dange" data-toggle="modal" data-target="#deleteUserModal{{ ad.id }}"><i class="fa fa-trash"></i></button>
             </div>
       </div>
      </div>
@@ -30,5 +31,28 @@
     {% endfor %}
    </div>
   </div>
+
+{% for ad in add %}
+<div class="modal fade" id="deleteUserModal{{ ad.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete address?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a href="{% url 'delete_address' ad.id %}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 
 {% endblock leftcontent %}

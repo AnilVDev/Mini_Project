@@ -1145,33 +1145,19 @@ def order_details(request, order_id):
 
     return render(request, 'app/order_details.html', {'order': order})
 
-def cancel_order(request, order_id):
-    order = get_object_or_404(Order, id=order_id)
-
-    if request.method == 'POST':
-        order.order_status = 'Cancelled'
-        order.save()
-
-        return redirect('user_orders')
-
-    return render(request, 'app/order_details.html', order_id=order.id)
+# def cancel_order(request, order_id):
+#     order = get_object_or_404(Order, id=order_id)
+#
+#     if request.method == 'POST':
+#         order.order_status = 'Cancelled'
+#         order.save()
+#
+#         return redirect('user_orders')
+#
+#     return render(request, 'app/order_details.html', order_id=order.id)
 
 def generate_pdf(request, order_id):
     order = get_object_or_404(Order, id=order_id)
-
-    #
-    # template_path = 'invoice.html'
-    # response = HttpResponse(content_type='application/pdf')
-    # response['Content-Disposition'] = f'attachment; filename="invoice_{order.id}.pdf"'
-    #
-    # with open(template_path, 'r') as template_file:
-    #     template = template_file.read()
-    #     pdf = pisa.pisaDocument(template, dest=response)
-    #
-    # if not pdf.err:
-    #     return response
-    #
-    # return HttpResponse('Error generating the PDF')
     template_path = 'pdf_convert/invoice.html'
     context = {'order':order}
     response = HttpResponse(content_type='application/pdf')
@@ -1186,3 +1172,4 @@ def generate_pdf(request, order_id):
     return response
 
     # return render(request, 'pdf_convert/invoice.html',{ 'order':order})
+

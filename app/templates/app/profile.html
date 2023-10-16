@@ -11,7 +11,7 @@
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>Joined:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
             <button id="showAddressForm" class="btn btn-primary">Add New Address</button>
-            <form id="addressForm" action="" method="post" novalidate style="display: none;">
+            <form id="addressForm" action="{% url 'profile' %}" method="post" novalidate style="display: none;">
                 {% csrf_token %}
                 {% for fm in form %}
                 <div class="form-group col-lg-6 mb-3">

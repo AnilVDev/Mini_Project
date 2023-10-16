@@ -349,112 +349,22 @@
         }).render('#paypal-button-container');
     </script>
 
-
-
 <!--<script>-->
 <!--  document.addEventListener("DOMContentLoaded", function() {-->
-<!--    // Get the submit button and payment radio buttons-->
-<!--    var submitButton = document.getElementById("place-order-button");-->
-<!--    var paymentRadios = document.querySelectorAll("input[name='payment']");-->
-<!--    var paypalContainer = document.getElementById("paypal-button-container");-->
-<!--    var termsCheckbox = document.getElementById("terms");-->
-
-<!--    // Disable the submit button by default-->
-<!--    submitButton.disabled = true;-->
-<!--    paypalContainer.style.display = "none";-->
-
-<!--    // Add a change event listener to the payment radio buttons-->
-<!--    for (var i = 0; i < paymentRadios.length; i++) {-->
-<!--      paymentRadios[i].addEventListener("change", function() {-->
-<!--        // Check if a payment method is selected and terms are accepted-->
-<!--        var selectedPayment = document.querySelector("input[name='payment']:checked");-->
-<!--        if (selectedPayment) {-->
-<!--          var selectedPaymentId = selectedPayment.id;-->
-<!--          if (selectedPaymentId === "payment-1" || selectedPaymentId === "payment-2") {-->
-<!--            alert("This payment method is not available right now. Please try another method.");-->
-<!--            submitButton.disabled = true;-->
-<!--            paypalContainer.style.display = "none";-->
-<!--          } else if (selectedPaymentId === "payment-3" && termsCheckbox.checked) {-->
-<!--            paypalContainer.style.display = "block";-->
-<!--            submitButton.disabled = true;-->
-<!--          } else if (selectedPaymentId === "payment-4" && termsCheckbox.checked) {-->
-<!--            submitButton.disabled = false;-->
-<!--            paypalContainer.style.display = "none";-->
-<!--          } else {-->
-<!--            submitButton.disabled = true;-->
-<!--            paypalContainer.style.display = "none";-->
-<!--          }-->
-<!--        } else {-->
-<!--          submitButton.disabled = true;-->
-<!--          paypalContainer.style.display = "none";-->
-<!--        }-->
-<!--      });-->
+<!--    // Select the first billing address radio button by default-->
+<!--    var firstBillingAddress = document.querySelector("input[name='billing_address_id']:first-of-type");-->
+<!--    if (firstBillingAddress) {-->
+<!--      firstBillingAddress.checked = true;-->
 <!--    }-->
 
-<!--    // Add a change event listener to the terms and conditions checkbox-->
-<!--    termsCheckbox.addEventListener("change", function() {-->
-<!--      var selectedPayment = document.querySelector("input[name='payment']:checked");-->
-<!--      if (selectedPayment && termsCheckbox.checked) {-->
-<!--        var selectedPaymentId = selectedPayment.id;-->
-<!--        if (selectedPaymentId === "payment-3") {-->
-<!--          paypalContainer.style.display = "block";-->
-<!--          submitButton.disabled = true;-->
-<!--        } else if (selectedPaymentId === "payment-4") {-->
-<!--          submitButton.disabled = false;-->
-<!--          paypalContainer.style.display = "none";-->
-<!--        } else {-->
-<!--          submitButton.disabled = true;-->
-<!--          paypalContainer.style.display = "none";-->
-<!--        }-->
-<!--      } else {-->
-<!--        submitButton.disabled = true;-->
-<!--        paypalContainer.style.display = "none";-->
-<!--      }-->
-<!--    });-->
+<!--    // Select the first shipping address radio button by default-->
+<!--    var firstShippingAddress = document.querySelector("input[name='shipping_address_id']:first-of-type");-->
+<!--    if (firstShippingAddress) {-->
+<!--      firstShippingAddress.checked = true;-->
+<!--    }-->
 <!--  });-->
 <!--</script>-->
 
-
-
-
-
-
-
-
-
-
-
-
-<!--<script>-->
-<!--    document.addEventListener("DOMContentLoaded", function () {-->
-<!--        const paymentRadios = document.querySelectorAll('input[type="radio"][name="payment"]');-->
-<!--        const termsCheckbox = document.getElementById('terms');-->
-<!--        const placeOrderButton = document.getElementById('place-order-button');-->
-
-<!--        // Initially disable the button-->
-<!--        placeOrderButton.disabled = true;-->
-
-<!--        // Add a change event listener to each payment radio button-->
-<!--        paymentRadios.forEach(function (radio) {-->
-<!--            radio.addEventListener('change', function () {-->
-<!--                // Enable the button if any radio button is selected and the terms checkbox is checked-->
-<!--                placeOrderButton.disabled = !(-->
-<!--                    Array.from(paymentRadios).some(radio => radio.checked) &&-->
-<!--                    termsCheckbox.checked-->
-<!--                );-->
-<!--            });-->
-<!--        });-->
-
-<!--        // Add a change event listener to the terms checkbox-->
-<!--        termsCheckbox.addEventListener('change', function () {-->
-<!--            // Enable the button if any radio button is selected and the terms checkbox is checked-->
-<!--            placeOrderButton.disabled = !(-->
-<!--                Array.from(paymentRadios).some(radio => radio.checked) &&-->
-<!--                termsCheckbox.checked-->
-<!--            );-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
 
 
 

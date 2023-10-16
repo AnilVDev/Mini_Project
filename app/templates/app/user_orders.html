@@ -6,88 +6,230 @@
 .cardbody3{
     background-color: #fafafa;
     width: 100%;
+    height:21rem;
     padding-top:1rem;
     border-radius: 1rem;
 
     }
+
+        .custom-body {
+            min-height: 50vh;
+            font-family: 'Exo 2';
+            font-size: 14px;
+            color: #fff;
+            background: #eee;
+        }
+
+        .custom-modal-content {
+            background-color: #42469d;
+            border-color: #42469d;
+            border-radius: 1rem;
+        }
+
+        @media (min-width: 576px) {
+            .custom-modal-dialog {
+                max-width: 750px;
+                margin: 1.75rem auto;
+            }
+        }
+
+        .custom-show {
+            padding: 0;
+        }
+
+        .custom-modal-header {
+            border-bottom: none;
+            text-align: center;
+        }
+
+        .custom-modal-header .close {
+            padding: 1rem 1rem;
+            margin: -1rem -1rem -1rem 0;
+            color: #fff;
+        }
+
+        .custom-modal-title {
+            line-height: 3rem;
+        }
+
+        .custom-modal-body {
+            padding: 1rem;
+        }
+
+        #custom-progressbar {
+            margin-bottom: 3vh;
+            overflow: hidden;
+            color: white;
+            padding-left: 0px;
+            margin-top: 3vh;
+        }
+
+        #custom-progressbar li {
+            list-style-type: none;
+            font-size: 1rem;
+            width: 23%;
+            float: left;
+            position: relative;
+            font-weight: 400;
+            color: white;
+        }
+
+        #custom-progressbar #custom-step1:before {
+            content: "";
+            color: white;
+            width: 20px;
+            height: 20px;
+            margin-left: 0px !important;
+        }
+
+        #custom-progressbar #custom-step2:before {
+            content: "";
+            color: white;
+            width: 20px;
+            height: 20px;
+            margin-left: 0;
+        }
+
+        #custom-progressbar #custom-step3:before {
+            content: "";
+            color: white;
+            width: 20px;
+            height: 20px;
+            margin-left: 0;
+        }
+
+        #custom-progressbar #custom-step4:before {
+            content: "";
+            color: white;
+            width: 20px;
+            height: 20px;
+            margin-left: 0;
+        }
+        #custom-progressbar #custom-step5:before {
+            content: "";
+            color: white;
+            width: 20px;
+            height: 20px;
+            margin-left: 0px !important;
+        }
+        #custom-progressbar li:before {
+            line-height: 29px;
+            display: block;
+            font-size: 12px;
+            background: rgb(151, 149, 149);
+            border-radius: 50%;
+            margin: auto;
+            z-index: -1;
+            margin-bottom: 1vh;
+        }
+
+        #custom-progressbar li:after {
+            content: '';
+            height: 3px;
+            background: rgb(151, 149, 149, 0.651);
+            position: absolute;
+            left: 0%;
+            right: 0%;
+            margin-bottom: 2vh;
+            top: 8px;
+            z-index: 1;
+        }
+        .custom-progress-track {
+            padding: 0 8%;
+        }
+
+        #custom-progressbar li.active:before,
+        #custom-progressbar li.active:after {
+            background: white;
+        }
+
+        .custom-details {
+            color: white;
+            padding: 2rem;
+            font-size: 1.4rem;
+            line-height: 3.5rem;
+        }
 
 </style>
 
 
 
 <!-- Right Content -->
-                    <div class="col-lg-10 col-sm-8 offset-sm-1 ">
+<div class="col-lg-10 col-sm-8 offset-sm-1 ">
 
                         <!-- Inside your user page template -->
-                        <div class="container ">
-                            <h2>Your Orders</h2>
-                                <div class="container card-body2">
-                                    <div class="row justify-content-center mb-3" style="margin:0;">
-                                        <div class="col-md-12 col-xl-10">
-                                            <div class="card shadow-0 border rounded-3">
-                                                 {% if orders %}
-                                                {% for order in orders %}
+  <div class="container ">
+      <h2>Your Orders</h2>
+          <div class="container card-body2">
+              <div class="row justify-content-center mb-3" style="margin:0;">
+                  <div class="col-md-12 col-xl-10">
+                      <div class="card shadow-0 border rounded-3">
+                             {% if orders %}
+                            {% for order in orders %}
 
-                                                    <div class="" style="margin: 1.5rem 0rem;">
-                                                <a class="order-card-link" href="{% url 'order_details' order.id %}">
-                                                        <div class="row cardbody3 " >
-                                                            <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
-                                                                <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                                                                    <img src="{{ order.orderitem_set.first.product.images.first.image.url }}"
-                                                                         style="width:200px;"/>
-                                                                    <a href="#!">
-                                                                        <div class="hover-overlay">
-                                                                            <div class="mask"
-                                                                                 style="background-color: rgba(253, 253, 253, 0.15);"></div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6 col-lg-6 col-xl-6">
-                                                                <h5>Order ID: {{ order.id }}</h5>
-                                                                <div class="d-flex flex-row">
-                                                                    <div class="text-danger mb-1 me-2">
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star"></i>
-                                                                        <i class="fa fa-star"></i>
-                                                                    </div>
-                                                                    {% for order_item in order.orderitem_set.all %}
-                                                                    <li><strong>{{ order_item.product.title }}</strong> - Qty {{ order_item.quantity }} x {{order_item.price_per_product}}</li>
-                                                                    {% endfor %}
-                                                                    <p class="text-truncate mb-4 mb-md-0">Ordered Date: {{ order.ordered_date }}</p>
-                                                                </div>
-                                                                <p class="text-truncate mb-4 mb-md-0"><strong>Billing Address:  </strong>{{ order.billing_address.name }}, {{ order.billing_address.locality }},
-                                                                {{ order.billing_address.city }}, {{ order.billing_address.state }}-{{ order.billing_address.pincode }}<br>{{ order.billing_address.phone_number }}</p>
-<!--                                                                <p class="text-truncate mb-4 mb-md-0">Brand: {{ order.orderitem_set.first.product.brand }}</p>-->
-
-                                                            </div>
-                                                            <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
-                                                                <div class="d-flex flex-row align-items-center mb-1">
-                                                                    <h4 class="mb-1 me-1">₹{{ order.total_price }}</h4>
-                                                                    <!--                  <span class="text-danger"><s>$20.99</s></span>-->
-                                                                </div>
-                                                                <h6 class="text-success">Order Status: {{ order.order_status }}</h6>
-<!--                                                                <h6 class="text-success">Ordered Date: {{ order.ordered_date }}</h6>-->
-                                                                {% if order.order_status != 'Cancelled' %}
-                                                                <div class="d-flex flex-column mt-5">
-                                                                    <a href="{% url 'cancel_order' order.id %}" class="btn btn-primary btn-sm" style="width:100%;">Cancel</a>
-                                                                </div>
-                                                                {% endif %}
-                                                        </div>
-                                                 </a>
+                          <div class="" style="margin: 1.5rem 0rem;">
+                            <a class="order-card-link" href="{% url 'order_details' order.id %}">
+                                    <div class="row cardbody3 " >
+                                        <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                                            <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                                                <img src="{{ order.orderitem_set.first.product.images.first.image.url }}"
+                                                     style="width:200px;"/>
+                                                <a href="#!">
+                                                    <div class="hover-overlay">
+                                                        <div class="mask"
+                                                             style="background-color: rgba(253, 253, 253, 0.15);"></div>
                                                     </div>
-
-                                                {% endfor %}
-                                                {% else %}
-                                                <p>You have no orders yet.</p>
-                                                {% endif %}
+                                                </a>
                                             </div>
                                         </div>
+                                        <div class="col-md-6 col-lg-6 col-xl-6">
+                                            <h5>Order ID: {{ order.id }}</h5>
+                                            <div class="d-flex flex-row">
+                                                <div class="text-danger mb-1 me-2">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                </div>
+                                                {% for order_item in order.orderitem_set.all %}
+                                                <li><strong>{{ order_item.product.title }}</strong> - Qty {{ order_item.quantity }} x {{order_item.price_per_product}}</li>
+                                                {% endfor %}
+                                                <p class="text-truncate mb-4 mb-md-0">Ordered Date: {{ order.ordered_date }}</p>
+                                            </div>
+                                            <p class="text-truncate mb-4 mb-md-0"><strong>Billing Address:  </strong>{{ order.billing_address.name }}, {{ order.billing_address.locality }},
+                                            {{ order.billing_address.city }}, {{ order.billing_address.state }}-{{ order.billing_address.pincode }}<br>{{ order.billing_address.phone_number }}</p>
+<!--                                                                <p class="text-truncate mb-4 mb-md-0">Brand: {{ order.orderitem_set.first.product.brand }}</p>-->
+
+                                        </div>
+                                        <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                                            <div class="d-flex flex-row align-items-center mb-1">
+                                                <h4 class="mb-1 me-1">₹{{ order.total_price }}</h4>
+                                                <!--                  <span class="text-danger"><s>$20.99</s></span>-->
+                                            </div>
+                                            <h6 class="text-success">Order Status: {{ order.order_status }}</h6>
+<!--                                                                <h6 class="text-success">Ordered Date: {{ order.ordered_date }}</h6>-->
+                                                {% if order.order_status != 'Cancelled' %}
+                                            <div class="d-flex flex-column mt-5">
+<!--                                                                    <a href="{% url 'cancel_order' order.id %}" class="btn btn-primary btn-sm" style="width:100%;">Cancel</a>-->
+                                                <button type="button" class="btn d-flex" style="width:100%;" data-toggle="modal" data-target="#myModal{{order.id}}">Track your order</button>
+                                                <button type="button" class="btn btn-primary" style="width:100%;" data-toggle="modal" data-target="#deleteUserModal{{ order.id }}">Cancel</button>
+                                            </div>
+                                            {% endif %}
                                     </div>
-                                </div>
-                        </div>
-                    </div>
+                                    </div>
+                             </a>
+                          </div>
+
+                            {% endfor %}
+                            {% else %}
+                            <p>You have no orders yet.</p>
+                            {% endif %}
+                      </div>
+                  </div>
+              </div>
+          </div>
+  </div>
+
 <!-- /Right Content -->
 
 
@@ -127,6 +269,83 @@
 </div>
 <!-- Pagination -->
 
+</div>
+
+{% for order in orders %}
+<div class="modal fade" id="deleteUserModal{{ order.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel your order?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">go back</button>
+                <a href="{% url 'cancel_order' order.id %}" class="btn btn-danger">Cancel your order</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+
+<!-- Button to Open the Modal -->
+
+<!-- The Modal -->
+{% for order in orders %}
+<div class="modal fade" id="myModal{{order.id}}">
+            <div class="modal-dialog modal-dialog-centered custom-modal-dialog">
+                <div class="modal-content custom-modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header custom-modal-header">
+                        <h4 class="modal-title mx-auto custom-modal-title">Order Status<br>AWB Number-5335T5S</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body custom-modal-body">
+                        <div class="progress-track custom-progress-track">
+                            <ul id="custom-progressbar">
+        <li class="{% if order.order_status == 'Processing' or order.order_status == 'Confirmed' or order.order_status == 'Shipped' or order.order_status == 'Out for Delivery' or order.order_status == 'Delivered'%} active{% endif %} step0" id="custom-step1">Processing</li>
+        <li class="{% if order.order_status == 'Confirmed' or order.order_status == 'Shipped' or order.order_status == 'Out for Delivery' or order.order_status == 'Delivered' %} active{% endif %} step0" id="custom-step2">Confirmed</li>
+        <li class="{% if order.order_status == 'Shipped' or order.order_status == 'Out for Delivery' or order.order_status == 'Delivered' %} active{% endif %} step0 " id="custom-step3">Shipped</li>
+        <li class="{% if order.order_status == 'Out for Delivery' or order.order_status == 'Delivered' %} active{% endif %} step0" id="custom-step4"><span id="three">Out for Delivery</span></li>
+        <li class=" step0 " id="custom-step5">Delivered</li>
+                            </ul>
+                        </div>
+                        <div class="row">
+                            <div class="col-9">
+                                <div class="details d-table custom-details">
+                                    <div class="d-table-row">
+                                        <div class="d-table-cell">
+                                            Shipped with
+                                        </div>
+                                        <div class="d-table-cell">
+                                            UPS Expedited
+                                        </div>
+                                    </div>
+                                    <div class="d-table-row">
+                                        <div class="d-table-cell">
+                                            Estimated Delivery
+                                        </div>
+                                        <div class="d-table-cell">
+                                            {{ order.ordered_date}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endfor %}
 
 
 
