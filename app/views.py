@@ -23,6 +23,9 @@ from django.views.generic import ListView
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.http import JsonResponse
+from django.template.loader import get_template
+from django.http import HttpResponse
+from xhtml2pdf import pisa
 
 
 class ProductView(View):
@@ -1169,5 +1172,17 @@ def generate_pdf(request, order_id):
     #     return response
     #
     # return HttpResponse('Error generating the PDF')
+    template_path = 'pdf_convert/invoice.html'
+    context = {'order':order}
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+    template = get_template(template_path)
+    html = template.render(context)
 
-    return render(request, 'app/invoice.html',{ 'order':order})
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+    # return render(request, 'pdf_convert/invoice.html',{ 'order':order})

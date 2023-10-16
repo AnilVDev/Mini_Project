@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="user and admin ui is changed">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="created invoice template">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/product_listing.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_listing.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/user_orders.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/user_orders.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,12 +44,16 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;newbranch&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/anil/Projects/admin panel&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/anilv/OneDrive/Documents/Project/Mini_Project/pdf_convert/templates/pdf_convert&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\anilv\OneDrive\Documents\Project\Mini_Project\pdf_convert\templates\pdf_convert" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\anilv\OneDrive\Documents\Project\Mini_Project\app\templates\pdf_convert" />
       <recent name="$PROJECT_DIR$/app/templatetags" />
     </key>
   </component>
@@ -334,7 +332,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697354235277</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="created invoice template">
+      <option name="closed" value="true" />
+      <created>1697467760702</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1697467760702</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -349,7 +355,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Users listed,Product listed completed in admin side" />
     <MESSAGE value="Category,brand,image -add,deletion options implemented" />
     <MESSAGE value="almost admin side cleared...password reset cleared..session added" />
     <MESSAGE value="almost admin side cleared...password reset cleared..admin.site.login_template added" />
@@ -372,8 +377,9 @@
     <MESSAGE value="paypal implemented and also  cash on delivery implemented" />
     <MESSAGE value="admin and user ui are updated" />
     <MESSAGE value="user and admin ui is cleared" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
     <MESSAGE value="user and admin ui is changed" />
-    <option name="LAST_COMMIT_MESSAGE" value="user and admin ui is changed" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
+    <MESSAGE value="created invoice template" />
+    <option name="LAST_COMMIT_MESSAGE" value="created invoice template" />
   </component>
 </project>
