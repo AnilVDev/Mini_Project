@@ -885,6 +885,12 @@ def plus_cart(request):
             'amount': total_price,
 
         }
+        if c.quantity == c.product.stock:
+            data['out_of_stock'] = True
+        else:
+            data['out_of_stock'] = False
+        print(data['out_of_stock'])
+
         return JsonResponse(data)
 
 def minus_cart(request):
