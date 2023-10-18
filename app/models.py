@@ -104,10 +104,18 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     stock = models.PositiveIntegerField(default=0)
+    is_available = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
 
+    def update_availability(self):
+        self.is_available = self.stock > 0
+
+    def save(self, *args, **kwargs):
+        # Update is_available when saving
+        self.update_availability()
+        super(Product, self).save(*args, **kwargs)
 
 
 class Cart(models.Model):

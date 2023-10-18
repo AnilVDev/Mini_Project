@@ -3,13 +3,28 @@
 {% block title %}Profile{% endblock title %}
 {% block leftcontent %}
 
-<div class="container my-5">
+<style>
+    .card-body4{
+    text-align:center;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius:1rem;
+    margin:1rem;
+    height:45rem;
+    padding:1.5rem;
+    }
+
+</style>
+
+
+<div class="container my-5 ">
     <div class="row">
-        <div class="col-sm-12 col-md-8 offset-md-2">
+        <div class="col-sm-12 col-md-8 offset-md-4 card-body4">
             <h4 class="mb-5 text-danger">User Profile</h4>
             <p><strong>Name:</strong> {{ user.username }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>Joined:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+                                <a href=" url 'edit_address' ad.id %}" class="btn text-right "><i class="fa fa-edit"></i></a>
+
             <button id="showAddressForm" class="btn btn-primary">Add New Address</button>
             <form id="addressForm" action="{% url 'profile' %}" method="post" novalidate style="display: none;">
                 {% csrf_token %}
@@ -19,8 +34,9 @@
                 </div>
                 {% endfor %}
                 <div class="col-12 mt-3">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary text-left">Submit</button>
                 </div>
+
             </form>
             {% if messages %}
             {% for message in messages %}
@@ -29,6 +45,10 @@
             {% endif %}
         </div>
     </div>
+
+
+
+
 </div>
 
 <script>

@@ -116,7 +116,7 @@
 <!--									<button type="submit" formaction="{% url 'buy_now' product.id %}" class="add-to-cart-btn"><i class="fa fa-bolt"></i> Buy Now</button>-->
 <!--								</form>-->
 
-
+											{% if product.is_available %}
 												{% if product|is_in_cart:request.user %}
 													<form method="post" action="{% url 'cart' %}">
 														{% csrf_token %}
@@ -136,6 +136,10 @@
 														</div>
 													</form>
 												{% endif %}
+																					{% else %}
+											<h4 class="text-danger"><span>Out of Stock</span></h4>
+											{% endif %}
+
 
 							</div>
 

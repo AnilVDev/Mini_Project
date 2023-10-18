@@ -308,6 +308,7 @@
 <!--													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>-->
 												</div>
 											</div>
+
 												{% if h|is_in_cart:request.user %}
 													<form method="post" action="{% url 'cart' %}">
 														{% csrf_token %}
@@ -315,6 +316,7 @@
 														<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Go to Cart</button>
 														</div>
 													</form>
+												{% else %}
 													<form method="post" action="{% url 'add_to_cart' h.id %}">
 														{% csrf_token %}
 														<div class="add-to-cart">
@@ -323,6 +325,7 @@
 														</div>
 													</form>
 												{% endif %}
+
 										</div>
 										{% endfor %}
 										<!-- /product -->
