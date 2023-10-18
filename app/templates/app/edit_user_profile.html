@@ -1,0 +1,28 @@
+{% extends 'app/user_profile.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+{% block leftcontent %}
+
+<div class="col-lg-10 col-sm-8 offset-sm-1 ">
+  <div class="container mx-5">
+<!--    <div class="container">-->
+      <h2>Edit Your Profile</h2>
+      <form method="post">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        <button class="btn" type="submit">Save Changes</button>
+      </form>
+<!--    </div>-->
+{% if form_errors %}
+  <ul class="errorlist">
+    {% for field, error_list in form_errors.items %}
+      {% for error in error_list %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    {% endfor %}
+  </ul>
+{% endif %}
+
+  </div>
+</div>
+{% endblock leftcontent %}

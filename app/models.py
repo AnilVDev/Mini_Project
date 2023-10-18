@@ -233,3 +233,14 @@ class OrderItem(models.Model):
     def save(self, *args, **kwargs):
         self.total_price_product = self.calculate_total_price()
         super(OrderItem, self).save(*args, **kwargs)
+
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    text = models.TextField()
+    rating = models.PositiveSmallIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')

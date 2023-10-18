@@ -17,3 +17,8 @@ def is_in_cart(product, user):
         return cart_item_exists
 
     return False
+
+
+@register.filter
+def get_stars(product_reviews, rating):
+    return range(1,rating+1)

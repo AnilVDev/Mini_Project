@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,UsernameField, PasswordChangeForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,UsernameField, PasswordChangeForm, PasswordResetForm, SetPasswordForm,UserChangeForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext,gettext_lazy as _
 from django.contrib.auth import password_validation
@@ -24,7 +24,15 @@ class CustomerRegistrationForm(UserCreationForm):
         labels = {'email': 'Email'}
         widgets = {'username': forms.TextInput(attrs={'class':'form-control'})}
 
+class UserProfileForm(UserChangeForm):
+    username = forms.CharField(label='Username', widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 20rem;'}))
+    first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 20rem;'}))
+    last_name = forms.CharField(label='Last Name', widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 20rem;'}))
+    email = forms.EmailField(label='Email', widget=forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 20rem;'}))
 
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
 
 
 class MyPasswordChangeForm(PasswordChangeForm):

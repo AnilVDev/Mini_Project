@@ -107,7 +107,7 @@
 												</div>
 											</div>
 											<div class="product-body">
-												<p class="product-category">Category</p>
+												<p class="product-category">{{c.category}}</p>
 												<h3 class="product-name"><a href="{% url 'product-detail' c.id %}">{{c.title}}</a></h3>
 												<h4 class="product-price">Rs.{{c.discount_price}} <del class="product-old-price">Rs.{{c.selling_price}}</del></h4>
 												<div class="product-rating">
@@ -196,7 +196,7 @@
 												</div>
 											</div>
 											<div class="product-body">
-												<p class="product-category">Category</p>
+												<p class="product-category">{{s.category}}</p>
 												<h3 class="product-name"><a href="{% url 'product-detail' s.id %}">{{s.title}}</a></h3>
 												<h4 class="product-price">Rs.{{s.discount_price}} <del class="product-old-price">Rs.{{s.selling_price}}</del></h4>
 												<div class="product-rating">
@@ -283,7 +283,7 @@
 												</div>
 											</div>
 											<div class="product-body">
-												<p class="product-category">Category</p>
+												<p class="product-category">{{h.category}}</p>
 												<h3 class="product-name"><a href="{% url 'product-detail' h.id %}">{{h.title}}</a></h3>
 												<h4 class="product-price">Rs.{{h.discount_price}} <del class="product-old-price">Rs.{{h.selling_price}}</del></h4>
 												<div class="product-rating">
@@ -373,7 +373,7 @@
 												</div>
 											</div>
 											<div class="product-body">
-												<p class="product-category">Category</p>
+												<p class="product-category">{{sp.category}}</p>
 												<h3 class="product-name"><a href="{% url 'product-detail' sp.id %}">{{sp.title}}</a></h3>
 												<h4 class="product-price">Rs.{{sp.discount_price}} <del class="product-old-price">Rs.{{sp.selling_price}}</del></h4>
 												<div class="product-rating">

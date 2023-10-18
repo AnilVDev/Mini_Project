@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice</title>
+    <!-- Include Bootstrap CSS (you can host it locally or use a CDN) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles here, if needed */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-6">
+                <h2>PayForTech</h2>
+                <p>Kerala</p>
+                <p>Phone: 00701211523</p>
+                <p>Email: payfortech@gmail.com</p>
+            </div>
+            <div class="col-lg-6 text-right">
+                <h3>INVOICE</h3>
+                <p>Date: {{ order.ordered_date|date:"d-m-Y" }}</p>
+                <p>Invoice #: 12345</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Billing Address</h3>
+                <p>{{ order.billing_address.name }}<br>
+                {{ order.billing_address.locality }}<br>
+                {{ order.billing_address.city }}, {{ order.billing_address.state }}-{{ order.billing_address.pincode }}<br>
+                {{ order.billing_address.phone_number }}</p>
+            </div>
+            <div class="col-md-6 ">
+                <h3>Shipping Address</h3>
+                <p>{{ order.shipping_address.name }}<br>
+                {{ order.shipping_address.locality }}<br>
+                {{ order.shipping_address.city }}, {{ order.shipping_address.state }}-{{ order.shipping_address.pincode }}<br>
+                {{ order.shipping_address.phone_number }}</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Serial No</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price per Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for order_item in order.orderitem_set.all %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ order_item.product.title }}</td>
+                    <td>{{ order_item.quantity }}</td>
+                    <td>₹{{ order_item.price_per_product }}</td>
+                    <td>₹{{ order_item.total_price_product }}</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="row">
+            <div class="offset-md-6 col-md-6">
+                <p>Subtotal: ₹{{ order.total_price|floatformat:2 }}</p>
+                <p>Shipping Charge: ₹00.00</p>
+                <p>Discount: ₹00.00</p>
+                <p>GST: ₹00.00</p>
+                <h3>Total: ₹{{ order.total_price|floatformat:2 }}</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Terms and Conditions</h3>
+                <p>Thank you for your business!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and other scripts, if needed -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

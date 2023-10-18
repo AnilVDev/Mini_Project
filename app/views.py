@@ -1,8 +1,8 @@
 import random
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
-from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem,Order,OrderItem,BillingAddress,ShippingAddress
-from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm
+from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem,Order,OrderItem,BillingAddress,ShippingAddress,Review
+from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm,UserProfileForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -63,8 +63,15 @@ class ProductView(View):
 class ProductDetailView(View):
     def get(self, request,pk):
         product = get_object_or_404(Product, pk=pk)
+        has_purchased_product = OrderItem.objects.filter(order__user=request.user, product=product).exists()
+        print(has_purchased_product)
+        product_reviews = Review.objects.filter(product=product)
+        total_review_count = product_reviews.count()
         context = {
             'product': product,
+            'has_purchased_product': has_purchased_product,
+            'product_reviews': product_reviews,
+            'total_review_count': total_review_count,
         }
         return render(request, 'app/productdetails.html', context)
 
@@ -288,6 +295,27 @@ class ProfileView(View):
             'form': form,
         }
         return render(request, 'app/profile.html',context)
+
+def edit_user_profile(request):
+    if request.method == 'POST':
+        user_form = UserProfileForm(request.POST, instance=request.user)
+
+        if user_form.is_valid():
+            user_form.save()
+            messages.success(request, 'Your profile has been updated successfully.')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the error(s) in the form.')
+            form_errors = user_form.errors
+            return render(request, 'app/edit_user_profile.html', {'user_form': user_form, 'form_errors': form_errors})
+
+
+    else:
+        user_form = UserProfileForm(instance=request.user)
+
+    return render(request, 'app/edit_user_profile.html', {'user_form': user_form})
+
+
 @method_decorator(staff_member_required, name='dispatch')
 def add_product_with_images(request):
     if request.method == 'POST':
@@ -1061,9 +1089,8 @@ def order_placed(request):
 
             cart_items.delete()
 
-            return render(request, 'app/order_placed.html')
+            return render(request, 'user_orders')
         except Customer.DoesNotExist:
-            # in case where the Customer with the specified ID does not exist
             pass
 
     return redirect('checkout')
@@ -1178,4 +1205,31 @@ def generate_pdf(request, order_id):
     return response
 
     # return render(request, 'pdf_convert/invoice.html',{ 'order':order})
+
+
+
+@login_required
+def submit_product_review(request, product_id):
+    product = Product.objects.get(pk=product_id)  # Replace Product with your actual product model
+
+    has_purchased = OrderItem.objects.filter(order__user=request.user, product=product).exists()
+
+    if has_purchased:
+        if request.method == 'POST':
+            review_text = request.POST.get('review')
+            rating = request.POST.get('rating')
+
+            review, created = Review.objects.get_or_create(user=request.user, product=product,defaults={'text': review_text, 'rating': rating})
+            if not created:
+                review.text = review_text
+                review.rating = rating
+                review.save()
+
+
+        return redirect('product-detail', pk=product_id)
+    context = {
+        'product': product,
+    }
+    return render(request, 'app/productdetails.html', context)
+
 

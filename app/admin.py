@@ -14,7 +14,8 @@ from .models import (
     Category,
     Order,
     OrderItem,
-    BillingAddress,ShippingAddress
+    BillingAddress,ShippingAddress,
+    Review,
 )
 
 
@@ -75,7 +76,9 @@ class BillingAddressModelAdmin(admin.ModelAdmin):
 class ShippingAddressModelAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'name','phone_number', 'locality', 'city', 'pincode', 'state']
 
-
+@admin.register(Review)
+class ReviewModelAdmin(admin.ModelAdmin):
+    list_display = ['id','user','product','text','rating','created_at']
 
 # class CustomUserAdmin(UserAdmin):
 #     add_form = CustomerRegistrationForm

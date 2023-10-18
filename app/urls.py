@@ -9,6 +9,7 @@ from .forms import LoginForm,MyPasswordChangeForm, MyPasswordResetForm, MySetPas
 urlpatterns = [
     path('', views.ProductView.as_view(),name='home'),
     path('product-detail/<int:pk>', views.ProductDetailView.as_view(), name='product-detail'),
+    path('submit_product_review/<int:product_id>/', views.submit_product_review, name='submit_product_review'),
     path('product-listing/<str:category>/',views.product_listing,name='product_listing'),
     path('profile/add-to-wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('profile/wishlist/',views.wishlist, name='wishlist'),
@@ -16,6 +17,7 @@ urlpatterns = [
     path('toggle-wishlist/<int:product_id>/', views.toggle_wishlist, name='toggle_wishlist'),
     # path('buy/', views.buy_now, name='buy-now'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('edit-profile/', views.edit_user_profile, name='edit_profile'),
     path('address/', views.address, name='address'),
     path('address/edit-address/<int:address_id>/',views.edit_address, name = 'edit_address'),
     path('address/delete/<int:address_id>/', views.delete_address, name='delete_address'),
