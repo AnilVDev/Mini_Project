@@ -1,8 +1,9 @@
 import random
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
-from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem,Order,OrderItem,BillingAddress,ShippingAddress,Review
-from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm,UserProfileForm
+from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem,Order,OrderItem,BillingAddress,ShippingAddress,Review,ProductOffer,ReferralOffer,CategoryOffer
+
+from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm,UserProfileForm,ProductOfferForm,ReferralOfferForm,CategoryOfferForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -268,9 +269,12 @@ class ProfileView(View):
     def get(self, request):
         form = CustomerProfileForm()
         user = request.user
+        referral_code = generate_referral_code(user)
         context = {
             'user': user,
             'form': form,
+            'referral_code':referral_code,
+
         }
         return render(request, 'app/profile.html', context)
 
@@ -1233,3 +1237,53 @@ def submit_product_review(request, product_id):
     return render(request, 'app/productdetails.html', context)
 
 
+def create_product_offer(request):
+    if request.method == 'POST':
+        form = ProductOfferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('product_offer_list')
+    else:
+        form = ProductOfferForm()
+
+    return render(request, 'offer/create_product_offer.html', {'form': form})
+
+
+def product_offer_list(request):
+    product_offers = ProductOffer.objects.all()
+    return render(request, 'offer/product_offer_list.html', {'product_offers': product_offers})
+
+def create_category_offer(request):
+    if request.method == 'POST':
+        form = CategoryOfferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('category_offer_list')
+    else:
+        form = CategoryOfferForm()
+
+    return render(request, 'offer/create_category_offer.html', {'form': form})
+
+
+def category_offer_list(request):
+    category_offers = CategoryOffer.objects.all()
+    return render(request, 'offer/category_offer_list.html', {'category_offers': category_offers})
+
+def create_referral_offer(request):
+    if request.method == 'POST':
+        form = ReferralOfferForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('referral_offer_list')
+    else:
+        form = ReferralOfferForm()
+
+    return render(request, 'offer/create_referral_offer.html', {'form': form})
+
+
+def referral_offer_list(request):
+    referral_offers = ReferralOffer.objects.all()
+    return render(request, 'offer/referral_offer_list.html', {'referral_offers': referral_offers})
+
+def generate_referral_code(username):
+    return f"{username}@payfortech"

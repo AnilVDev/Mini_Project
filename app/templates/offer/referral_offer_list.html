@@ -1,0 +1,39 @@
+{% extends 'app/admin-dashboard.html' %}
+{% load static %}
+{% block title %}User List{% endblock title %}
+
+
+
+{% block admin %}
+
+
+
+    <h2>Referral Offers</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Referrer</th>
+                <th>Referral code</th>
+                <th>Reward</th>
+                <th>Used_by</th>
+                <th>Created_at</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for refferal_offer in refferals_offers %}
+                <tr>
+                    <td>{{ referral_offer.referrer }}</td>
+                    <td>{{ referral_offer.referral_code }}</td>
+                    <td>{{ referral_offer.reward }}</td>
+                    <td>{{ referral_offer.used_by }}</td>
+                    <td>{{ referral_offer.created_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
+{% endblock admin %}

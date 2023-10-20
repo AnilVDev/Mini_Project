@@ -15,7 +15,7 @@ from .models import (
     Order,
     OrderItem,
     BillingAddress,ShippingAddress,
-    Review,
+    Review,ProductOffer,CategoryOffer,ReferralOffer
 )
 
 
@@ -79,6 +79,18 @@ class ShippingAddressModelAdmin(admin.ModelAdmin):
 @admin.register(Review)
 class ReviewModelAdmin(admin.ModelAdmin):
     list_display = ['id','user','product','text','rating','created_at']
+
+@admin.register(ProductOffer)
+class ProductModelAdmin(admin.ModelAdmin):
+    list_display = ('id','product', 'discount_percentage', 'max_discount_amount', 'start_date', 'end_date', 'conditions')
+
+@admin.register(CategoryOffer)
+class CategoryOfferAdmin(admin.ModelAdmin):
+    list_display = ('id','category', 'discount_percentage', 'max_discount_amount', 'start_date', 'end_date', 'conditions')
+
+@admin.register(ReferralOffer)
+class ReferralOfferAdmin(admin.ModelAdmin):
+    list_display = ('id','referrer', 'referral_code', 'reward', 'used_by', 'created_at')
 
 # class CustomUserAdmin(UserAdmin):
 #     add_form = CustomerRegistrationForm

@@ -102,6 +102,17 @@
         </a>
       </li>
 
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="offersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="zmdi zmdi-account-circle"></i> <span>Offers</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="offersDropdown">
+                <a class="dropdown-item" href="{% url 'product_offer_list' %}">Product Offer</a>
+                <a class="dropdown-item" href="{% url 'category_offer_list' %}">Category Offer</a>
+                <a class="dropdown-item" href="{% url 'referral_offer_list' %}">Referral Offer</a>
+            </div>
+        </li>
+
       <li class="sidebar-header">LABELS</li>
       <li><a href="javaScript:void();"><i class="zmdi zmdi-coffee text-danger"></i> <span>Important</span></a></li>
       <li><a href="javaScript:void();"><i class="zmdi zmdi-chart-donut text-success"></i> <span>Warning</span></a></li>

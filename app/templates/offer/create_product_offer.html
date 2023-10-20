@@ -1,0 +1,17 @@
+{% extends 'app/admin-dashboard.html' %}
+{% load static %}
+{% block title %}User List{% endblock title %}
+
+
+
+{% block admin %}
+
+
+    <h2>Create a New Product Offer</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Create Product Offer</button>
+    </form>
+
+{% endblock admin %}

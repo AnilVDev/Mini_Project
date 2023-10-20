@@ -244,3 +244,58 @@ class Review(models.Model):
 
     class Meta:
         unique_together = ('user', 'product')
+
+class ProductOffer(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    max_discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    conditions = models.TextField()
+
+    def is_valid(self):
+        now = timezone.now()
+        return self.start_date <= now <= self.end_date
+
+    def apply_discount(self, price):
+        if self.is_valid():
+            discount = min(price * self.discount_percentage / 100, self.max_discount_amount)
+            return price - discount
+        return price
+
+    def __str__(self):
+        return f"{self.product} Offer ({self.discount_percentage}% discount)"
+
+
+class CategoryOffer(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    max_discount_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    conditions = models.TextField()
+
+    def is_valid(self):
+        now = timezone.now()
+        return self.start_date <= now <= self.end_date
+
+    def apply_discount(self, price):
+        if self.is_valid():
+            discount = min(price * self.discount_percentage / 100, self.max_discount_amount)
+            return price - discount
+        return price
+
+    def __str__(self):
+        return f"{self.category.name} Category Offer"
+
+
+
+class ReferralOffer(models.Model):
+    referrer = models.ForeignKey(User, on_delete=models.CASCADE)
+    referral_code = models.CharField(max_length=20, unique=True)
+    reward = models.DecimalField(max_digits=10, decimal_places=2)
+    used_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='used_referral_offers')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Referral Offer for {self.referrer.username}"

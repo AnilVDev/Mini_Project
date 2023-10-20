@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,Userna
 from django.contrib.auth.models import User
 from django.utils.translation import gettext,gettext_lazy as _
 from django.contrib.auth import password_validation
-from .models import Customer,Product, ProductImage,Category,Brand
+from .models import Customer,Product, ProductImage,Category,Brand,ProductOffer,CategoryOffer,ReferralOffer
 from django.core.validators import RegexValidator
 from django.forms import modelformset_factory
 import random
@@ -109,3 +109,41 @@ class BrandForm(forms.ModelForm):
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+class ProductOfferForm(forms.ModelForm):
+    class Meta:
+        model = ProductOffer
+        fields = '__all__'
+        widgets = {
+            'product': forms.Select(attrs={'class': 'form-control','style': 'width: 25rem;'}),
+            'discount_percentage': forms.NumberInput(attrs={'class': 'form-control','style': 'width: 25rem;'}),
+            'max_discount_amount': forms.NumberInput(attrs={'class': 'form-control','style': 'width: 25rem;'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date','style': 'width: 25rem;'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control','type': 'date','style': 'width: 25rem;'}),
+            'conditions': forms.Textarea(attrs={'class': 'form-control','style': 'width: 25rem;'}),
+        }
+
+class CategoryOfferForm(forms.ModelForm):
+    class Meta:
+        model = CategoryOffer
+        fields = '__all__'
+        widgets = {
+            'category': forms.Select(attrs={'class': 'form-control', 'style': 'width: 25rem;'}),
+            'discount_percentage': forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 25rem;'}),
+            'max_discount_amount': forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 25rem;'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'style': 'width: 25rem;'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'style': 'width: 25rem;'}),
+            'conditions': forms.Textarea(attrs={'class': 'form-control', 'style': 'width: 25rem;'}),
+        }
+
+class ReferralOfferForm(forms.ModelForm):
+    class Meta:
+        model = ReferralOffer
+        fields = '__all__'
+        widgets = {
+            'referrer': forms.Select(attrs={'class': 'form-control', 'style': 'width: 25rem;'}),
+            'referral_code': forms.TextInput(attrs={'class': 'form-control', 'style': 'width: 25rem;'}),
+            'reward': forms.NumberInput(attrs={'class': 'form-control', 'style': 'width: 25rem;'}),
+            'used_by': forms.Select(attrs={'class': 'form-control', 'style': 'width: 25rem;'}),
+            'created_at': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'style': 'width: 25rem;'}),
+        }

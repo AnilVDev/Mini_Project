@@ -1,0 +1,17 @@
+{% extends 'app/admin-dashboard.html' %}
+{% load static %}
+{% block title %}User List{% endblock title %}
+
+
+
+{% block admin %}
+
+
+    <h2>Create a New Category Offer</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Create Category Offer</button>
+    </form>
+
+{% endblock admin %}

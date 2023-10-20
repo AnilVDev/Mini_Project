@@ -4,20 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="out of stock is completed successfully">
-      <change afterPath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/app/edit_user_profile.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/app/order_details.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/app/user_profile.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/pdf_convert/invoice.html" afterDir="false" />
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="added review to product and completed successfully">
+      <change afterPath="$PROJECT_DIR$/app/templates/offer/category_offer_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/offer/create_category_offer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/offer/create_product_offer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/offer/create_referral_offer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/offer/product_offer_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/offer/referral_offer_list.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/productdetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/productdetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templatetags/custom_filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/templatetags/custom_filters.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
@@ -386,7 +385,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697642248845</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="added review to product and completed successfully">
+      <option name="closed" value="true" />
+      <created>1697814816161</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1697814816161</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -401,7 +408,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="changing user into admin is working now" />
     <MESSAGE value="pagination added in user list" />
     <MESSAGE value="pagination added in user list,brand, category, product list" />
     <MESSAGE value="product listing 25% is completed.." />
@@ -424,8 +430,9 @@
     <MESSAGE value="track is not completed properly...there is bug" />
     <MESSAGE value="." />
     <MESSAGE value="out of stock is now available now" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
     <MESSAGE value="out of stock is completed successfully" />
-    <option name="LAST_COMMIT_MESSAGE" value="out of stock is completed successfully" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
+    <MESSAGE value="added review to product and completed successfully" />
+    <option name="LAST_COMMIT_MESSAGE" value="added review to product and completed successfully" />
   </component>
 </project>

@@ -9,7 +9,7 @@
     background-color: rgba(255, 255, 255, 0.5);
     border-radius:1rem;
     margin:1rem;
-    height:45rem;
+    height:50rem;
     padding:1.5rem;
     }
 
@@ -23,7 +23,8 @@
             <p><strong>Name:</strong> {{ user.username }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>First name & Last name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-            <p><strong>Joined:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+            <p><strong>Joined:</strong> {{ user.date_joined|date:"F d, Y" }}
+            <p><strong>Your Refferal code:</strong> {{ referral_code }}</p>
             <a href="{% url 'edit_profile' %}" class="btn text-right "><i class="fa fa-edit"></i></a>
 
             <button id="showAddressForm" class="btn btn-primary">Add New Address</button>
