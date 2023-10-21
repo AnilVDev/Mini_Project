@@ -147,3 +147,29 @@ class ReferralOfferForm(forms.ModelForm):
             'used_by': forms.Select(attrs={'class': 'form-control', 'style': 'width: 25rem;'}),
             'created_at': forms.DateInput(attrs={'class': 'form-control', 'type': 'date', 'style': 'width: 25rem;'}),
         }
+
+
+class MonthYearForm(forms.Form):
+    month = forms.ChoiceField(
+        choices=[
+            (1, 'January'),
+            (2, 'February'),
+            (3, 'March'),
+            (4, 'April'),
+            (5, 'May'),
+            (6, 'June'),
+            (7, 'July'),
+            (8, 'August'),
+            (9, 'September'),
+            (10, 'October'),
+            (11, 'November'),
+            (12, 'December')
+        ],
+        label='Month',
+        widget=forms.Select(attrs={'class': 'form-control', 'style': 'width: 20rem;'})
+    )
+    year = forms.ChoiceField(
+        choices=[(year, year) for year in range(2022, 2030)],  # Customize the range as needed
+        label='Year',
+        widget=forms.Select(attrs={'class': 'form-control', 'style': 'width: 20rem;'})
+    )

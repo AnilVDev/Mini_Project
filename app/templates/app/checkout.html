@@ -155,8 +155,18 @@
 								<div><strong>FREE</strong></div>
 							</div>
 							<div class="order-col">
+								<div>Discount</div>
+								<div><strong>-FREE</strong></div>
+							</div>
+							<div class="order-col">
 								<div><strong>TOTAL</strong></div>
 								<div><strong class="order-total">₹{{ final_price }}</strong></div>
+							</div>
+							<div class="order-col text-right">
+							<!-- Trigger the modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#offerModal">
+    View Available Offers
+</button>
 							</div>
 						</div>
 						<div class="payment-method">
@@ -208,16 +218,20 @@
 								I've read and accept the <a href="#">terms & conditions</a>
 							</label>
 						</div>
+
 						  <div class="col-12 text-center">
 							<button type="submit" class="primary-btn order-submit " style="width:100%" id="place-order-button" formnovalidate>Place order</button>
 						  </div>
 						<!-- Set up a container element for the button -->
    						<div id="paypal-button-container"></div>
+
 					</div>
+
 					<!-- /Order Details -->
 				</div>
 				<!-- /row -->
 			</div>
+
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
@@ -227,7 +241,69 @@
 
 
 
+<!-- The Modal -->
+<div class="modal fade" id="offerModal" tabindex="-1" role="dialog" aria-labelledby="offerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="offerModalLabel">Available Offers</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- List of available offers -->
+                <ul>
+                    {% for offer in product_offers %}
+                        <li>
+                            {{ offer.conditions }} - {{ offer.discount_percentage }}
+                            <button class="btn btn-primary" onclick="selectOffer('{{ offer.id }}')">Select</button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
 	</body>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#offerModalButton').click(function() {
+        $.ajax({
+            url: '/available_offers/',
+            type: 'GET',
+            dataType: 'json', // Change this to 'json'
+            success: function(data) {
+                console.log(data); // Check the data in the browser console
+                // Update the modal body with the received JSON data
+                var offersHtml = '';
+                for (var i = 0; i < data.product_offers.length; i++) {
+                    offersHtml += '<li>' + data.product_offers[i].conditions + ' - ' + data.product_offers[i].discount_percentage + '<button class="btn btn-primary" onclick="selectOffer(\'' + data.product_offers[i].id + '\')">Select</button></li>';
+                }
+                $('#offerModal .modal-body ul').html(offersHtml);
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+});
+</script>
+
 
 
 

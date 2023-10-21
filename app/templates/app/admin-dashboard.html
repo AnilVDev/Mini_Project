@@ -47,11 +47,21 @@
    </div>
    <ul class="sidebar-menu do-nicescrol">
       <li class="sidebar-header">MAIN NAVIGATION</li>
-      <li>
-        <a href="index.html">
-          <i class="zmdi zmdi-view-dashboard"></i> <span>Dashboard</span>
-        </a>
-      </li>
+<!--      <li>-->
+<!--        <a href="{% url 'monthly_sales_report' %}">-->
+<!--          <i class="zmdi zmdi-view-dashboard"></i> <span>Dashboard</span>-->
+<!--        </a>-->
+<!--      </li>-->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="offersDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="zmdi zmdi-account-circle"></i> <span>Dashboard</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="offersDropdown">
+                <a class="dropdown-item" href="{% url 'daily_sales_report' %}">Daily</a>
+                <a class="dropdown-item" href="{% url 'monthly_sales_report' %}">Monthly</a>
+                <a class="dropdown-item" href="{% url 'yearly_sales_report' %}">Yearly</a>
+            </div>
+        </li>
 
       <li>
         <a href="{% url 'user_list' %}">

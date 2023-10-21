@@ -3,12 +3,12 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem,Order,OrderItem,BillingAddress,ShippingAddress,Review,ProductOffer,ReferralOffer,CategoryOffer
 
-from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm,UserProfileForm,ProductOfferForm,ReferralOfferForm,CategoryOfferForm
+from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm,UserProfileForm,ProductOfferForm,ReferralOfferForm,CategoryOfferForm,MonthYearForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.forms import modelformset_factory
-from django.db.models import Q
+from django.db.models import Q,Count
 from django.contrib.auth import views as auth_views
 from django.urls import reverse
 from django.contrib.admin.views.decorators import staff_member_required
@@ -27,7 +27,9 @@ from django.http import JsonResponse
 from django.template.loader import get_template
 from django.http import HttpResponse
 from xhtml2pdf import pisa
-
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.functions import ExtractMonth,ExtractDay,ExtractYear
+import calendar
 
 class ProductView(View):
     def get(self, request):
@@ -1093,7 +1095,7 @@ def order_placed(request):
 
             cart_items.delete()
 
-            return render(request, 'user_orders')
+            return redirect( 'user_orders')
         except Customer.DoesNotExist:
             pass
 
@@ -1214,7 +1216,7 @@ def generate_pdf(request, order_id):
 
 @login_required
 def submit_product_review(request, product_id):
-    product = Product.objects.get(pk=product_id)  # Replace Product with your actual product model
+    product = Product.objects.get(pk=product_id)
 
     has_purchased = OrderItem.objects.filter(order__user=request.user, product=product).exists()
 
@@ -1287,3 +1289,133 @@ def referral_offer_list(request):
 
 def generate_referral_code(username):
     return f"{username}@payfortech"
+
+
+
+
+# def available_offers(request):
+#     try:
+#         print('hai')
+#         selected_product = CartItem.objects.get(cart__user=request.user)
+#         print(selected_product)
+#
+#         product_offers = ProductOffer.objects.filter(product=selected_product.product)
+#         # category_offers = CategoryOffer.objects.filter(category=selected_product.category)
+#         print(product_offers, 'haa')
+#         # print('hai2', category_offers)
+#
+#         context = {
+#             'product_offers': product_offers,
+#             # 'category_offers': category_offers,
+#         }
+#
+#         return render(request, 'app/available_offers.html', context)
+#
+#     except ObjectDoesNotExist as e:
+#         print(f"Error: {e}")
+#         return render(request, 'offer/error_page.html', {'error_message': str(e)})
+#     except Exception as e:
+#         print(f"Error: {e}")
+#         return render(request, 'offer/error_page.html', {'error_message': str(e)})
+
+
+# def available_offers(request):
+#     print('hai')
+#     try:
+#         selected_product = CartItem.objects.get(cart__user=request.user)
+#         print(selected_product)
+#         product_offers = ProductOffer.objects.filter(product=selected_product.product)
+#         print(product_offers)
+#         context = {
+#             'product_offers': product_offers,
+#         }
+#         return render(request, 'checkout.html', context)
+#     except ObjectDoesNotExist as e:
+#         print(f"Error: {e}")
+#         return render(request, 'offer/error_page.html', {'error_message': str(e)})
+
+
+
+def available_offers(request):
+    print('hai')
+    try:
+        selected_product = CartItem.objects.get(cart__user=request.user)
+        print(selected_product)
+        product_offers = ProductOffer.objects.filter(product=selected_product.product)
+        print(product_offers)
+        data = {
+            'product_offers': product_offers,
+        }
+        return JsonResponse(data)
+    except ObjectDoesNotExist as e:
+        print(f"Error: {e}")
+        return JsonResponse({'error_message': str(e)})
+
+def monthly_sales_report(request):
+    orders = Order.objects.annotate(month=ExtractMonth('ordered_date')).values('month').annotate(count=Count('id')).values('month','count')
+    month_number = []
+    total_order = []
+    for d in orders:
+        month_number.append(calendar.month_name[d['month']])
+        total_order.append(d['count'])
+
+    print(month_number,total_order)
+    context ={
+        'month_number':month_number,
+        'total_order':total_order
+    }
+    return render(request, 'report/monthly_sales_report.html', context)
+
+
+def daily_sales_report(request):
+    form = MonthYearForm()
+    month = 1
+    year = 2023
+    if request.method == 'POST':
+        form = MonthYearForm(request.POST)
+        if form.is_valid():
+            month = form.cleaned_data['month']
+            year = form.cleaned_data['year']
+        else:
+            current_date = datetime.now()
+            month = current_date.month
+            year = current_date.year
+    else:
+        form = MonthYearForm(initial={'month': 1, 'year': 2023})
+
+    orders = Order.objects.filter(
+        ordered_date__month=month,
+        ordered_date__year=year
+    ).annotate(day=ExtractDay('ordered_date')).values('day').annotate(count=Count('id')).values('day', 'count')
+
+    day_number = []
+    total_order = []
+
+    for d in orders:
+        day_number.append(d['day'])
+        total_order.append(d['count'])
+
+    context = {
+        'day_number': day_number,
+        'total_order': total_order,
+        'selected_month': int(month),
+        'selected_year': int(year),
+        'form': form,
+    }
+
+    return render(request, 'report/daily_sales_report.html', context)
+
+def yearly_sales_report(request):
+    orders = Order.objects.annotate(year=ExtractYear('ordered_date')).values('year').annotate(count=Count('id')).values('year','count')
+    year_number = []
+    total_order = []
+    for d in orders:
+        year_number.append(d['year'])
+        total_order.append(d['count'])
+
+    print(year_number,total_order)
+    context ={
+        'year_number':year_number,
+        'total_order':total_order
+    }
+    return render(request, 'report/yearly_sales_report.html', context)

@@ -65,7 +65,18 @@
 					<ul class="header-links pull-right">
 						<li><a href="/"><i class="fa fa-home"></i> Home</a></li>
 						{% if request.user.is_authenticated %}
-						<li><a href="{% url 'profile' %}"><i class="far fa-user"></i> {{request.user.username|capfirst}}</a></li>
+<!--						<li><a href="{% url 'profile' %}"><i class="far fa-user"></i> {{request.user.username|capfirst}}</a></li>-->
+						<li>
+							<div class="dropdown show" >
+							  <a class=" dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="far fa-user"></i> {{request.user.username|capfirst}}
+							  </a>
+							  <div class="dropdown-menu " aria-labelledby="dropdownMenuLink" >
+								  <a class="list-group-item" href="{% url 'profile' %}" style="background-color: black;">Profile</a>
+								  <a class="list-group-item"  href="{% url 'user_orders' %}" style="background-color: black;">Orders</a>
+							  </div>
+						</div>
+						</li>
 						<li><a href="{% url 'logout' %}"><i class="fa fa-user-plus"></i> Logout</a></li
 						{% else %}
 						<li><a href="{% url 'login' %}"><i class="fa fa-user-plus"></i> Login/SignUp</a></li>
