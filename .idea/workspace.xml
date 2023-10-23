@@ -4,17 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="offer code admin side is created, there is user side to be do..">
-      <change afterPath="$PROJECT_DIR$/app/templates/app/available_offers.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/report/daily_sales_report.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/report/monthly_sales_report.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/report/yearly_sales_report.html" afterDir="false" />
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="chart completed..sales report pending">
+      <change afterPath="$PROJECT_DIR$/app/templates/pdf_convert/generate_sales_report.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/forms.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/baseindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/baseindex.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/checkout.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/checkout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/product_listing.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_listing.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
@@ -399,7 +397,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697883898968</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="chart completed..sales report pending">
+      <option name="closed" value="true" />
+      <created>1698070957907</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1698070957907</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -414,7 +420,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="pagination added in user list,brand, category, product list" />
     <MESSAGE value="product listing 25% is completed.." />
     <MESSAGE value="product listing 25% is completed" />
     <MESSAGE value="user address - edit,delete option added ," />
@@ -437,8 +442,9 @@
     <MESSAGE value="out of stock is now available now" />
     <MESSAGE value="out of stock is completed successfully" />
     <MESSAGE value="added review to product and completed successfully" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
     <MESSAGE value="offer code admin side is created, there is user side to be do.." />
-    <option name="LAST_COMMIT_MESSAGE" value="offer code admin side is created, there is user side to be do.." />
+    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
+    <MESSAGE value="chart completed..sales report pending" />
+    <option name="LAST_COMMIT_MESSAGE" value="chart completed..sales report pending" />
   </component>
 </project>

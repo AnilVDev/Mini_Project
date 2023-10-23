@@ -36,14 +36,14 @@
 					<!-- ASIDE -->
 					<div id="aside" class="col-md-3">
 						<!-- aside Widget -->
-						<form>
+						<form >
 						<div class="aside">
 							<h3 class="aside-title">Categories</h3>
 							<div class="checkbox-filter">
 
 								{% for category in categories %}
 								<div class="input-checkbox">
-								    <input type="checkbox" id="category-{{ category.id }}" name="category" value="{{ category.name }}">
+								    <input type="checkbox" id="category-{{ category.id }}" name="category" value="{{ category.name }}"
 									{% if category.name in selected_categories %}checked{% endif %}>
 
 								    <label for="category-{{ category.id }}">
@@ -112,7 +112,7 @@
 									</select>
 								</label>
 							<!--Sort-->
-<!--								<form method="get" action="{% url 'product_listing' category=category %}">-->
+<!--								<form method="get" action=" url 'product_listing' category=category %}">-->
 <!--									&lt;!&ndash; Other form inputs here &ndash;&gt;-->
 <!--									<label>-->
 <!--										Sort By Price:-->
@@ -338,6 +338,35 @@ $(document).ready(function() {
         });
     });
 </script>
+
+
+
+
+
+<!--<script>-->
+<!--    document.addEventListener('DOMContentLoaded', function() {-->
+<!--        // Get references to the Clear button and filter form-->
+<!--        const clearButton = document.getElementById('clear-filter');-->
+<!--        const filterForm = document.getElementById('filter-form');-->
+
+<!--        // Add a click event listener to the Clear button-->
+<!--        clearButton.addEventListener('click', function() {-->
+<!--            // Clear the filter form-->
+<!--            filterForm.reset();-->
+
+<!--            // Send an AJAX request to get all products and update the product listing-->
+<!--            fetch('/clear-filter/')-->
+<!--                .then(response => response.json())-->
+<!--                .then(data => {-->
+<!--                    // Handle the data and update the product listing-->
+<!--                    console.log(data); // Replace this with your code to update the product listing-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error(error);-->
+<!--                });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 
 
 

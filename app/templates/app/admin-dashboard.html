@@ -12,7 +12,7 @@
   <link href="{% static 'app/assets/css/pace.min.css' %}" rel="stylesheet"/>
   <script src="{% static 'app/assets/js/pace.min.js' %}"></script>
   <!--favicon-->
-  <link rel="icon" href="{% static 'app/assets/images/favicon.ico' %}" type="image/x-icon">
+  <link rel="icon" href="{% static 'app/images/Payfortechtitle.png' %}" type="image/x-icon">
   <!-- Vector CSS -->
   <link href="{% static 'app/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css' %}" rel="stylesheet"/>
   <!-- simplebar CSS-->
@@ -89,8 +89,8 @@
       </li>
 
       <li>
-        <a href="profile.html">
-          <i class="zmdi zmdi-face"></i> <span>Profile</span>
+        <a href="{% url 'sales_report' %}">
+          <i class="zmdi zmdi-face"></i> <span>Sales report</span>
         </a>
       </li>
 

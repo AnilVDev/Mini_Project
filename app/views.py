@@ -30,6 +30,9 @@ from xhtml2pdf import pisa
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import ExtractMonth,ExtractDay,ExtractYear
 import calendar
+from django.utils import timezone
+
+
 
 class ProductView(View):
     def get(self, request):
@@ -704,40 +707,34 @@ def user_search(request):
     return render(request, 'app/user_search.html', {'users': users})
 
 
-def product_listing(request, category):
-    print('from-',category)
-    selected_category = request.GET.get('category', 'All Categories')
-    print('sel-',selected_category)
-    search_query = request.GET.get('search_query', '')
-    print(search_query)
+def product_listing(request, categorys):
+    print('from-',categorys)
+    print('hai')
+    selected_categories = request.GET.getlist('category')
+    print(selected_categories)
     selected_brands = request.GET.getlist('brand')
     print(selected_brands)
+
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
 
     categories = Category.objects.all()
     brands = Brand.objects.all()
 
-    if category != 'All Categories' and selected_category == 'All Categories':
-        products = Product.objects.filter(category__name=category)
-        print('from all category',products)
+    if categorys and not selected_categories:
+        products = Product.objects.filter(category__name=categorys)
+        print('from categorys',products)
     else:
-        if selected_category == 'All Categories':
-            products = Product.objects.all()
-            print('all-',products,category)
+
+        if selected_categories:
+            products = Product.objects.filter(category__name__in=selected_categories)
+            print('selected categories',products)
+
+        if selected_brands and not selected_categories:
+            products = Product.objects.filter(brand__name__in=selected_brands)
         else:
-            products = Product.objects.filter(category__name=selected_category)
-            print('else-',products)
-    print(category,products)
-
-    if search_query:
-        products = products.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query))
-    print('search query-',products)
-
-    if selected_brands:
-        print(products)
-        products = products.filter(brand__name__in=selected_brands)
-        print('pro from brands-',products)
+            products = products.filter(brand__name__in=selected_brands)
+            print('pro from brands-',products)
 
 
     if min_price:
@@ -762,9 +759,8 @@ def product_listing(request, category):
     page_range = range(1, total_pages + 1)
 
     context = {
-        'category': category,
-        'selected_category': selected_category,
-        'search_query': search_query,
+        'categorys': categorys,
+        'selected_categories': selected_categories,
         'selected_brands': selected_brands,
         'min_price': min_price,
         'max_price': max_price,
@@ -772,11 +768,46 @@ def product_listing(request, category):
         'brands': brands,
         'page_range': page_range,
         'products': products_page,
-        # 'sort_by_price': sort_by_price,
 
     }
 
     return render(request, 'app/product_listing.html', context)
+
+def search_product(request):
+    selected_category = (request.GET.get('categories', 'All Categories'))
+    search_query = request.GET.get('search_query','')
+
+
+    if selected_category == 'All Categories':
+        products = Product.objects.all()
+    else:
+        products = Product.objects.filter(category__name = selected_category)
+
+    products = products.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query))
+
+    categories = Category.objects.all()
+    brands = Brand.objects.all()
+    products_per_page = 6
+
+    paginator = Paginator(products, products_per_page)
+    page_number = request.GET.get('page')
+    products_page = paginator.get_page(page_number)
+    total_pages = paginator.num_pages
+    page_range = range(1, total_pages + 1)
+
+    context = {
+        'selected_category': selected_category,
+        'search_query': search_query,
+        'categories': categories,
+        'brands': brands,
+        'page_range': page_range,
+        'products': products_page,
+
+    }
+
+    return render(request, 'app/product_listing.html', context)
+
+
 @login_required
 def add_to_wishlist(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -963,12 +994,15 @@ class CheckoutView(View):
         if request.user.is_authenticated:
             address = Customer.objects.filter(user=request.user)
             product_data, final_price = self.get_product_data(request.user)
-
+            product_offer,category_offer = self.available_offers(request.user)
+            # print('recieved data-',data)
             context = {
                 'form': form,
                 'product_data': product_data,
                 'final_price': final_price,
                 'address': address,
+                'product_offer':product_offer,
+                'category_offer':category_offer,
             }
 
             return render(request, 'app/checkout.html', context)
@@ -998,12 +1032,15 @@ class CheckoutView(View):
 
         product_data, final_price = self.get_product_data(request.user)
         address = Customer.objects.filter(user=request.user)
+        product_offer,category_offer = self.available_offers(request.user)
 
         context = {
             'form': form,
             'product_data': product_data,
             'final_price': final_price,
             'address': address,
+            'product_offer':product_offer,
+            'category_offer':category_offer,
         }
 
         return render(request, 'app/checkout.html', context)
@@ -1026,6 +1063,62 @@ class CheckoutView(View):
             final_price += total_price
 
         return product_data, final_price
+
+    def available_offers(self, user):
+        try:
+            selected_products = CartItem.objects.filter(cart__user=user)
+
+            if selected_products:
+                product_offers = []
+                category_offers = []
+                for item in selected_products:
+                    product_offers.extend(ProductOffer.objects.filter(product=item.product))
+                    category_offers.extend(CategoryOffer.objects.filter(category=item.product.category))
+                return product_offers,category_offers
+            else:
+                return None
+
+        except ObjectDoesNotExist as e:
+            print(f"Error: {e}")
+            return None
+
+
+
+def offer_adding(request):
+    print('hw')
+    t_instance = CheckoutView()
+    product_data, final_price = t_instance.get_product_data(request.user)
+    # product_offer, category_offer = self.available_offers(request.user)
+    if request.method == 'GET':
+        print('h2')
+        offer_id = request.GET.get('offer_id')
+        if offer_id:
+            try:
+                product_offer = ProductOffer.objects.get(pk=offer_id)
+            except ProductOffer.DoesNotExist:
+                product_offer = None
+
+            try:
+                category_offer = CategoryOffer.objects.get(pk=offer_id)
+            except CategoryOffer.DoesNotExist:
+                category_offer = None
+
+            if product_offer:
+                    discount = min(product_offer.max_discount_amount,(product_offer.product.discount_price * product_offer.discount_percentage) / 100)
+                    final_price = final_price - discount
+
+            if category_offer:
+                    discount = min(category_offer.max_discount_amount,(product_offer.product.discount_price * category_offer.discount_percentage) / 100)
+                    final_price = final_price - discount
+
+    # Return the final price after applying the offer
+    data = {
+        'final_price': final_price,
+        'discount':discount,
+    }
+    return JsonResponse(data)
+
+
 
 
 
@@ -1336,20 +1429,7 @@ def generate_referral_code(username):
 
 
 
-def available_offers(request):
-    print('hai')
-    try:
-        selected_product = CartItem.objects.get(cart__user=request.user)
-        print(selected_product)
-        product_offers = ProductOffer.objects.filter(product=selected_product.product)
-        print(product_offers)
-        data = {
-            'product_offers': product_offers,
-        }
-        return JsonResponse(data)
-    except ObjectDoesNotExist as e:
-        print(f"Error: {e}")
-        return JsonResponse({'error_message': str(e)})
+
 
 def monthly_sales_report(request):
     orders = Order.objects.annotate(month=ExtractMonth('ordered_date')).values('month').annotate(count=Count('id')).values('month','count')
@@ -1419,3 +1499,117 @@ def yearly_sales_report(request):
         'total_order':total_order
     }
     return render(request, 'report/yearly_sales_report.html', context)
+
+
+from io import BytesIO
+import openpyxl
+import datetime
+from reportlab.lib.pagesizes import letter,landscape
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus import Paragraph
+from reportlab.platypus.tables import Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet
+
+
+def generate_pdf_report(data):
+    buffer = BytesIO()
+    pdf = SimpleDocTemplate(buffer, pagesize=landscape(letter))
+    elements = []
+
+    title = Paragraph("Sales Report", getSampleStyleSheet()['Title'])
+    elements.append(title)
+
+    # table_data = [data[0]]
+    # table_data.extend(data[1:])
+    formatted_data = [data[0]]
+    col_widths = [60, 80, 60, 80, 140, 80, 80, 80]
+
+    for row in data[1:]:
+        formatted_row = []
+        for i, cell in enumerate(row):
+            if i == 1 and isinstance(cell, datetime.datetime):
+                # Format date to display only date, month, year
+                formatted_date = cell.strftime("%d-%b-%Y")
+                formatted_row.append(formatted_date)
+            else:
+                formatted_row.append(cell)
+        formatted_data.append(formatted_row)
+
+    table = Table(formatted_data, colWidths=col_widths)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+
+    elements.append(table)
+    pdf.build(elements)
+    buffer.seek(0)
+    return buffer
+
+def generate_excel_report(data):
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+
+    for row in data:
+        cleaned_row = []
+        for cell in row:
+            if isinstance(cell, datetime.datetime):
+                cell = cell.replace(tzinfo=None)
+            cleaned_row.append(cell)
+        sheet.append(cleaned_row)
+
+    excel_file = BytesIO()
+    workbook.save(excel_file)
+    excel_file.seek(0)
+    return excel_file
+
+def generate_sales_report(request):
+    if request.method == 'POST':
+        report_format = request.POST.get('report_format')
+        orders = Order.objects.all()
+        report_data = [
+            ['Order ID', 'Ordered Date', 'Username', 'Order Status', 'Product', 'Price per Product', 'Quantity',
+             'Sub Total']]
+
+        for order in orders:
+            for item in OrderItem.objects.filter(order=order):
+                report_data.append([order.id, order.ordered_date, order.username, order.get_order_status_display(),
+                                    item.product.title, item.price_per_product, item.quantity,
+                                    item.total_price_product])
+
+        if report_format == 'pdf':
+            # Generate and return the PDF report
+            pdf_file = generate_pdf_report(report_data)  # Replace with your data
+            response = HttpResponse(pdf_file, content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="sales_report.pdf"'
+            return response
+
+        elif report_format == 'excel':
+            # Generate and return the Excel report
+            excel_file = generate_excel_report(report_data)  # Replace with your data
+            response = HttpResponse(excel_file, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename="sales_report.xlsx"'
+            return response
+
+    return render(request, 'pdf_convert/generate_sales_report.html')
+
+
+
+
+def sales_report(request):
+
+    return render(request, 'pdf_convert/generate_sales_report.html',)
+
+from django.http import JsonResponse
+
+def clear_filter(request):
+    products = Product.objects.all()
+    # You can filter and serialize the products as needed
+    data = [{'title': product.title, 'selling_price': product.selling_price} for product in products]
+    return JsonResponse(data, safe=False)

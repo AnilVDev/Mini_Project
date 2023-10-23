@@ -1,0 +1,25 @@
+{% extends 'app/admin-dashboard.html' %}
+{% load static %}
+{% block title %}User List{% endblock title %}
+
+
+
+{% block admin %}
+<head>
+    <title>Sales Report Generator</title>
+</head>
+<body>
+    <h1>Sales Report Generator</h1>
+    <form method="post" action="{% url 'generate_sales_report' %}">
+        {% csrf_token %}
+        <label for="report_format">Select Report Format:</label>
+        <select aria-label="Default select example" name="report_format" id="report_format">
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+        <button class="btn btn-sm btn-white text-dark" type="submit">Generate Report</button>
+    </form>
+</body>
+
+{% endblock %}
+

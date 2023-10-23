@@ -3,7 +3,21 @@
 {% block title %}Checkout{% endblock title %}
 
 {% block main-content %}
-	<body>
+<style>
+	.offer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .5rem;
+}
+
+.offer-button button {
+    margin-left: 0.5rem;
+}
+
+</style>
+
+<body>
 
 <form method="post" action="{% url 'order_placed' %}" id="paymentform">
   {% csrf_token %}
@@ -156,17 +170,18 @@
 							</div>
 							<div class="order-col">
 								<div>Discount</div>
-								<div><strong>-FREE</strong></div>
+								<div id="discount"><strong>00.00</strong></div>
 							</div>
 							<div class="order-col">
 								<div><strong>TOTAL</strong></div>
-								<div><strong class="order-total">₹{{ final_price }}</strong></div>
+								<div><strong class="order-total" id="order-final-price">₹{{ final_price }}</strong></div>
 							</div>
 							<div class="order-col text-right">
 							<!-- Trigger the modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#offerModal">
-    View Available Offers
-</button>
+								<!-- Button to open the modal and navigate to the URL -->
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#offerModal">
+									View Available Offers
+								</button>
 							</div>
 						</div>
 						<div class="payment-method">
@@ -236,6 +251,9 @@
 		</div>
 		<!-- /SECTION -->
 
+
+
+
 </form>
 
 
@@ -254,11 +272,25 @@
             <div class="modal-body">
                 <!-- List of available offers -->
                 <ul>
-                    {% for offer in product_offers %}
-                        <li>
-                            {{ offer.conditions }} - {{ offer.discount_percentage }}
-                            <button class="btn btn-primary" onclick="selectOffer('{{ offer.id }}')">Select</button>
-                        </li>
+                    {% for offer in product_offer %}
+						<li class="offer-item">
+							<div class="offer-details">
+								{{ offer.discount_percentage }}% off, up to ₹{{ offer.max_discount_amount }}, {{ offer.conditions }} T&C
+							</div>
+							<div class="offer-button">
+								<button class="offer-buttons btn btn-primary" onclick="selectOffer('{{ offer.id }}')" offerid="{{offer.id}}">Select</button>
+							</div>
+						</li>
+                    {% endfor %}
+                    {% for offer in category_offer %}
+						<li class="offer-item">
+							<div class="offer-details">
+								{{ offer.discount_percentage }}% off, up to ₹{{ offer.max_discount_amount }}, {{ offer.conditions }} T&C
+							</div>
+							<div class="offer-button">
+								<button class="offer-buttons btn btn-primary" onclick="selectOffer('{{ offer.id }}')" offerid="{{offer.id}}">Select</button>
+							</div>
+						</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -280,31 +312,45 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<!--<script>-->
+<!--$(document).ready(function() {-->
+<!--    $('#offerModal').click(function() {-->
+<!--        $.ajax({-->
+<!--            url: "/available_offers/",-->
+<!--            type: 'GET',-->
+<!--            dataType: 'json', // Change this to 'json'-->
+<!--            success: function(data) {-->
+<!--                console.log(data); // Check the data in the browser console-->
+<!--                // Update the modal body with the received JSON data-->
+<!--                var offersHtml = '';-->
+<!--                for (var i = 0; i < data.product_offers.length; i++) {-->
+<!--                    offersHtml += '<li>' + data.product_offers[i].conditions + ' - ' + data.product_offers[i].discount_percentage + '<button class="btn btn-primary" onclick="selectOffer(\'' + data.product_offers[i].id + '\')">Select</button></li>';-->
+<!--                }-->
+<!--                $('#offerModal .modal-body ul').html(offersHtml);-->
+<!--            },-->
+<!--            error: function(xhr, status, error) {-->
+<!--                console.error(error);-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+<!--});-->
+<!--</script>-->
+
 <script>
-$(document).ready(function() {
-    $('#offerModalButton').click(function() {
-        $.ajax({
-            url: '/available_offers/',
-            type: 'GET',
-            dataType: 'json', // Change this to 'json'
-            success: function(data) {
-                console.log(data); // Check the data in the browser console
-                // Update the modal body with the received JSON data
-                var offersHtml = '';
-                for (var i = 0; i < data.product_offers.length; i++) {
-                    offersHtml += '<li>' + data.product_offers[i].conditions + ' - ' + data.product_offers[i].discount_percentage + '<button class="btn btn-primary" onclick="selectOffer(\'' + data.product_offers[i].id + '\')">Select</button></li>';
-                }
-                $('#offerModal .modal-body ul').html(offersHtml);
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-            }
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    // Find the button element by its ID
+    var viewOffersButton = document.getElementById('viewOffersButton');
+
+    // Add a click event listener to the button
+    viewOffersButton.addEventListener('click', function() {
+        // Get the URL from the "data-url" attribute
+        var url = viewOffersButton.getAttribute('data-url');
+
+        // Navigate to the URL
+        window.location.href = url;
     });
 });
 </script>
-
-
 
 
 
@@ -440,9 +486,27 @@ $(document).ready(function() {
 <!--    }-->
 <!--  });-->
 <!--</script>-->
-
-
-
+<script>
+$(document).ready(function () {
+	$('.offer-buttons').click(function () {
+		console.log('Button clicked');
+		var id = $(this).attr("offerid").toString();
+		console.log('Offer ID:', id);
+		$.ajax({
+			type: "GET",
+			url: "/offer-adding/",
+			data: {
+				offer_id: id
+			},
+			success: function (data) {
+				console.log(data);
+				document.getElementById("discount").innerText = data.discount;
+				document.getElementById("order-final-price").innerText = data.final_price;
+			}
+		});
+	});
+});
+</script>
 
 </html>
 {% endblock main-content %}

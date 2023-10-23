@@ -117,8 +117,8 @@
 <!--									<button class="search-btn">Search</button>-->
 <!--								</form>-->
 
-								<form method="get" action="{% url 'product_listing' 'All Categories' %}">
-									<select class="input-select" name="category">
+								<form method="get" action="{% url 'search_product' %}">
+									<select class="input-select" name="categories">
 										<option value="All Categories">All Categories</option>
 										{% for category in categories %}
 											<option value="{{ category }}">{{ category }}</option>
@@ -224,10 +224,10 @@
 						<li class="active"><a href="/">Home</a></li>
 						<li><a href="#">Hot Deals</a></li>
 						<li><a href="#">Categories</a></li>
-						<li><a href="{% url 'product_listing' category='Camera' %}">Camera</a></li>
-						<li><a href="{% url 'product_listing' category='Smart watch' %}">Smart Watch</a></li>
-						<li><a href="{% url 'product_listing' category='Headphone' %}">Headphone</a></li>
-						<li><a href="{% url 'product_listing' category='Speaker' %}">Speaker</a></li>
+						<li><a href="{% url 'product_listing' categorys='Camera' %}">Camera</a></li>
+						<li><a href="{% url 'product_listing' categorys='Smart watch' %}">Smart Watch</a></li>
+						<li><a href="{% url 'product_listing' categorys='Headphone' %}">Headphone</a></li>
+						<li><a href="{% url 'product_listing' categorys='Speaker' %}">Speaker</a></li>
 					</ul>
 					<!-- /NAV -->
 				</div>
@@ -311,10 +311,10 @@
 								<h3 class="footer-title">Categories</h3>
 								<ul class="footer-links">
 									<li><a href="#">Hot deals</a></li>
-									<li><a href="{% url 'product_listing' category='Headphone' %}">Headphones</a></li>
-									<li><a href="{% url 'product_listing' category='Smart watch' %}">Smart Watch</a></li>
-									<li><a href="{% url 'product_listing' category='Camera' %}">Camera</a></li>
-									<li><a href="{% url 'product_listing' category='Speaker' %}">Speaker</a></li>
+									<li><a href="{% url 'product_listing' categorys='Headphone' %}">Headphones</a></li>
+									<li><a href="{% url 'product_listing' categorys='Smart watch' %}">Smart Watch</a></li>
+									<li><a href="{% url 'product_listing' categorys='Camera' %}">Camera</a></li>
+									<li><a href="{% url 'product_listing' categorys='Speaker' %}">Speaker</a></li>
 								</ul>
 							</div>
 						</div>
