@@ -191,6 +191,11 @@ class Order(models.Model):
         ('Delivered', 'Delivered'),
         ('Cancelled', 'Cancelled'),
     )
+    PAYMENT_METHOD_CHOICES = (
+        ('Paypal', 'Paypal System'),
+        ('CashOnDelivery', 'Cash on delivery'),
+    )
+
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     billing_address = models.OneToOneField(BillingAddress, on_delete=models.CASCADE, null=True)
@@ -198,10 +203,15 @@ class Order(models.Model):
     order_status = models.CharField(max_length=100, choices=ORDER_STATUS_CHOICES, default='Processing')
     ordered_date = models.DateTimeField(auto_now_add=True)
     username = models.CharField(max_length=150, blank=True)
+    discount = models.FloatField(default=0.0)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(max_length=50, choices=PAYMENT_METHOD_CHOICES)
+
+    def get_payment_method_display(self):
+        return dict(self.PAYMENT_METHOD_CHOICES).get(self.payment_method, '')
 
     def __str__(self):
-        return f"Order for {self.username}"
+        return f"Order {self.id} for {self.user.username}"
 
     def save(self, *args, **kwargs):
         if self.user:

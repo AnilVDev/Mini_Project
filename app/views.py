@@ -30,7 +30,7 @@ from xhtml2pdf import pisa
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import ExtractMonth,ExtractDay,ExtractYear
 import calendar
-from django.utils import timezone
+from decimal import Decimal,InvalidOperation
 
 
 
@@ -1125,11 +1125,117 @@ def offer_adding(request):
 from django.shortcuts import render, redirect
 from .models import Order, BillingAddress, ShippingAddress, Customer, Cart, OrderItem
 
+# def order_placed(request):
+#     if request.method == 'POST':
+#         user = request.user
+#         billing_address_id = request.POST.get('billing_address_id')
+#         shipping_address_id = request.POST.get('shipping_address_id')
+#         try:
+#             discount_str = request.POST.get('discount')
+#             print('dis', discount_str)
+#             payment_method = request.POST.get('payment')
+#             print('pay-', payment_method)
+#
+#             if discount_str:
+#                 discount = Decimal(discount_str)
+#             else:
+#                 discount = Decimal('0.00')
+#         except (InvalidOperation, TypeError, ValueError):
+#             discount = Decimal('0.00')
+#         # try:
+#         #     discount = Decimal(discount_str)
+#         #     print('disc1',discount)
+#         # except (InvalidOperation, TypeError, ValueError):
+#         #     # Handle the case where the discount_str is not a valid decimal
+#         #     discount = Decimal('0.00')
+#         #     print('disc2-',discount)
+#         try:
+#             customer = Customer.objects.get(id=billing_address_id)
+#
+#             billing_address = BillingAddress(
+#                 user=customer.user,
+#                 name=customer.name,
+#                 locality=customer.locality,
+#                 city=customer.city,
+#                 pincode=customer.pincode,
+#                 state=customer.state,
+#                 phone_number=customer.phone_number
+#             )
+#
+#             billing_address.save()
+#
+#             customer = Customer.objects.get(id=shipping_address_id)
+#
+#             shipping_address = ShippingAddress(
+#                 user=customer.user,
+#                 name=customer.name,
+#                 locality=customer.locality,
+#                 city=customer.city,
+#                 pincode=customer.pincode,
+#                 state=customer.state,
+#                 phone_number=customer.phone_number
+#             )
+#
+#             shipping_address.save()
+#
+#             cart_items = CartItem.objects.filter(cart__user=user)
+#             total_price = sum(item.product.discount_price * item.quantity for item in cart_items)
+#
+#             if discount != 0:
+#                 total_price -= discount
+#
+#             order = Order(
+#                 user=user,
+#                 billing_address=billing_address,
+#                 shipping_address=shipping_address,
+#                 discount=discount,
+#                 total_price=total_price,
+#                 payment_method=payment_method
+#             )
+#             try:
+#                 order.save()
+#                 print('Order saved successfully')
+#
+#
+#                 for cart_item in cart_items:
+#                     order_item = OrderItem(
+#                         order=order,
+#                         product=cart_item.product,
+#                         quantity=cart_item.quantity,
+#                         price_per_product=cart_item.product.discount_price
+#                     )
+#                     order_item.save()
+#                     print(order_item)
+#                     product = cart_item.product
+#                     product.stock -= cart_item.quantity
+#                     product.save()
+#
+#                 cart_items.delete()
+#             except Exception as e:
+#                 print(f'Error saving the order: {str(e)}')
+#             return redirect( 'user_orders')
+#         except Customer.DoesNotExist:
+#             pass
+#
+#     return redirect('checkout')
+
+
+
 def order_placed(request):
     if request.method == 'POST':
         user = request.user
         billing_address_id = request.POST.get('billing_address_id')
         shipping_address_id = request.POST.get('shipping_address_id')
+
+        discount_str = request.POST.get('discount', '0.00')
+        print('dis', discount_str)
+        payment_method = request.POST.get('payment')
+        print('pay-', payment_method)
+
+        try:
+            discount = Decimal(discount_str)
+        except (InvalidOperation, ValueError):
+            discount = Decimal('0.00')
 
         try:
             customer = Customer.objects.get(id=billing_address_id)
@@ -1145,6 +1251,7 @@ def order_placed(request):
             )
 
             billing_address.save()
+            print('bill add')
 
             customer = Customer.objects.get(id=shipping_address_id)
 
@@ -1159,40 +1266,57 @@ def order_placed(request):
             )
 
             shipping_address.save()
+            print('ship add')
 
             cart_items = CartItem.objects.filter(cart__user=user)
             total_price = sum(item.product.discount_price * item.quantity for item in cart_items)
-
+            print('tot1',total_price)
+            if discount != Decimal('0.00'):
+                total_price -= discount
+                print('tot2-',total_price)
 
             order = Order(
                 user=user,
                 billing_address=billing_address,
                 shipping_address=shipping_address,
+                discount=discount,
                 total_price=total_price,
+                payment_method=payment_method
             )
-            order.save()
+            print(user,billing_address,shipping_address,discount,total_price,payment_method)
+            print(type(discount))
             print(order)
 
-            for cart_item in cart_items:
-                order_item = OrderItem(
-                    order=order,
-                    product=cart_item.product,
-                    quantity=cart_item.quantity,
-                    price_per_product=cart_item.product.discount_price
-                )
-                order_item.save()
-                print(order_item)
-                product = cart_item.product
-                product.stock -= cart_item.quantity
-                product.save()
+            try:
+                order.save()
+                print('Order saved successfully')
 
-            cart_items.delete()
+                for cart_item in cart_items:
+                    order_item = OrderItem(
+                        order=order,
+                        product=cart_item.product,
+                        quantity=cart_item.quantity,
+                        price_per_product=cart_item.product.discount_price
+                    )
+                    order_item.save()
+                    print(order_item)
 
-            return redirect( 'user_orders')
+                    product = cart_item.product
+                    product.stock -= cart_item.quantity
+                    product.save()
+
+                cart_items.delete()
+            except Exception as e:
+                print(f'Error saving the order: {str(e)}')
+                return redirect('checkout')
+            return redirect('user_orders')
         except Customer.DoesNotExist:
             pass
 
     return redirect('checkout')
+
+
+
 
 def user_orders(request):
     orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product').order_by('-ordered_date')

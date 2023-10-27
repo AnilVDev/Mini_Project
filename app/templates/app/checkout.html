@@ -170,10 +170,12 @@
 							</div>
 							<div class="order-col">
 								<div>Discount</div>
-								<div id="discount"><strong>00.00</strong></div>
+								<input type="hidden" id="discount" name="discount" value="0">
+								<div id="discountvalue" name="discountvalue"><strong>00.00</strong></div>
 							</div>
 							<div class="order-col">
 								<div><strong>TOTAL</strong></div>
+
 								<div><strong class="order-total" id="order-final-price">₹{{ final_price }}</strong></div>
 							</div>
 							<div class="order-col text-right">
@@ -206,7 +208,7 @@
 <!--								</div>-->
 <!--							</div>-->
 							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-3">
+								<input type="radio" name="payment" id="payment-3" value="Paypal">
 								<label for="payment-3">
 									<span></span>
 									Paypal System
@@ -216,7 +218,7 @@
 								</div>
 							</div>
 							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-4">
+								<input type="radio" name="payment" id="payment-4" value="CashOnDelivery">
 								<label for="payment-4">
 									<span></span>
 									Cash on delivery
@@ -435,11 +437,57 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+
+
+<!--<script>-->
+<!--  document.addEventListener("DOMContentLoaded", function() {-->
+<!--    // Select the first billing address radio button by default-->
+<!--    var firstBillingAddress = document.querySelector("input[name='billing_address_id']:first-of-type");-->
+<!--    if (firstBillingAddress) {-->
+<!--      firstBillingAddress.checked = true;-->
+<!--    }-->
+
+<!--    // Select the first shipping address radio button by default-->
+<!--    var firstShippingAddress = document.querySelector("input[name='shipping_address_id']:first-of-type");-->
+<!--    if (firstShippingAddress) {-->
+<!--      firstShippingAddress.checked = true;-->
+<!--    }-->
+<!--  });-->
+<!--</script>-->
+<script>
+$(document).ready(function () {
+	$('.offer-buttons').click(function () {
+		console.log('Button clicked');
+		var id = $(this).attr("offerid").toString();
+		console.log('Offer ID:', id);
+		$.ajax({
+			type: "GET",
+			url: "/offer-adding/",
+			data: {
+				offer_id: id
+			},
+			success: function (data) {
+				console.log(data);
+				document.getElementById("discountvalue").innerText = data.discount;
+				document.getElementById('discount').value = data.discount;
+				document.getElementById("order-final-price").innerText = data.final_price;
+
+			}
+		});
+	});
+});
+<!--</script>-->
+
     <!-- Include the PayPal JavaScript SDK -->
 	<script src="https://www.paypal.com/sdk/js?client-id=AVqCTpTO6jvHt-nKCYg3QMdHxJM_kGFNYfHHsfmn_NQYbWgA6ginY7xE6xzFfOs6djOGXk0QC_L_ojV4&currency=USD&disable-funding=credit,card"></script>
 
 	<script>
-		var total = '{{ final_price }}'
+		//var total = '{{ final_price }}'
+		var totalElement = document.getElementById("order-final-price");
+		var total = parseFloat(totalElement.textContent.replace('₹', '').trim()).toFixed(2);
+		console.log("helo-",totalElement)
+    	console.log(total)
+
         // Render the PayPal button into #paypal-button-container
         paypal.Buttons({
 
@@ -471,42 +519,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }).render('#paypal-button-container');
     </script>
 
-<!--<script>-->
-<!--  document.addEventListener("DOMContentLoaded", function() {-->
-<!--    // Select the first billing address radio button by default-->
-<!--    var firstBillingAddress = document.querySelector("input[name='billing_address_id']:first-of-type");-->
-<!--    if (firstBillingAddress) {-->
-<!--      firstBillingAddress.checked = true;-->
-<!--    }-->
-
-<!--    // Select the first shipping address radio button by default-->
-<!--    var firstShippingAddress = document.querySelector("input[name='shipping_address_id']:first-of-type");-->
-<!--    if (firstShippingAddress) {-->
-<!--      firstShippingAddress.checked = true;-->
-<!--    }-->
-<!--  });-->
-<!--</script>-->
-<script>
-$(document).ready(function () {
-	$('.offer-buttons').click(function () {
-		console.log('Button clicked');
-		var id = $(this).attr("offerid").toString();
-		console.log('Offer ID:', id);
-		$.ajax({
-			type: "GET",
-			url: "/offer-adding/",
-			data: {
-				offer_id: id
-			},
-			success: function (data) {
-				console.log(data);
-				document.getElementById("discount").innerText = data.discount;
-				document.getElementById("order-final-price").innerText = data.final_price;
-			}
-		});
-	});
-});
-</script>
 
 </html>
 {% endblock main-content %}
