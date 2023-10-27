@@ -472,6 +472,11 @@ $(document).ready(function () {
 				document.getElementById('discount').value = data.discount;
 				document.getElementById("order-final-price").innerText = data.final_price;
 
+                // Set the 'total' variable in the second script
+                var totalElement = document.getElementById("order-final-price");
+                var total = parseFloat(totalElement.textContent.replace('₹', '').trim()).toFixed(2);
+                console.log("helo-", total);
+                setTotal(total);
 			}
 		});
 	});
@@ -482,12 +487,10 @@ $(document).ready(function () {
 	<script src="https://www.paypal.com/sdk/js?client-id=AVqCTpTO6jvHt-nKCYg3QMdHxJM_kGFNYfHHsfmn_NQYbWgA6ginY7xE6xzFfOs6djOGXk0QC_L_ojV4&currency=USD&disable-funding=credit,card"></script>
 
 	<script>
-		//var total = '{{ final_price }}'
-		var totalElement = document.getElementById("order-final-price");
-		var total = parseFloat(totalElement.textContent.replace('₹', '').trim()).toFixed(2);
-		console.log("helo-",totalElement)
-    	console.log(total)
+    var total;
 
+    function setTotal(value) {
+        total = value;
         // Render the PayPal button into #paypal-button-container
         paypal.Buttons({
 
@@ -517,7 +520,10 @@ $(document).ready(function () {
             }
 
         }).render('#paypal-button-container');
+
+	}
     </script>
+
 
 
 </html>
