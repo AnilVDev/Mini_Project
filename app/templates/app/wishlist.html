@@ -1,15 +1,15 @@
-{% extends 'app/user_profile.html' %}
+{% extends 'app/user_profile2.html' %}
 {% load static %}
 {% load custom_filters %}
 {% block title %}Profile{% endblock title %}
 {% block leftcontent %}
 
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid ">
+        <div class="row ">
 
 
-    <div class="container col-md-10 my-2">
-        <h1>Your Wishlist</h1>
+    <div class="container col-md-9 my-2">
+        <h1 class="">Your Wishlist</h1>
         {% if wishlist_items %}
         <table class="table table-bordered card-body2">
             <thead>

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.utils.html import format_html
 
 from .models import (
-    Customer,
+    Customer,Wallet,Transaction,
     Product,
     Cart,
     CartItem,
@@ -92,13 +92,14 @@ class CategoryOfferAdmin(admin.ModelAdmin):
 class ReferralOfferAdmin(admin.ModelAdmin):
     list_display = ('id','referrer', 'referral_code', 'reward', 'used_by', 'created_at')
 
-# class CustomUserAdmin(UserAdmin):
-#     add_form = CustomerRegistrationForm
-#     fieldsets = (
-#         (None, {'fields': ('username', 'password1', 'password2')}),
-#         ('Personal Info', {'fields': ('email', 'phonenumber')}),
-#         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-#         ('Important dates', {'fields': ('last_login', 'date_joined')}),
-#     )
+@admin.register(Wallet)
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ('id','user','balance')
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('id','user','amount','transaction_type','timestamp','transaction_balance')
+
+
 
 

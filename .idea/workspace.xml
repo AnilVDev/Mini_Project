@@ -4,9 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="offer successfully implemented and paypal is to be implement">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="paypal is success now">
+      <change afterPath="$PROJECT_DIR$/app/signals.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/app/user_profile2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/app/wallet.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/checkout.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/checkout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/address.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/address.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/baseindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/baseindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/edit_address.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/edit_address.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/edit_user_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/edit_user_profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/order_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/order_details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/passwordchange.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/passwordchange.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/product_listing.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_listing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/user_orders.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/user_orders.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/wishlist.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/wishlist.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/pdf_convert/invoice.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/pdf_convert/invoice.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -412,7 +431,15 @@
       <option name="project" value="LOCAL" />
       <updated>1698416203525</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="paypal is success now">
+      <option name="closed" value="true" />
+      <created>1698423801936</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1698423801938</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -427,7 +454,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="user address - edit,delete option added ," />
     <MESSAGE value="wishllist added,but there is some problem(in frontend the item should be displayed as added in wishlist)" />
     <MESSAGE value="image zooming is not working..all other okay..wishlist almost completed" />
     <MESSAGE value="image zooming is not working.." />
@@ -450,8 +476,9 @@
     <MESSAGE value="offer code admin side is created, there is user side to be do.." />
     <MESSAGE value="chart completed..sales report pending" />
     <MESSAGE value="product offer completed but it is not saved in database" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
     <MESSAGE value="offer successfully implemented and paypal is to be implement" />
-    <option name="LAST_COMMIT_MESSAGE" value="offer successfully implemented and paypal is to be implement" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
+    <MESSAGE value="paypal is success now" />
+    <option name="LAST_COMMIT_MESSAGE" value="paypal is success now" />
   </component>
 </project>

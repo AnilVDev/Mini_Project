@@ -11,6 +11,7 @@ urlpatterns = [
     path('product-detail/<int:pk>', views.ProductDetailView.as_view(), name='product-detail'),
     path('submit_product_review/<int:product_id>/', views.submit_product_review, name='submit_product_review'),
     path('search-product/',views.search_product, name= 'search_product'),
+    path('suggestions/', views.search_suggestions, name='suggestions'),
     path('product-listing/<str:categorys>/',views.product_listing,name='product_listing'),
     path('profile/add-to-wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
     path('profile/wishlist/',views.wishlist, name='wishlist'),

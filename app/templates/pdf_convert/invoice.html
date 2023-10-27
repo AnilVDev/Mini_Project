@@ -73,7 +73,7 @@
             <div class="offset-md-6 col-md-6">
                 <p>Subtotal: ₹{{ order.total_price|floatformat:2 }}</p>
                 <p>Shipping Charge: ₹00.00</p>
-                <p>Discount: ₹00.00</p>
+                <p>Discount: ₹{{ order.discount|floatformat:2 }}</p>
                 <p>GST: ₹00.00</p>
                 <h3>Total: ₹{{ order.total_price|floatformat:2 }}</h3>
             </div>

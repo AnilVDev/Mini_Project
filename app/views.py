@@ -1,7 +1,7 @@
 import random
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
-from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem,Order,OrderItem,BillingAddress,ShippingAddress,Review,ProductOffer,ReferralOffer,CategoryOffer
+from .models import Customer,Cart,Product,OrderPlaced,ProductImage,Category,Brand,Wishlist,CartItem,Order,OrderItem,BillingAddress,ShippingAddress,Review,ProductOffer,ReferralOffer,CategoryOffer,Wallet,Transaction
 
 from .forms import CustomerRegistrationForm,CustomerProfileForm,ProductForm, CustomAdminLoginForm, MyPasswordChangeForm, OTPVerificationForm, ProductImageFormSet, ProductImageForm,CategoryForm,BrandForm,UserProfileForm,ProductOfferForm,ReferralOfferForm,CategoryOfferForm,MonthYearForm
 from django.contrib import messages
@@ -721,7 +721,7 @@ def product_listing(request, categorys):
     categories = Category.objects.all()
     brands = Brand.objects.all()
 
-    if categorys and not selected_categories:
+    if categorys and not selected_categories and not selected_brands:
         products = Product.objects.filter(category__name=categorys)
         print('from categorys',products)
     else:
@@ -732,6 +732,8 @@ def product_listing(request, categorys):
 
         if selected_brands and not selected_categories:
             products = Product.objects.filter(brand__name__in=selected_brands)
+        elif not selected_brands:
+            products=products
         else:
             products = products.filter(brand__name__in=selected_brands)
             print('pro from brands-',products)
@@ -743,17 +745,10 @@ def product_listing(request, categorys):
     if max_price:
         products = products.filter(discount_price__lte=max_price)
 
-    # sort_by_price = request.GET.get('sort_by_price', '0')
-
-    # if sort_by_price == '0':
-    #     products = products.order_by('discount_price')
-    # elif sort_by_price == '1':
-    #     products = products.order_by('-discount_price')
-
     products_per_page = 6
 
     paginator = Paginator(products, products_per_page)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page',1)
     products_page = paginator.get_page(page_number)
     total_pages = paginator.num_pages
     page_range = range(1, total_pages + 1)
@@ -783,7 +778,7 @@ def search_product(request):
     else:
         products = Product.objects.filter(category__name = selected_category)
 
-    products = products.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query))
+    products = products.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query) | Q(brand__name__icontains=search_query))
 
     categories = Category.objects.all()
     brands = Brand.objects.all()
@@ -806,6 +801,17 @@ def search_product(request):
     }
 
     return render(request, 'app/product_listing.html', context)
+
+
+def search_suggestions(request):
+    print('hhh')
+    search_query = request.GET.get('term', '')  # 'term' is the default parameter name used by jQuery UI
+    print(search_query)
+    products = Product.objects.filter(Q(title__istartswith=search_query))
+
+    suggestions = [product.title for product in products]
+
+    return JsonResponse(suggestions, safe=False)
 
 
 @login_required
@@ -1125,101 +1131,6 @@ def offer_adding(request):
 from django.shortcuts import render, redirect
 from .models import Order, BillingAddress, ShippingAddress, Customer, Cart, OrderItem
 
-# def order_placed(request):
-#     if request.method == 'POST':
-#         user = request.user
-#         billing_address_id = request.POST.get('billing_address_id')
-#         shipping_address_id = request.POST.get('shipping_address_id')
-#         try:
-#             discount_str = request.POST.get('discount')
-#             print('dis', discount_str)
-#             payment_method = request.POST.get('payment')
-#             print('pay-', payment_method)
-#
-#             if discount_str:
-#                 discount = Decimal(discount_str)
-#             else:
-#                 discount = Decimal('0.00')
-#         except (InvalidOperation, TypeError, ValueError):
-#             discount = Decimal('0.00')
-#         # try:
-#         #     discount = Decimal(discount_str)
-#         #     print('disc1',discount)
-#         # except (InvalidOperation, TypeError, ValueError):
-#         #     # Handle the case where the discount_str is not a valid decimal
-#         #     discount = Decimal('0.00')
-#         #     print('disc2-',discount)
-#         try:
-#             customer = Customer.objects.get(id=billing_address_id)
-#
-#             billing_address = BillingAddress(
-#                 user=customer.user,
-#                 name=customer.name,
-#                 locality=customer.locality,
-#                 city=customer.city,
-#                 pincode=customer.pincode,
-#                 state=customer.state,
-#                 phone_number=customer.phone_number
-#             )
-#
-#             billing_address.save()
-#
-#             customer = Customer.objects.get(id=shipping_address_id)
-#
-#             shipping_address = ShippingAddress(
-#                 user=customer.user,
-#                 name=customer.name,
-#                 locality=customer.locality,
-#                 city=customer.city,
-#                 pincode=customer.pincode,
-#                 state=customer.state,
-#                 phone_number=customer.phone_number
-#             )
-#
-#             shipping_address.save()
-#
-#             cart_items = CartItem.objects.filter(cart__user=user)
-#             total_price = sum(item.product.discount_price * item.quantity for item in cart_items)
-#
-#             if discount != 0:
-#                 total_price -= discount
-#
-#             order = Order(
-#                 user=user,
-#                 billing_address=billing_address,
-#                 shipping_address=shipping_address,
-#                 discount=discount,
-#                 total_price=total_price,
-#                 payment_method=payment_method
-#             )
-#             try:
-#                 order.save()
-#                 print('Order saved successfully')
-#
-#
-#                 for cart_item in cart_items:
-#                     order_item = OrderItem(
-#                         order=order,
-#                         product=cart_item.product,
-#                         quantity=cart_item.quantity,
-#                         price_per_product=cart_item.product.discount_price
-#                     )
-#                     order_item.save()
-#                     print(order_item)
-#                     product = cart_item.product
-#                     product.stock -= cart_item.quantity
-#                     product.save()
-#
-#                 cart_items.delete()
-#             except Exception as e:
-#                 print(f'Error saving the order: {str(e)}')
-#             return redirect( 'user_orders')
-#         except Customer.DoesNotExist:
-#             pass
-#
-#     return redirect('checkout')
-
-
 
 def order_placed(request):
     if request.method == 'POST':
@@ -1347,6 +1258,21 @@ def cancel_order(request, order_id):
         if order.user == request.user:
             order.order_status = 'Cancelled'
             order.save()
+            if order.payment_method == 'Paypal':
+                print('paypal')
+                user_wallet = Wallet.objects.get(user=request.user)
+                user_wallet.balance += order.total_price
+
+                deposit_transaction = Transaction(
+                    user=request.user,
+                    amount=order.total_price,
+                    transaction_type='Deposit',
+                    transaction_balance=user_wallet.balance,
+                )
+
+                deposit_transaction.save()
+                user_wallet.save()
+
 
             for order_item in order.orderitem_set.all():
                 product = order_item.product
