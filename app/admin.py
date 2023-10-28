@@ -90,7 +90,7 @@ class CategoryOfferAdmin(admin.ModelAdmin):
 
 @admin.register(ReferralOffer)
 class ReferralOfferAdmin(admin.ModelAdmin):
-    list_display = ('id','referrer', 'referral_code', 'reward', 'used_by', 'created_at')
+    list_display = ('id','referrer', 'referred_user', 'created_at')
 
 @admin.register(Wallet)
 class WalletAdmin(admin.ModelAdmin):

@@ -293,25 +293,29 @@ class CategoryOffer(models.Model):
 
 
 class ReferralOffer(models.Model):
-    referrer = models.ForeignKey(User, on_delete=models.CASCADE)
-    referral_code = models.CharField(max_length=20, unique=True)
-    reward = models.DecimalField(max_digits=10, decimal_places=2)
-    used_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='used_referral_offers')
+    referrer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='referrals_given')
+    referred_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='referred_by', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    used = models.BooleanField(default=False)
+    token = models.CharField(max_length=100, unique=True,default='')
 
     def __str__(self):
         return f"Referral Offer for {self.referrer.username}"
 
+    def get_referral_link(self):
+        return f'http://127.0.0.1:8000/registration/?ref={self.referrer.username}&token={self.token}'
 
 class Wallet(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2,default=0.0)
 
     def deposit(self, amount):
+        amount = Decimal(amount)
         self.balance += amount
         self.save()
 
     def withdraw(self, amount):
+        amount = Decimal(amount)
         if self.balance >= amount:
             self.balance -= amount
             self.save()

@@ -31,8 +31,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.functions import ExtractMonth,ExtractDay,ExtractYear
 import calendar
 from decimal import Decimal,InvalidOperation
-
-
+from .utils import generate_referral_link
+import uuid
 
 class ProductView(View):
     def get(self, request):
@@ -69,7 +69,9 @@ class ProductView(View):
 class ProductDetailView(View):
     def get(self, request,pk):
         product = get_object_or_404(Product, pk=pk)
-        has_purchased_product = OrderItem.objects.filter(order__user=request.user, product=product).exists()
+        has_purchased_product = False
+        if request.user.is_authenticated:
+            has_purchased_product = OrderItem.objects.filter(order__user=request.user, product=product).exists()
         print(has_purchased_product)
         product_reviews = Review.objects.filter(product=product)
         total_review_count = product_reviews.count()
@@ -83,6 +85,7 @@ class ProductDetailView(View):
 
 def add_to_cart(request):
  return render(request, 'app/addtocart.html')
+
 
 def buy_now(request,product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -142,8 +145,7 @@ def delete_address(request, address_id):
     return redirect('address')
 
 
-def mobile(request):
- return render(request, 'app/mobile.html')
+
 
 def login(request):
  return render(request, 'app/login.html')
@@ -157,10 +159,26 @@ def login(request):
 class CustomerRegistrationView(View):
     def get(self, request):
         form = CustomerRegistrationForm()
+        referrer_username = request.GET.get('ref')
+        token = request.GET.get('token')
+
+        try:
+            referrer = User.objects.get(username=referrer_username)
+        except User.DoesNotExist:
+            referrer = None
+
+        if referrer and is_valid_token(referrer, token):
+
+            request.session['temp_referrer'] = {
+                'referrer_username': referrer.username,
+                'token': token,
+            }
+
         return render(request, 'app/customerregistration.html', {'form': form})
 
     def post(self, request):
         form = CustomerRegistrationForm(request.POST)
+
         if form.is_valid():
             request.session['temp_user_data'] = {
                 'username': form.cleaned_data['username'],
@@ -188,6 +206,14 @@ class CustomerRegistrationView(View):
             return redirect('verify_otp')
 
         return render(request, 'app/customerregistration.html', {'form': form})
+
+def is_valid_token(referrer, token):
+    try:
+        valid_referral = ReferralOffer.objects.get(referrer=referrer, token=token)
+        return True
+    except ReferralOffer.DoesNotExist:
+        return False
+
 
 class OTPVerificationView(View):
     MAX_ATTEMPTS = 3
@@ -225,6 +251,24 @@ class OTPVerificationView(View):
                         email=user_data['email'],
                         password=make_password(user_data['password'])
                     )
+
+                    referrer_data = request.session.get('temp_referrer')
+
+                    if referrer_data:
+                        referrer_username = referrer_data.get('referrer_username')
+                        referrer = User.objects.get(username=referrer_username)
+                        token = referrer_data.get('token')
+
+                        if referrer and is_valid_token(referrer, token):
+                            referral_offer, created = ReferralOffer.objects.get_or_create(referrer=referrer)
+                            if not referral_offer.used:
+                                referral_offer.referred_user = user
+                                referral_offer.used = True
+                                referral_offer.save()
+                                update_wallet_and_create_transaction(referrer)
+
+
+                    del request.session['temp_referrer']
                     del request.session['temp_user_data']
                     del request.session['registration_otp']
                     del request.session['otp_attempts']
@@ -261,6 +305,41 @@ class OTPVerificationView(View):
         return redirect('verify_otp')
 
 
+def update_wallet_and_create_transaction(user):
+    print(user)
+    # First, get the user's wallet (create one if it doesn't exist)
+    # wallet, created = Wallet.objects.get_or_create(user=user)
+    # print('wallet',wallet)
+    # Deposit 100 rupees into the user's wallet
+    deposit_amount = 100
+    print('typeof',type(deposit_amount))
+    # wallet.deposit(deposit_amount)
+    #
+    # # Create a Transaction record for the deposit
+    # transaction = Transaction.objects.create(
+    #     user=user,
+    #     amount=deposit_amount,
+    #     transaction_type='Deposit',
+    #     transaction_balance=wallet.balance
+    # )
+    #
+    # # Return the updated wallet and transaction if needed
+    # return wallet, transaction
+
+    user_wallet = Wallet.objects.get(user=user)
+    user_wallet.balance += deposit_amount
+    print(user_wallet,'is',user_wallet.balance)
+
+    deposit_transaction = Transaction(
+        user=user,
+        amount=deposit_amount,
+        transaction_type='Deposit',
+        transaction_balance=user_wallet.balance,
+    )
+    print(deposit_transaction)
+    deposit_transaction.save()
+    user_wallet.save()
+
 
 def registration_complete(request):
     return render(request, 'registration_complete.html')
@@ -274,11 +353,23 @@ class ProfileView(View):
     def get(self, request):
         form = CustomerProfileForm()
         user = request.user
-        referral_code = generate_referral_code(user)
+        referral_offer = None
+
+        try:
+            referral_offer = user.referrals_given.get()  # Attempt to get the related ReferralOffer instance
+        except ReferralOffer.DoesNotExist:
+            referral_offer = None
+
+            print('err',referral_offer)
+
+        if referral_offer:
+            referral_link = referral_offer.get_referral_link()
+        else:
+            referral_link = None
         context = {
             'user': user,
             'form': form,
-            'referral_code':referral_code,
+            'referral_link':referral_link,
 
         }
         return render(request, 'app/profile.html', context)
@@ -305,6 +396,7 @@ class ProfileView(View):
         }
         return render(request, 'app/profile.html',context)
 
+@login_required
 def edit_user_profile(request):
     if request.method == 'POST':
         user_form = UserProfileForm(request.POST, instance=request.user)
@@ -324,6 +416,28 @@ def edit_user_profile(request):
 
     return render(request, 'app/edit_user_profile.html', {'user_form': user_form})
 
+
+@login_required
+def wallet_view(request):
+    wallet = Wallet.objects.get(user=request.user)
+    print(wallet)
+    transactions =Transaction.objects.filter(user=request.user)
+    context = {
+        'wallet':wallet,
+        'transactions':transactions,
+    }
+    return render(request, 'app/wallet.html', context)
+
+
+
+class GenerateReferralLinkView(View):
+    def get(self, request):
+        print('request')
+        referral_link = generate_referral_link(request.user)
+        print(referral_link)
+        data = {'referral_link': referral_link}
+        # return render(request, 'app/generate_referral_link.html', context)
+        return JsonResponse(data)
 
 @method_decorator(staff_member_required, name='dispatch')
 def add_product_with_images(request):

@@ -5,11 +5,11 @@
 
 <style>
     .card-body4{
-    text-align:center;
+
     background-color: rgba(255, 255, 255, 0.5);
     border-radius:1rem;
     margin:1rem;
-    height:50rem;
+    height:60rem;
     padding:1.5rem;
     }
 
@@ -23,8 +23,15 @@
             <p><strong>Name:</strong> {{ user.username }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>First name & Last name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-            <p><strong>Joined:</strong> {{ user.date_joined|date:"F d, Y" }}
-            <p><strong>Your Refferal code:</strong> {{ referral_code }}</p>
+            <p><strong>Joined:</strong> {{ user.date_joined|date:"F d, Y" }}</p>
+            <p><strong>Benefits of Referral:</strong>When someone joins the website using your referral link, <br>you will receive a reward of 100 rupees for their first signup.</p>
+            {% if referral_link %}
+            <p><strong>Your referral link</strong>: {{ referral_link }}</p>
+            {% else %}
+            <p><strong>Generate referral link</strong><a class="generate-link">(click here to generate)</a>:</p>
+            <div id="refferal_link"></div>
+            {% endif %}
+
             <a href="{% url 'edit_profile' %}" class="btn text-right "><i class="fa fa-edit"></i></a>
 
             <button id="showAddressForm" class="btn btn-primary">Add New Address</button>
@@ -63,9 +70,21 @@ document.getElementById("showAddressForm").addEventListener("click", function() 
     }
 });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$('.generate-link').click(function () {
+    $.ajax({
+        type: "GET",
+        url: "/generate-referral-link/",
 
-
-
+        success: function (data) {
+            console.log(data);
+            console.log("success");
+            document.getElementById("refferal_link").innerText = data.referral_link;
+        }
+    });
+});
+</script>
 
 
 {% endblock leftcontent %}

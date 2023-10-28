@@ -2,22 +2,33 @@
 {% load static %}
 {% block title %}Profile{% endblock title %}
 {% block leftcontent %}
+<style>
+    .cardbod{
+    background-color: rgba(255, 255, 255, 0.7);
+    margin-top:5rem;
+    margin-bottom:1rem;
+    padding:1.4rem;
+    border-radius:1rem;
+    }
+</style>
+
+
         {% if wallet is None %}
-        <div class="col-lg-8">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h2>Sorry! You dont have a wallet yet!</h2>
-                    <h4>Create a wallet and enjoy special offers.</h4>
-                    <a href="{% url 'new_wallet' %}" class="primary-btn">create wallet</a>
-                </div>
-            </div>
-        </div>
+<!--        <div class="col-lg-8">-->
+<!--            <div class="card mb-4">-->
+<!--                <div class="card-body">-->
+<!--                    <h2>Sorry! You dont have a wallet yet!</h2>-->
+<!--                    <h4>Create a wallet and enjoy special offers.</h4>-->
+<!--                    <a href="{% url 'new_wallet' %}" class="primary-btn">create wallet</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
         {% else %}
         <div class="col-lg-8">
           <div class="card mb-4">
           
-              <div class="card-body">
+              <div class="card-body cardbod">
                 <div class="row">
                   <div class="col-sm-3">
                     <p class="mb-0">Full Name : </p>
@@ -36,7 +47,7 @@
                     </div>
                   </div>
                   <hr>
-                <form action="{% url 'deposit_wallet' %}" id="paymentform" method="post">
+                <form action=" url 'deposit_wallet' %}" id="paymentform" method="post">
                     {% csrf_token %}
                     <div class="row">
                     <div class="col-sm-3">
@@ -71,8 +82,8 @@
                     <tbody>
                         {% for item in transactions %}
                             <tr>
-                                <td><h4>{{item.timestamp}}</h4></td>
-                                <td><h4>{{ item.transaction_type }}</h4></td>
+                                <td><h5>{{item.timestamp}}</h5></td>
+                                <td><h5>{{ item.transaction_type }}</h5></td>
                                 <td><p>₹{{ item.amount }}</p></td>
                                 <td><h5>₹{{ item.transaction_balance }}</h5></td>
                             </tr>
