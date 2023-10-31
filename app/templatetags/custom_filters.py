@@ -22,3 +22,10 @@ def is_in_cart(product, user):
 @register.filter
 def get_stars(product_reviews, rating):
     return range(1,rating+1)
+
+
+@register.filter
+def split_text(value, length):
+    if len(value) > length:
+        return value[:length] + "<br>" + value[length:]
+    return value

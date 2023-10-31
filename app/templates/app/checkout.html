@@ -274,8 +274,9 @@
             <div class="modal-body">
                 <!-- List of available offers -->
                 <ul>
+					<span><strong>Product Offers</strong></span><br>
                     {% for offer in product_offer %}
-						<li class="offer-item"><span>Product Offers</span>
+					<li class="offer-item">
 							<div class="offer-details">
 								{{ offer.discount_percentage }}% off, up to ₹{{ offer.max_discount_amount }}, {{ offer.conditions }} T&C
 							</div>
@@ -284,8 +285,9 @@
 							</div>
 						</li>
                     {% endfor %}
+					<span><strong>Category Offers</strong></span><br>
                     {% for offer in category_offer %}
-						<li class="offer-item"><span>Category Offers</span>
+					<li class="offer-item">
 							<div class="offer-details">
 								{{ offer.discount_percentage }}% off, up to ₹{{ offer.max_discount_amount }}, {{ offer.conditions }} T&C
 							</div>
@@ -482,6 +484,8 @@ $(document).ready(function () {
 	});
 });
 <!--</script>-->
+
+
 
     <!-- Include the PayPal JavaScript SDK -->
 	<script src="https://www.paypal.com/sdk/js?client-id=AVqCTpTO6jvHt-nKCYg3QMdHxJM_kGFNYfHHsfmn_NQYbWgA6ginY7xE6xzFfOs6djOGXk0QC_L_ojV4&currency=USD&disable-funding=credit,card"></script>

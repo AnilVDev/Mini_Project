@@ -422,7 +422,7 @@ def wallet_view(request):
     return render(request, 'app/wallet.html', context)
 
 
-
+@method_decorator(login_required, name='dispatch')
 class GenerateReferralLinkView(View):
     def get(self, request):
         print('request')
@@ -851,16 +851,19 @@ def product_listing(request, categorys):
     if max_price:
         products = products.filter(discount_price__lte=max_price)
 
-    category = products.first().category
-    category_offer = CategoryOffer.objects.filter(category__name=category)
 
-    products_per_page = 6
+    if products.exists():
+        category = products.first().category
+        category_offer = CategoryOffer.objects.filter(category__name=category)
+    else:
+        category = None
+        category_offer = None
 
-    paginator = Paginator(products, products_per_page)
-    page_number = request.GET.get('page',1)
-    products_page = paginator.get_page(page_number)
-    total_pages = paginator.num_pages
-    page_range = range(1, total_pages + 1)
+    paginator = Paginator(products, 6)
+    page_number = request.GET.get('page')
+    productsfinal = paginator.get_page(page_number)
+    totalpage = productsfinal.paginator.num_pages
+    page_range = range(productsfinal.number, min(productsfinal.number + 3, totalpage + 1))
 
     context = {
         'categorys': categorys,
@@ -870,8 +873,9 @@ def product_listing(request, categorys):
         'max_price': max_price,
         'categories': categories,
         'brands': brands,
+        'lastpage': totalpage,
         'page_range': page_range,
-        'products': products_page,
+        'products': productsfinal,
         'category_offer':category_offer,
     }
 
@@ -891,21 +895,21 @@ def search_product(request):
 
     categories = Category.objects.all()
     brands = Brand.objects.all()
-    products_per_page = 6
 
-    paginator = Paginator(products, products_per_page)
+    paginator = Paginator(products, 6)
     page_number = request.GET.get('page')
-    products_page = paginator.get_page(page_number)
-    total_pages = paginator.num_pages
-    page_range = range(1, total_pages + 1)
+    productsfinal = paginator.get_page(page_number)
+    totalpage = productsfinal.paginator.num_pages
+    page_range = range(productsfinal.number, min(productsfinal.number + 3, totalpage + 1))
 
     context = {
         'selected_category': selected_category,
         'search_query': search_query,
         'categories': categories,
         'brands': brands,
+        'lastpage': totalpage,
         'page_range': page_range,
-        'products': products_page,
+        'products': productsfinal,
 
     }
 
@@ -934,6 +938,8 @@ def add_to_wishlist(request, product_id):
         return redirect(next_url)
     else:
         return redirect(reverse('home'))
+
+@login_required
 def remove_from_wishlist(request, product_id):
     product = Product.objects.get(pk=product_id)
     Wishlist.objects.filter(user=request.user, product=product).delete()
@@ -959,12 +965,12 @@ def toggle_wishlist(request, product_id):
         return redirect(reverse('home'))
 
 
-
+@login_required
 def wishlist(request):
     wishlist_items = Wishlist.objects.filter(user=request.user)
     return render(request, 'app/wishlist.html', {'wishlist_items': wishlist_items})
 
-
+@login_required
 def cart(request):
     if request.user.is_authenticated:
         user_cart = Cart.objects.filter(user=request.user).first()
@@ -996,7 +1002,7 @@ def calculate_cart_total(cart_items):
 
     return total_price
 
-
+@login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
@@ -1030,7 +1036,7 @@ def add_to_cart(request, product_id):
         return redirect('login')
 
 
-
+@login_required
 def delete_cart_item(request, item_id):
     if request.user.is_authenticated:
         cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
@@ -1040,6 +1046,7 @@ def delete_cart_item(request, item_id):
             return redirect(next_url)
         else:
             return redirect('cart')
+
 
 def plus_cart(request):
     if request.method == 'GET':
@@ -1099,7 +1106,7 @@ def minus_cart(request):
         }
         return JsonResponse(data)
 
-
+@method_decorator(login_required, name='dispatch')
 class CheckoutView(View):
     def get(self, request):
         if not CartItem.objects.filter(cart__user=request.user).exists():
@@ -1241,6 +1248,7 @@ from django.shortcuts import render, redirect
 from .models import Order, BillingAddress, ShippingAddress, Customer, Cart, OrderItem
 
 
+@login_required
 def order_placed(request):
     if request.method == 'POST':
         user = request.user
@@ -1337,7 +1345,7 @@ def order_placed(request):
 
 
 
-
+@login_required
 def user_orders(request):
     orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product').order_by('-ordered_date')
 
@@ -1358,7 +1366,7 @@ def user_orders(request):
 
 
 
-
+@login_required
 def cancel_order(request, order_id):
     try:
         order = Order.objects.get(id=order_id)
@@ -1394,7 +1402,7 @@ def cancel_order(request, order_id):
     except Order.DoesNotExist:
         return HttpResponse("Order not found.")
 
-
+@staff_member_required
 def admin_orders(request):
     search_query = request.GET.get('search', '')
 
@@ -1415,6 +1423,8 @@ def admin_orders(request):
 
     return render(request, 'app/admin_orders.html', context)
 
+
+@staff_member_required
 def admin_edit_order_status(request, order_id):
     if request.method == 'POST':
         try:
@@ -1430,7 +1440,7 @@ def admin_edit_order_status(request, order_id):
 
     return redirect(reverse('admin_orders'))
 
-
+@login_required
 def order_details(request, order_id):
     order = get_object_or_404(Order, id=order_id)
 
@@ -1490,7 +1500,7 @@ def submit_product_review(request, product_id):
     }
     return render(request, 'app/productdetails.html', context)
 
-
+@staff_member_required
 def create_product_offer(request):
     if request.method == 'POST':
         form = ProductOfferForm(request.POST)
@@ -1502,11 +1512,36 @@ def create_product_offer(request):
 
     return render(request, 'offer/create_product_offer.html', {'form': form})
 
-
+@staff_member_required
 def product_offer_list(request):
     product_offers = ProductOffer.objects.all()
     return render(request, 'offer/product_offer_list.html', {'product_offers': product_offers})
 
+@staff_member_required
+def edit_product_offer(request, product_offer_id):
+    product_offer = get_object_or_404(ProductOffer, pk=product_offer_id)
+
+    if request.method == 'POST':
+        form = ProductOfferForm(request.POST, instance=product_offer)
+        if form.is_valid():
+            form.save()
+            return redirect('product_offer_list')  # Redirect to the list view after editing
+    else:
+        form = ProductOfferForm(instance=product_offer)
+
+    return render(request, 'offer/create_product_offer.html', {'form': form})
+
+@staff_member_required
+def delete_product_offer(request, pk):
+    try:
+        product_offer = ProductOffer.objects.get(pk=pk)
+        product_offer.delete()
+        messages.success(request, 'Product offer deleted successfully.')
+    except Brand.DoesNotExist:
+        messages.error(request, 'Product offer not found.')
+    return redirect('product_offer_list')
+
+@staff_member_required
 def create_category_offer(request):
     if request.method == 'POST':
         form = CategoryOfferForm(request.POST)
@@ -1518,10 +1553,11 @@ def create_category_offer(request):
 
     return render(request, 'offer/create_category_offer.html', {'form': form})
 
-
+@staff_member_required
 def category_offer_list(request):
     category_offers = CategoryOffer.objects.all()
     return render(request, 'offer/category_offer_list.html', {'category_offers': category_offers})
+
 
 def create_referral_offer(request):
     if request.method == 'POST':
@@ -1545,51 +1581,7 @@ def generate_referral_code(username):
 
 
 
-# def available_offers(request):
-#     try:
-#         print('hai')
-#         selected_product = CartItem.objects.get(cart__user=request.user)
-#         print(selected_product)
-#
-#         product_offers = ProductOffer.objects.filter(product=selected_product.product)
-#         # category_offers = CategoryOffer.objects.filter(category=selected_product.category)
-#         print(product_offers, 'haa')
-#         # print('hai2', category_offers)
-#
-#         context = {
-#             'product_offers': product_offers,
-#             # 'category_offers': category_offers,
-#         }
-#
-#         return render(request, 'app/available_offers.html', context)
-#
-#     except ObjectDoesNotExist as e:
-#         print(f"Error: {e}")
-#         return render(request, 'offer/error_page.html', {'error_message': str(e)})
-#     except Exception as e:
-#         print(f"Error: {e}")
-#         return render(request, 'offer/error_page.html', {'error_message': str(e)})
-
-
-# def available_offers(request):
-#     print('hai')
-#     try:
-#         selected_product = CartItem.objects.get(cart__user=request.user)
-#         print(selected_product)
-#         product_offers = ProductOffer.objects.filter(product=selected_product.product)
-#         print(product_offers)
-#         context = {
-#             'product_offers': product_offers,
-#         }
-#         return render(request, 'checkout.html', context)
-#     except ObjectDoesNotExist as e:
-#         print(f"Error: {e}")
-#         return render(request, 'offer/error_page.html', {'error_message': str(e)})
-
-
-
-
-
+@staff_member_required
 def monthly_sales_report(request):
     orders = Order.objects.annotate(month=ExtractMonth('ordered_date')).values('month').annotate(count=Count('id')).values('month','count')
     month_number = []
@@ -1606,6 +1598,7 @@ def monthly_sales_report(request):
     return render(request, 'report/monthly_sales_report.html', context)
 
 
+@staff_member_required
 def daily_sales_report(request):
     form = MonthYearForm()
     month = 1
@@ -1644,6 +1637,7 @@ def daily_sales_report(request):
 
     return render(request, 'report/daily_sales_report.html', context)
 
+@staff_member_required
 def yearly_sales_report(request):
     orders = Order.objects.annotate(year=ExtractYear('ordered_date')).values('year').annotate(count=Count('id')).values('year','count')
     year_number = []
@@ -1728,6 +1722,8 @@ def generate_excel_report(data):
     excel_file.seek(0)
     return excel_file
 
+
+@staff_member_required
 def generate_sales_report(request):
     if request.method == 'POST':
         report_format = request.POST.get('report_format')
@@ -1761,11 +1757,20 @@ def generate_sales_report(request):
 
 
 
-
+@staff_member_required
 def sales_report(request):
     orders = Order.objects.all().order_by('-ordered_date')
+
+    paginator = Paginator(orders, 10)
+    page_number = request.GET.get('page')
+    ordersfinal = paginator.get_page(page_number)
+    totalpage = ordersfinal.paginator.num_pages
+    page_range = range(ordersfinal.number, min(ordersfinal.number + 3, totalpage + 1))
+
     context = {
-        'orders': orders
+        'orders': ordersfinal,
+        'lastpage': totalpage,
+        'page_range': page_range
     }
     return render(request, 'pdf_convert/generate_sales_report.html', context)
 

@@ -21,7 +21,7 @@
     </form>
         <table class="table">
             <thead>
-                <tr>
+                <tr class="text-black-50 fw-bold">
                     <th>Order ID</th>
                     <th>Ordered Date</th>
                     <th>Username</th>
@@ -33,24 +33,69 @@
                 </tr>
             </thead>
             <tbody>
-                {% for order in orders %}
-                <tr>
-                    <td>{{ order.id }}</td>
-                    <td>{{ order.ordered_date }}</td>
-                    <td>{{ order.user.username }}</td>
-                    <td>{{ order.order_status }}</td>
-                    {% for order_item in order.orderitem_set.all %}
-                    <td>{{ order_item.product.title }}</td>
-                    <td>{{ order_item.price_per_product }}</td>
-                    <td>{{ order_item.quantity }}</td>
-                    <td>{{ order_item.total_price_product }}</td>
-                    {% endfor %}
-
-                </tr>
-                {% endfor %}
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.ordered_date }}</td>
+            <td>{{ order.user.username }}</td>
+            <td>{{ order.order_status }}</td>
+            {% with first_order_item=order.orderitem_set.first %}
+            <td>{{ first_order_item.product.title }}</td>
+            <td>{{ first_order_item.price_per_product }}</td>
+            <td>{{ first_order_item.quantity }}</td>
+            <td>{{ first_order_item.total_price_product }}</td>
+            {% endwith %}
+        </tr>
+        {% for order_item in order.orderitem_set.all|slice:"1:" %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ order_item.product.title }}</td>
+            <td>{{ order_item.price_per_product }}</td>
+            <td>{{ order_item.quantity }}</td>
+            <td>{{ order_item.total_price_product }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
             </tbody>
         </table>
 </body>
-
+<!-- Pagination -->
+<div style="text-align: center; margin-top: 20px;">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      {% if orders.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="{% url 'sales_report' %}?page=1" aria-label="First"><span aria-hidden="true">&laquo;</span> first
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="{% url 'sales_report' %}?page={{ orders.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% endif %}
+      {% for n in page_range %}
+      <li class="page-item{% if n == orders.number %} active{% endif %}">
+        <a class="page-link" href="{% url 'sales_report' %}?page={{ n }}">{{ n }}</a>
+      </li>
+      {% endfor %}
+      {% if orders.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="{% url 'sales_report' %}?page={{ orders.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="{% url 'sales_report' %}?page={{ lastpage }}" aria-label="Last">last <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+<!-- Pagination -->
 {% endblock %}
 
