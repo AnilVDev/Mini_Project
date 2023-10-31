@@ -414,12 +414,28 @@ def edit_user_profile(request):
 def wallet_view(request):
     wallet = Wallet.objects.get(user=request.user)
     print(wallet)
-    transactions =Transaction.objects.filter(user=request.user)
+    transactions =Transaction.objects.filter(user=request.user).order_by('-timestamp')
     context = {
         'wallet':wallet,
         'transactions':transactions,
     }
     return render(request, 'app/wallet.html', context)
+
+def deposit_wallet(request):
+    if request.method == 'POST':
+        amount = request.POST.get('total')
+        amount = Decimal(amount)
+        wallet = Wallet.objects.get(user=request.user)
+        wallet.balance += amount
+        wallet.save()
+        transaction = Transaction.objects.create(
+            user = request.user,
+            amount =amount,
+            transaction_type = 'Deposit',
+            transaction_balance = wallet.balance
+        )
+        return redirect('wallet_view')
+
 
 
 @method_decorator(login_required, name='dispatch')

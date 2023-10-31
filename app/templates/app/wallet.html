@@ -47,7 +47,7 @@
                     </div>
                   </div>
                   <hr>
-                <form action=" url 'deposit_wallet' %}" id="paymentform" method="post">
+                <form action="{% url 'deposit_wallet' %}" id="paymentform" method="post">
                     {% csrf_token %}
                     <div class="row">
                     <div class="col-sm-3">

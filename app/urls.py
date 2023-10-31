@@ -20,6 +20,7 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('edit-profile/', views.edit_user_profile, name='edit_profile'),
     path('wallet-view/', views.wallet_view, name='wallet_view'),
+    path('deposit-wallet/',views.deposit_wallet, name='deposit_wallet'),
     path('generate-referral-link/', views.GenerateReferralLinkView.as_view(), name='generate_referral_link'),
     path('address/', views.address, name='address'),
     path('address/edit-address/<int:address_id>/',views.edit_address, name = 'edit_address'),
