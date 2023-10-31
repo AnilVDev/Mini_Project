@@ -75,14 +75,23 @@ class ProductDetailView(View):
         print(has_purchased_product)
         product_reviews = Review.objects.filter(product=product)
         total_review_count = product_reviews.count()
+
+        product_offer, category_offer = product_available_offer(pk)
         context = {
             'product': product,
             'has_purchased_product': has_purchased_product,
             'product_reviews': product_reviews,
             'total_review_count': total_review_count,
+            'product_offer': product_offer,
+            'category_offer': category_offer,
         }
         return render(request, 'app/productdetails.html', context)
 
+def product_available_offer(product_id):
+    product_offer = ProductOffer.objects.filter(product_id=product_id)
+    product = Product.objects.get(id=product_id)
+    category_offer = CategoryOffer.objects.filter(category=product.category)
+    return product_offer, category_offer
 def add_to_cart(request):
  return render(request, 'app/addtocart.html')
 
@@ -307,24 +316,8 @@ class OTPVerificationView(View):
 
 def update_wallet_and_create_transaction(user):
     print(user)
-    # First, get the user's wallet (create one if it doesn't exist)
-    # wallet, created = Wallet.objects.get_or_create(user=user)
-    # print('wallet',wallet)
-    # Deposit 100 rupees into the user's wallet
+
     deposit_amount = 100
-    print('typeof',type(deposit_amount))
-    # wallet.deposit(deposit_amount)
-    #
-    # # Create a Transaction record for the deposit
-    # transaction = Transaction.objects.create(
-    #     user=user,
-    #     amount=deposit_amount,
-    #     transaction_type='Deposit',
-    #     transaction_balance=wallet.balance
-    # )
-    #
-    # # Return the updated wallet and transaction if needed
-    # return wallet, transaction
 
     user_wallet = Wallet.objects.get(user=user)
     user_wallet.balance += deposit_amount
@@ -503,8 +496,12 @@ def admin_login(request):
 
 @staff_member_required
 def admin_home(request):
-
-    return render(request,'app/admin-dashboard.html')
+    total_order_count = Order.objects.all().count()
+    print(total_order_count)
+    context = {
+        'total_order_count': total_order_count
+    }
+    return render(request,'app/admin-dashboard.html', context)
 
 @staff_member_required
 def user_list(request):
@@ -822,12 +819,9 @@ def user_search(request):
 
 
 def product_listing(request, categorys):
-    print('from-',categorys)
-    print('hai')
+
     selected_categories = request.GET.getlist('category')
-    print(selected_categories)
     selected_brands = request.GET.getlist('brand')
-    print(selected_brands)
 
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
@@ -837,12 +831,11 @@ def product_listing(request, categorys):
 
     if categorys and not selected_categories and not selected_brands:
         products = Product.objects.filter(category__name=categorys)
-        print('from categorys',products)
+
     else:
 
         if selected_categories:
             products = Product.objects.filter(category__name__in=selected_categories)
-            print('selected categories',products)
 
         if selected_brands and not selected_categories:
             products = Product.objects.filter(brand__name__in=selected_brands)
@@ -850,7 +843,6 @@ def product_listing(request, categorys):
             products=products
         else:
             products = products.filter(brand__name__in=selected_brands)
-            print('pro from brands-',products)
 
 
     if min_price:
@@ -858,6 +850,9 @@ def product_listing(request, categorys):
 
     if max_price:
         products = products.filter(discount_price__lte=max_price)
+
+    category = products.first().category
+    category_offer = CategoryOffer.objects.filter(category__name=category)
 
     products_per_page = 6
 
@@ -877,7 +872,7 @@ def product_listing(request, categorys):
         'brands': brands,
         'page_range': page_range,
         'products': products_page,
-
+        'category_offer':category_offer,
     }
 
     return render(request, 'app/product_listing.html', context)
@@ -1760,6 +1755,7 @@ def generate_sales_report(request):
             response = HttpResponse(excel_file, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename="sales_report.xlsx"'
             return response
+        print(orders)
 
     return render(request, 'pdf_convert/generate_sales_report.html')
 
@@ -1767,8 +1763,11 @@ def generate_sales_report(request):
 
 
 def sales_report(request):
-
-    return render(request, 'pdf_convert/generate_sales_report.html',)
+    orders = Order.objects.all().order_by('-ordered_date')
+    context = {
+        'orders': orders
+    }
+    return render(request, 'pdf_convert/generate_sales_report.html', context)
 
 from django.http import JsonResponse
 

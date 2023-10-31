@@ -19,6 +19,37 @@
         </select>
         <button class="btn btn-sm btn-white text-dark" type="submit">Generate Report</button>
     </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Ordered Date</th>
+                    <th>Username</th>
+                    <th>Order Status</th>
+                    <th>Product</th>
+                    <th>Price per Product</th>
+                    <th>Quantity</th>
+                    <th>Sub Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.ordered_date }}</td>
+                    <td>{{ order.user.username }}</td>
+                    <td>{{ order.order_status }}</td>
+                    {% for order_item in order.orderitem_set.all %}
+                    <td>{{ order_item.product.title }}</td>
+                    <td>{{ order_item.price_per_product }}</td>
+                    <td>{{ order_item.quantity }}</td>
+                    <td>{{ order_item.total_price_product }}</td>
+                    {% endfor %}
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 </body>
 
 {% endblock %}

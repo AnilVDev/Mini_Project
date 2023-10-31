@@ -4,16 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="wallet added at the backend">
-      <change afterPath="$PROJECT_DIR$/app/utils.py" afterDir="false" />
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="refferel offer implemented successfully">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/signals.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/signals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/checkout.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/checkout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/product_listing.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_listing.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/templates/app/productdetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/productdetails.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/user_profile2.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/user_profile2.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/wallet.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/wallet.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/pdf_convert/generate_sales_report.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/pdf_convert/generate_sales_report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/report/daily_sales_report.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/report/daily_sales_report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/report/monthly_sales_report.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/report/monthly_sales_report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/report/yearly_sales_report.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/report/yearly_sales_report.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
@@ -438,7 +439,15 @@
       <option name="project" value="LOCAL" />
       <updated>1698506195504</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="refferel offer implemented successfully">
+      <option name="closed" value="true" />
+      <created>1698734442388</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1698734442388</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -453,7 +462,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="image zooming is not working.." />
     <MESSAGE value="wishlist corrected...almost all other are corrected" />
     <MESSAGE value="wishlist error corrected" />
     <MESSAGE value="solved almost all error, show success message after registration, category filter working, product deleting working" />
@@ -476,8 +484,9 @@
     <MESSAGE value="offer successfully implemented and paypal is to be implement" />
     <MESSAGE value="paypal is success now" />
     <MESSAGE value="wallet" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
     <MESSAGE value="wallet added at the backend" />
-    <option name="LAST_COMMIT_MESSAGE" value="wallet added at the backend" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
+    <MESSAGE value="refferel offer implemented successfully" />
+    <option name="LAST_COMMIT_MESSAGE" value="refferel offer implemented successfully" />
   </component>
 </project>

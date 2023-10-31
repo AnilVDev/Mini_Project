@@ -105,11 +105,14 @@
 						<div class="store-filter clearfix">
 							<div class="store-sort">
 								<label>
-									Sort By:
-									<select class="input-select">
-										<option value="0">Popular</option>
-										<option value="1">Position</option>
-									</select>
+<!--									Sort By:-->
+<!--									<select class="input-select">-->
+<!--										<option value="0">Popular</option>-->
+<!--										<option value="1">Position</option>-->
+<!--									</select>-->
+								{% for offer in category_offer %}
+								<li><i class="fa fa-tag"></i><span> {{ offer.discount_percentage }}% off, up to ₹{{ offer.max_discount_amount }}, {{ offer.conditions }} T&C</span></li>
+								{% endfor %}
 								</label>
 							<!--Sort-->
 <!--								<form method="get" action=" url 'product_listing' category=category %}">-->
@@ -156,7 +159,7 @@
 										</div>
 									</div>
 									<div class="product-body">
-										<p class="product-category">Category</p>
+										<p class="product-category">{{ product.category }}</p>
 										<h3 class="product-name"><a href="{% url 'product-detail' product.id %}">{{product.title}}</a></h3>
 										<h4 class="product-price">Rs.{{product.discount_price}} <del class="product-old-price">Rs.{{product.selling_price}}</del></h4>
 										<div class="product-rating">

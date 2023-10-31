@@ -177,6 +177,16 @@
 								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
 								<li><a href="#"><i class="fa fa-envelope"></i></a></li>
 							</ul>
+							<ul class="product-links">
+								<li><strong>Available Offers</strong></li>
+								{% for offer in product_offer %}
+								<li><i class="fa fa-tag"></i><span> {{ offer.discount_percentage }}% off, up to ₹{{ offer.max_discount_amount }}, {{ offer.conditions }} T&C</span></li>
+								{% endfor %}
+								{% for offer in category_offer %}
+								<li><i class="fa fa-tag"></i><span> {{ offer.discount_percentage }}% off, up to ₹{{ offer.max_discount_amount }}, {{ offer.conditions }} T&C</span></li>
+								{% endfor %}
+
+							</ul>
 
 						</div>
 					</div>

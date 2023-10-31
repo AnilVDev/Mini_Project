@@ -5,9 +5,11 @@ from .models import Wallet
 
 @receiver(post_save, sender=User)
 def create_user_wallet(sender, instance, created, **kwargs):
-    if created:
+
+    if created and not instance.is_staff:
         Wallet.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
 def save_user_wallet(sender, instance, **kwargs):
-    instance.wallet.save()
+    if not instance.is_staff:
+        instance.wallet.save()

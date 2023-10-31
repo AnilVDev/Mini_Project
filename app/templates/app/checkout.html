@@ -275,7 +275,7 @@
                 <!-- List of available offers -->
                 <ul>
                     {% for offer in product_offer %}
-						<li class="offer-item">
+						<li class="offer-item"><span>Product Offers</span>
 							<div class="offer-details">
 								{{ offer.discount_percentage }}% off, up to ₹{{ offer.max_discount_amount }}, {{ offer.conditions }} T&C
 							</div>
@@ -285,7 +285,7 @@
 						</li>
                     {% endfor %}
                     {% for offer in category_offer %}
-						<li class="offer-item">
+						<li class="offer-item"><span>Category Offers</span>
 							<div class="offer-details">
 								{{ offer.discount_percentage }}% off, up to ₹{{ offer.max_discount_amount }}, {{ offer.conditions }} T&C
 							</div>
