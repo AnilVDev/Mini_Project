@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="project almost completed...but there is somany bugs are there">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="almost everything is completed including wallet deposit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/wallet.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/wallet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/brand_list_and_add.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/brand_list_and_add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/category_list_and_add.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/category_list_and_add.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/product_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/user_orders.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/user_orders.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
@@ -456,7 +462,15 @@
       <option name="project" value="LOCAL" />
       <updated>1698781395540</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="almost everything is completed including wallet deposit">
+      <option name="closed" value="true" />
+      <created>1698830206054</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1698830206054</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -471,7 +485,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="solved almost all error, show success message after registration, category filter working, product deleting working" />
     <MESSAGE value="add to cart almost done..dynamic changes to be implement" />
     <MESSAGE value="cart completed successfully" />
     <MESSAGE value="paypal implemented and also  cash on delivery implemented" />
@@ -494,8 +507,9 @@
     <MESSAGE value="wallet added at the backend" />
     <MESSAGE value="refferel offer implemented successfully" />
     <MESSAGE value="sales report completed ..admin dashboard cleared" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
     <MESSAGE value="project almost completed...but there is somany bugs are there" />
-    <option name="LAST_COMMIT_MESSAGE" value="project almost completed...but there is somany bugs are there" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
+    <MESSAGE value="almost everything is completed including wallet deposit" />
+    <option name="LAST_COMMIT_MESSAGE" value="almost everything is completed including wallet deposit" />
   </component>
 </project>

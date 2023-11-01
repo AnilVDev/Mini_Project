@@ -33,8 +33,12 @@ import calendar
 from decimal import Decimal,InvalidOperation
 from .utils import generate_referral_link
 import uuid
+from django.views.decorators.cache import never_cache
+
+
 
 class ProductView(View):
+    @never_cache
     def get(self, request):
         products_c = Product.objects.filter(Q(category__name__icontains='camera'))
         products_sw = Product.objects.filter(Q(category__name__icontains='smart watch'))
@@ -711,7 +715,10 @@ def category_list_and_add(request):
 def delete_category(request, category_id):
     try:
         category = Category.objects.get(pk=category_id)
-        category.delete()
+        category.is_available = False
+        category.save()
+
+        Product.objects.filter(category=category).update(is_available=False)
         messages.success(request, 'Category deleted successfully.')
     except Category.DoesNotExist:
         messages.error(request, 'Category not found.')
@@ -775,7 +782,10 @@ def brand_list_and_add(request):
 def delete_brand(request, brand_id):
     try:
         brand = Brand.objects.get(pk=brand_id)
-        brand.delete()
+        brand.is_available = False
+        brand.save()
+
+        Product.objects.filter(brand=brand).update(is_available=False)
         messages.success(request, 'Brand deleted successfully.')
     except Brand.DoesNotExist:
         messages.error(request, 'Brand not found.')
@@ -903,13 +913,13 @@ def search_product(request):
 
 
     if selected_category == 'All Categories':
-        products = Product.objects.all()
+        products = Product.objects.filter(is_available=True)
     else:
-        products = Product.objects.filter(category__name = selected_category)
+        products = Product.objects.filter(Q(category__name = selected_category) & Q(is_available=True))
 
     products = products.filter(Q(title__icontains=search_query) | Q(description__icontains=search_query) | Q(brand__name__icontains=search_query))
 
-    categories = Category.objects.all()
+    categories = Category.objects.filter(is_available=True)
     brands = Brand.objects.all()
 
     paginator = Paginator(products, 6)
@@ -1238,6 +1248,7 @@ def offer_adding(request):
 
             try:
                 category_offer = CategoryOffer.objects.get(pk=offer_id)
+                print('c-',category_offer)
             except CategoryOffer.DoesNotExist:
                 category_offer = None
 
@@ -1462,17 +1473,6 @@ def order_details(request, order_id):
 
     return render(request, 'app/order_details.html', {'order': order})
 
-# def cancel_order(request, order_id):
-#     order = get_object_or_404(Order, id=order_id)
-#
-#     if request.method == 'POST':
-#         order.order_status = 'Cancelled'
-#         order.save()
-#
-#         return redirect('user_orders')
-#
-#     return render(request, 'app/order_details.html', order_id=order.id)
-
 def generate_pdf(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     template_path = 'pdf_convert/invoice.html'
@@ -1680,7 +1680,7 @@ from reportlab.platypus import Paragraph
 from reportlab.platypus.tables import Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet
 
-
+@staff_member_required
 def generate_pdf_report(data):
     buffer = BytesIO()
     pdf = SimpleDocTemplate(buffer, pagesize=landscape(letter))
@@ -1790,10 +1790,10 @@ def sales_report(request):
     }
     return render(request, 'pdf_convert/generate_sales_report.html', context)
 
-from django.http import JsonResponse
+
 
 def clear_filter(request):
     products = Product.objects.all()
-    # You can filter and serialize the products as needed
+
     data = [{'title': product.title, 'selling_price': product.selling_price} for product in products]
     return JsonResponse(data, safe=False)

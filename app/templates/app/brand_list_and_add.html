@@ -66,12 +66,14 @@
                     <tr>
                         <th>Name</th>
                         <th>Actions</th>
+                        <th>Is Available</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for brand in brands %}
                     <tr>
                         <td>{{ brand.name }}</td>
+                        <td>{{ brand.is_available }}</td>
                         <td>
                             <a href="{% url 'edit_brand' brand.id %}" class="btn"><i class="fa fa-edit"></i></a>
                             <button type="button" class="btn btn-dange" data-toggle="modal" data-target="#deleteUserModal{{ brand.id }}"><i class="fa fa-trash"></i></button>
@@ -98,7 +100,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-dark">
                 Are you sure you want to delete "{{ brand.name }}"?
             </div>
             <div class="modal-footer">

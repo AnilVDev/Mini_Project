@@ -85,13 +85,13 @@ unique_case_insensitive_validator = RegexValidator(
 
 class Brand(models.Model):
     name = models.CharField(max_length=100, unique=True)
-
+    is_available = models.BooleanField(default=True)
     def __str__(self):
         return self.name
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
-
+    is_available = models.BooleanField(default=True)
     def __str__(self):
         return self.name
 

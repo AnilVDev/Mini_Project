@@ -7,7 +7,7 @@ from .forms import LoginForm,MyPasswordChangeForm, MyPasswordResetForm, MySetPas
 
 
 urlpatterns = [
-    path('', views.ProductView.as_view(),name='home'),
+    path('', views.ProductView.as_view(), name='home'),
     path('product-detail/<int:pk>', views.ProductDetailView.as_view(), name='product-detail'),
     path('submit_product_review/<int:product_id>/', views.submit_product_review, name='submit_product_review'),
     path('search-product/',views.search_product, name= 'search_product'),
