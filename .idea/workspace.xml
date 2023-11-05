@@ -4,16 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="almost everything is completed including wallet deposit">
+    <list default="true" id="345bdcf2-375d-4051-a099-b6cb3ad15705" name="Changes" comment="soft deleted implemented">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/admin-dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/brand_list_and_add.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/brand_list_and_add.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/category_list_and_add.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/category_list_and_add.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/product_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/product_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/templates/app/user_orders.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/user_orders.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/addtocart.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/admin_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/admin_login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/base.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/baseindex.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/baseindex.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/buynow.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/cart.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/home.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/app/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/templates/app/user_profile.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
@@ -470,7 +472,15 @@
       <option name="project" value="LOCAL" />
       <updated>1698830206054</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="soft deleted implemented">
+      <option name="closed" value="true" />
+      <created>1699163528216</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1699163528216</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -485,7 +495,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add to cart almost done..dynamic changes to be implement" />
     <MESSAGE value="cart completed successfully" />
     <MESSAGE value="paypal implemented and also  cash on delivery implemented" />
     <MESSAGE value="admin and user ui are updated" />
@@ -508,8 +517,9 @@
     <MESSAGE value="refferel offer implemented successfully" />
     <MESSAGE value="sales report completed ..admin dashboard cleared" />
     <MESSAGE value="project almost completed...but there is somany bugs are there" />
-    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
     <MESSAGE value="almost everything is completed including wallet deposit" />
-    <option name="LAST_COMMIT_MESSAGE" value="almost everything is completed including wallet deposit" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/newbranch' into newbranch" />
+    <MESSAGE value="soft deleted implemented" />
+    <option name="LAST_COMMIT_MESSAGE" value="soft deleted implemented" />
   </component>
 </project>

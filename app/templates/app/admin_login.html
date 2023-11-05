@@ -1,14 +1,21 @@
 {% extends 'app/baseindex.html' %}
 {% load static %}
 {% block title %}Admin Login{% endblock title %}
+{% block main-header %}{% endblock %}
+{% block navigation %}{% endblock %}
 {% block main-content %}
 
+<style>
+    .adminhome{
+    margin:10rem 5rem 30rem 5rem;
+
+    }
+</style>
 
 
-
-<div class="container">
+<div class="container mx-5">
  <div class="row my-3">
-  <div class="col-sm-6 offset-sm-3">
+  <div class="adminhome col-sm-6 offset-sm-3">
    <h3>Admin Login</h3>
    <hr>
    <form action="" method="post" novalidate class="shadow p-5">
@@ -34,5 +41,5 @@
   </div>
  </div>
 </div>
-
+{% block newsletter %}{% endblock %}
 {% endblock main-content %}

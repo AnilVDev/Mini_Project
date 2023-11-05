@@ -38,7 +38,6 @@ from django.views.decorators.cache import never_cache
 
 
 class ProductView(View):
-    @never_cache
     def get(self, request):
         products_c = Product.objects.filter(Q(category__name__icontains='camera'))
         products_sw = Product.objects.filter(Q(category__name__icontains='smart watch'))
@@ -76,7 +75,6 @@ class ProductDetailView(View):
         has_purchased_product = False
         if request.user.is_authenticated:
             has_purchased_product = OrderItem.objects.filter(order__user=request.user, product=product).exists()
-        print(has_purchased_product)
         product_reviews = Review.objects.filter(product=product)
         total_review_count = product_reviews.count()
 
@@ -127,8 +125,8 @@ def buy_now(request,product_id):
 
 @login_required
 def address(request):
- add = Customer.objects.filter(user=request.user)
- return render(request, 'app/address.html', {'add':add,'active':'bg-danger'})
+    add = Customer.objects.filter(user=request.user)
+    return render(request, 'app/address.html', {'add':add,'active':'bg-danger'})
 
 
 @login_required
@@ -158,14 +156,8 @@ def delete_address(request, address_id):
     return redirect('address')
 
 
-
-
 def login(request):
- return render(request, 'app/login.html')
-
-
-
-
+    return render(request, 'app/login.html')
 
 
 
@@ -319,21 +311,16 @@ class OTPVerificationView(View):
 
 
 def update_wallet_and_create_transaction(user):
-    print(user)
-
     deposit_amount = 100
 
     user_wallet = Wallet.objects.get(user=user)
     user_wallet.balance += deposit_amount
-    print(user_wallet,'is',user_wallet.balance)
-
     deposit_transaction = Transaction(
         user=user,
         amount=deposit_amount,
         transaction_type='Deposit',
         transaction_balance=user_wallet.balance,
     )
-    print(deposit_transaction)
     deposit_transaction.save()
     user_wallet.save()
 
@@ -356,8 +343,6 @@ class ProfileView(View):
             referral_offer = user.referrals_given.get()  # Attempt to get the related ReferralOffer instance
         except ReferralOffer.DoesNotExist:
             referral_offer = None
-
-            print('err',referral_offer)
 
         if referral_offer:
             referral_link = referral_offer.get_referral_link()
@@ -417,7 +402,6 @@ def edit_user_profile(request):
 @login_required
 def wallet_view(request):
     wallet = Wallet.objects.get(user=request.user)
-    print(wallet)
     transactions =Transaction.objects.filter(user=request.user).order_by('-timestamp')
     context = {
         'wallet':wallet,
@@ -445,9 +429,7 @@ def deposit_wallet(request):
 @method_decorator(login_required, name='dispatch')
 class GenerateReferralLinkView(View):
     def get(self, request):
-        print('request')
         referral_link = generate_referral_link(request.user)
-        print(referral_link)
         data = {'referral_link': referral_link}
         # return render(request, 'app/generate_referral_link.html', context)
         return JsonResponse(data)
@@ -484,15 +466,17 @@ def password_change_view(request):
     }
     return auth_views.PasswordChangeView.as_view(
         template_name='app/passwordchange.html',
-        extra_context=context  # Pass the context here
+        extra_context=context
     )(request)
 
 
 @method_decorator(staff_member_required, name='dispatch')
 class CustomAdminLoginView(LoginView):
-    template_name = 'admin_login.html'  # Create this template
+    template_name = 'admin_login.html'
     authentication_form = CustomAdminLoginForm
 
+
+from django.contrib.auth import login
 @never_cache
 def admin_login(request):
     errors = None
@@ -501,8 +485,8 @@ def admin_login(request):
         if form.is_valid():
             user = form.get_user()
             if user.is_superuser:
-                login(request)
-                return redirect('admin_home')
+                login(request, user)
+                return redirect('daily_sales_report')
             else:
                 errors = 'You are not an admin. Please use User login.'
 
@@ -517,7 +501,6 @@ def admin_login(request):
 @staff_member_required
 def admin_home(request):
     total_order_count = Order.objects.all().count()
-    print(total_order_count)
     context = {
         'total_order_count': total_order_count
     }
@@ -552,7 +535,6 @@ def is_admin_list(request):
     query = request.GET.get('q', '')
     if query:
         users = User.objects.filter( Q(username__icontains=query) | Q(email__icontains=query),is_staff=True)
-        print(users)
     else:
         users = User.objects.filter(is_staff=True)
 
@@ -824,7 +806,6 @@ def toggle_user_status(request, user_id):
 @staff_member_required
 def toggle_user_credential(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    print('hello')
     if user.is_staff:
         user.is_staff = False
         user.is_superuser = False
@@ -943,11 +924,8 @@ def search_product(request):
 
 
 def search_suggestions(request):
-    print('hhh')
-    search_query = request.GET.get('term', '')  # 'term' is the default parameter name used by jQuery UI
-    print(search_query)
+    search_query = request.GET.get('term', '')
     products = Product.objects.filter(Q(title__istartswith=search_query))
-
     suggestions = [product.title for product in products]
 
     return JsonResponse(suggestions, safe=False)
@@ -1096,19 +1074,16 @@ def plus_cart(request):
         data = {
             'quantity': c.quantity,
             'amount': total_price,
-
         }
         if c.quantity == c.product.stock:
             data['out_of_stock'] = True
         else:
             data['out_of_stock'] = False
-        print(data['out_of_stock'])
 
         return JsonResponse(data)
 
 def minus_cart(request):
     if request.method == 'GET':
-        print('hai')
         prod_id = request.GET.get('prod_id')
         c = CartItem.objects.get(Q(product=prod_id) & Q(cart__user=request.user))
         if c.quantity > 1:
@@ -1143,7 +1118,6 @@ class CheckoutView(View):
             address = Customer.objects.filter(user=request.user)
             product_data, final_price = self.get_product_data(request.user)
             product_offer,category_offer = self.available_offers(request.user)
-            # print('recieved data-',data)
             context = {
                 'form': form,
                 'product_data': product_data,
@@ -1158,7 +1132,6 @@ class CheckoutView(View):
     def post(self, request):
         form = CustomerProfileForm(request.POST)
         if form.is_valid():
-            print('hai')
             usr = request.user
             name = form.cleaned_data['name']
             phone_number = form.cleaned_data['phone_number']
@@ -1233,12 +1206,10 @@ class CheckoutView(View):
 
 
 def offer_adding(request):
-    print('hw')
     t_instance = CheckoutView()
     product_data, final_price = t_instance.get_product_data(request.user)
     # product_offer, category_offer = self.available_offers(request.user)
     if request.method == 'GET':
-        print('h2')
         offer_id = request.GET.get('offer_id')
         if offer_id:
             try:
@@ -1248,7 +1219,6 @@ def offer_adding(request):
 
             try:
                 category_offer = CategoryOffer.objects.get(pk=offer_id)
-                print('c-',category_offer)
             except CategoryOffer.DoesNotExist:
                 category_offer = None
 
@@ -1283,9 +1253,7 @@ def order_placed(request):
         shipping_address_id = request.POST.get('shipping_address_id')
 
         discount_str = request.POST.get('discount', '0.00')
-        print('dis', discount_str)
         payment_method = request.POST.get('payment')
-        print('pay-', payment_method)
 
         try:
             discount = Decimal(discount_str)
@@ -1306,7 +1274,6 @@ def order_placed(request):
             )
 
             billing_address.save()
-            print('bill add')
 
             customer = Customer.objects.get(id=shipping_address_id)
 
@@ -1321,14 +1288,10 @@ def order_placed(request):
             )
 
             shipping_address.save()
-            print('ship add')
-
             cart_items = CartItem.objects.filter(cart__user=user)
             total_price = sum(item.product.discount_price * item.quantity for item in cart_items)
-            print('tot1',total_price)
             if discount != Decimal('0.00'):
                 total_price -= discount
-                print('tot2-',total_price)
 
             order = Order(
                 user=user,
@@ -1338,14 +1301,9 @@ def order_placed(request):
                 total_price=total_price,
                 payment_method=payment_method
             )
-            print(user,billing_address,shipping_address,discount,total_price,payment_method)
-            print(type(discount))
-            print(order)
 
             try:
                 order.save()
-                print('Order saved successfully')
-
                 for cart_item in cart_items:
                     order_item = OrderItem(
                         order=order,
@@ -1354,7 +1312,6 @@ def order_placed(request):
                         price_per_product=cart_item.product.discount_price
                     )
                     order_item.save()
-                    print(order_item)
 
                     product = cart_item.product
                     product.stock -= cart_item.quantity
@@ -1375,7 +1332,6 @@ def order_placed(request):
 @login_required
 def user_orders(request):
     orders = Order.objects.filter(user=request.user).prefetch_related('orderitem_set__product').order_by('-ordered_date')
-
 
     paginator = Paginator(orders, 5)
     page_number = request.GET.get('page')
@@ -1398,12 +1354,10 @@ def cancel_order(request, order_id):
     try:
         order = Order.objects.get(id=order_id)
 
-
         if order.user == request.user:
             order.order_status = 'Cancelled'
             order.save()
             if order.payment_method == 'Paypal':
-                print('paypal')
                 user_wallet = Wallet.objects.get(user=request.user)
                 user_wallet.balance += order.total_price
 
@@ -1416,7 +1370,6 @@ def cancel_order(request, order_id):
 
                 deposit_transaction.save()
                 user_wallet.save()
-
 
             for order_item in order.orderitem_set.all():
                 product = order_item.product
@@ -1432,8 +1385,6 @@ def cancel_order(request, order_id):
 @staff_member_required
 def admin_orders(request):
     search_query = request.GET.get('search', '')
-
-    # orders = Order.objects.filter(username__icontains=search_query)
     orders = Order.objects.filter(Q(username__icontains=search_query) | Q(orderitem__product__title__icontains=search_query)).order_by('-ordered_date')
 
     paginator = Paginator(orders, 5)
@@ -1488,9 +1439,6 @@ def generate_pdf(request, order_id):
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
 
-    # return render(request, 'pdf_convert/invoice.html',{ 'order':order})
-
-
 
 @login_required
 def submit_product_review(request, product_id):
@@ -1508,7 +1456,6 @@ def submit_product_review(request, product_id):
                 review.text = review_text
                 review.rating = rating
                 review.save()
-
 
         return redirect('product-detail', pk=product_id)
     context = {
@@ -1591,11 +1538,6 @@ def referral_offer_list(request):
     referral_offers = ReferralOffer.objects.all()
     return render(request, 'offer/referral_offer_list.html', {'referral_offers': referral_offers})
 
-def generate_referral_code(username):
-    return f"{username}@payfortech"
-
-
-
 
 @staff_member_required
 def monthly_sales_report(request):
@@ -1606,7 +1548,6 @@ def monthly_sales_report(request):
         month_number.append(calendar.month_name[d['month']])
         total_order.append(d['count'])
 
-    print(month_number,total_order)
     context ={
         'month_number':month_number,
         'total_order':total_order
@@ -1662,7 +1603,6 @@ def yearly_sales_report(request):
         year_number.append(d['year'])
         total_order.append(d['count'])
 
-    print(year_number,total_order)
     context ={
         'year_number':year_number,
         'total_order':total_order
@@ -1767,7 +1707,6 @@ def generate_sales_report(request):
             response = HttpResponse(excel_file, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename="sales_report.xlsx"'
             return response
-        print(orders)
 
     return render(request, 'pdf_convert/generate_sales_report.html')
 

@@ -36,7 +36,7 @@ class UserProfileForm(UserChangeForm):
 
 
 class MyPasswordChangeForm(PasswordChangeForm):
-    old_password = forms.CharField(label=_("Old Password"),strip=False, widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'autofocus':True, 'class': 'form-control'}))
+    old_password = forms.CharField(label=_("Old Password"),strip=False, widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'autofocus':True, 'class': 'form-control', }))
     new_password1 = forms.CharField(label=_("New Password"), strip=False, widget=forms.PasswordInput(
         attrs={'autocomplete': 'new-password', 'class': 'form-control'}), help_text=password_validation.password_validators_help_text_html())
     new_password2 = forms.CharField(label=_("Confirm New Password"), strip=False, widget=forms.PasswordInput(
@@ -88,8 +88,8 @@ ProductImageFormSet = modelformset_factory(ProductImage, form=ProductImageForm, 
 
 
 class CustomAdminLoginForm(AuthenticationForm):
-    username = UsernameField(widget=forms.TextInput(attrs={'autofocus': True, 'class': 'form-control'}))
-    password = forms.CharField(label=_("Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'class': 'form-control'}))
+    username = UsernameField(widget=forms.TextInput(attrs={'autofocus': True, 'class': 'form-control', 'style': 'width: 20rem;'}))
+    password = forms.CharField(label=_("Password"), strip=False, widget=forms.PasswordInput(attrs={'autocomplete': 'current-password', 'class': 'form-control', 'style': 'width: 20rem;'}))
 
 class OTPVerificationForm(forms.Form):
     otp = forms.CharField(label=_("OTP"), max_length=6, widget=forms.TextInput(attrs={'autocomplete': 'off', 'class' : 'form-control'}))
